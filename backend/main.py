@@ -1,35 +1,50 @@
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session
-from backend.database import SessionLocal, engine
-import backend.models as models, backend.schemas as schemas
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from database import SessionLocal, engine
+import models
+from routers import farmers, questions, marketplace
 
+# Criar todas as tabelas no banco de dados
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="TerraViva API")
+# Criar aplicação FastAPI
+app = FastAPI(
+    title="TerraViva API",
+    description="Plataforma que conecta agricultores familiares a uma IA agrícola consultora e a um marketplace cooperativo",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
+)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# Configurar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Incluir routers
+app.include_router(farmers.router)
+app.include_router(questions.router)
+app.include_router(marketplace.router)
 
 @app.get("/")
 def home():
-    return {"TerraViva": "API conectada ao banco!"}
+    """Endpoint inicial da API"""
+    return {
+        "message": "TerraViva API - Conectando agricultores familiares à tecnologia",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "modules": [
+            "Agricultores (Farmers)",
+            "Consultoria IA (Questions)", 
+            "Marketplace Cooperativo"
+        ]
+    }
 
-@app.post("/usuarios", response_model=schemas.Usuario)
-def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
-    novo = models.UsuarioAgricultor(
-        nome_usuario=usuario.nome_usuario,
-        email=usuario.email,
-        senha_hash=usuario.senha_hash
-    )
-    db.add(novo)
-    db.commit()
-    db.refresh(novo)
-    return novo
-
-@app.get("/usuarios", response_model=list[schemas.Usuario])
-def listar_usuarios(db: Session = Depends(get_db)):
-    return db.query(models.UsuarioAgricultor).all()
+@app.get("/health")
+def health_check():
+    """Verificação de saúde da API"""
+    return {"status": "healthy", "message": "TerraViva API está funcionando!"}
