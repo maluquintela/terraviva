@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🌿 Estilos globais opcionais */
+:root {
+  --verde: #2e7d32;
+  --bege: #f5f5dc;
+  --cinza-claro: #f9fafb;
+  --texto: #1f2937;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-color: var(--cinza-claro);
+  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+  color: var(--texto);
+}
+
+/* ✨ Centralização padrão */
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* 💚 Botões padrão */
+button {
+  background-color: var(--verde);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #256828;
+}
+
+/* 📱 Responsividade básica */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  button {
+    width: 100%;
+  }
+}
