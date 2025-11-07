@@ -1,7 +1,14 @@
+import sys
+from pathlib import Path
+
+# Adicionar a raiz do projeto ao PYTHONPATH para importar o módulo database
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import SessionLocal, engine
-import models
+from database import SessionLocal, engine, models
 from routers import farmers, questions, marketplace
 
 # Criar todas as tabelas no banco de dados

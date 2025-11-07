@@ -1,3 +1,11 @@
+import sys
+from pathlib import Path
+
+# Adicionar a raiz do projeto ao PYTHONPATH para importar o módulo database
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -5,8 +13,7 @@ from passlib.context import CryptContext
 from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
-from database import SessionLocal
-import models
+from database import SessionLocal, models
 import os
 from dotenv import load_dotenv
 
