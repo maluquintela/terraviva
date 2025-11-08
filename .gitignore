@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+terraviva/
+
+# Node packages
+node_modules/
+frontend2/node_modules/
+frontend2/terraviva/node_modules/
+
+# Environment files
+.env
+
+# IDE / OS files
+.DS_Store
+Thumbs.db
+
