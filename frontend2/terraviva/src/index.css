@@ -68,7 +68,7 @@ body, html, #root {
   /* APLICANDO O FUNDO VERDE AQUI
     O gradiente será aplicado ao corpo inteiro da página 
   */
-  background: linear-gradient(135deg, #1E4620, #3b7a3d);
+  background: linear-gradient(135deg,#ffffff, #ffffff);
 }
 
 /* Garante que o box-sizing seja aplicado em tudo, facilitando a responsividade */

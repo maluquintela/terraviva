@@ -1,14 +1,21 @@
-import React from 'react';
-import './login.css'; // Mantenha a importação do CSS local
+import React, { useState } from 'react';
+import { Eye, EyeOff, User, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import './login.css';
 
 export default function LoginScreen() {
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleEntrar = () => {
+    navigate('/perguntas');
+  };
+
   return (
     <div className="login-page">
       <div className="card animate-fadeIn">
         {/* Logo */}
         <div className="logo-container">
-          {/* CORRIGIDO: Usando 'src' para a imagem */}
-          {/* O caminho "/terraviva.png" funciona porque 'terraviva.png' está na pasta 'public' */}
           <img src="/terraviva.png" alt="TerraViva Logo" className="logo" />
         </div>
 
@@ -16,24 +23,35 @@ export default function LoginScreen() {
           Bem-vindo ao <span className="highlight">TerraViva!</span>
         </h2>
 
-        {/* Inputs (apenas visuais por enquanto) */}
-        <input
-          type="text"
-          placeholder="Usuário"
-          className="input"
-          disabled
-        />
-        <input
-          type="password"
-          placeholder="Senha"
-          className="input"
-          disabled
-        />
+        {/* Input Usuário */}
+        <div className="input-container">
+          <User className="input-icon" />
+          <input type="text" placeholder="Usuário" className="input" />
+        </div>
 
-        {/* Botão Entrar */}
+        {/* Input Senha */}
+        <div className="input-container">
+          <Lock className="input-icon" />
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Senha"
+            className="input"
+          />
+          <button
+            type="button"
+            className="icon-button"
+            onClick={() => setShowPassword(!showPassword)}
+            aria-label="mostrar senha"
+          >
+            {showPassword ? <EyeOff /> : <Eye />}
+          </button>
+        </div>
+
+        {/* Botão Entrar - com navegação para /perguntas */}
         <button
+          type="button"
           className="button"
-          onClick={() => console.log('Botão Entrar Pressionado')}
+          onClick={handleEntrar}
         >
           Entrar
         </button>
@@ -43,7 +61,7 @@ export default function LoginScreen() {
           <span className="signup-text">Não possui uma conta?</span>
           <button
             className="signup-link"
-            onClick={() => console.log('Botão Cadastre-se Pressionado')}
+            onClick={() => console.log('Cadastre-se clicado')}
           >
             Cadastre-se
           </button>
