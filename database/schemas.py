@@ -32,8 +32,28 @@ class FarmerUpdate(BaseModel):
     sale_preference: Optional[str] = None
     contact: Optional[str] = None
 
+class DiagnosticRequest(BaseModel):
+    """Schema para diagnóstico inicial do agricultor"""
+    city: str
+    state: str
+    crops: str
+    budget: float = 0.0
+    production_weekly: Optional[str] = None
+    surplus: Optional[str] = None
+    sale_preference: str = "direta"
+    contact: Optional[str] = None
+
+class DiagnosticResponse(BaseModel):
+    """Schema para resposta do diagnóstico"""
+    farmer_id: int
+    bio: str
+    diagnostic_profile: str
+    message: str
+
 class Farmer(FarmerBase):
     id: int
+    bio: Optional[str] = None
+    diagnostic_profile: Optional[str] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
 
@@ -86,10 +106,20 @@ class ProductCreate(ProductBase):
 
 class Product(ProductBase):
     id: int
+    price: Optional[float] = None
+    quantity: Optional[float] = None
+    image_url: Optional[str] = None
+    farmer_id: Optional[int] = None
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+class ProductCreateWithFarmer(ProductBase):
+    """Schema para criar produto com agricultor"""
+    price: Optional[float] = None
+    quantity: Optional[float] = None
+    image_url: Optional[str] = None
 
 # Schemas para Listings (Anúncios)
 class ListingBase(BaseModel):
@@ -156,3 +186,46 @@ class CooperativeMembership(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Schemas para IA Consultiva
+class AIDiagnoseRequest(BaseModel):
+    """Schema para diagnóstico via IA"""
+    question: str
+    farmer_id: int
+
+class AIDiagnoseResponse(BaseModel):
+    """Schema para resposta do diagnóstico IA"""
+    response: str
+    confidence: float = 0.0
+
+class AIRecommendationResponse(BaseModel):
+    """Schema para recomendações da IA"""
+    recommendations: List[str]
+    based_on: str
+
+# Schemas para Marketplace Social
+class MarketplaceFeedItem(BaseModel):
+    """Schema para item do feed do marketplace"""
+    product: Optional[Product] = None
+    listing: Optional[Listing] = None
+    farmer: Farmer
+    type: str  # "product" ou "listing"
+
+class FollowRequest(BaseModel):
+    """Schema para seguir agricultor"""
+    farmer_id_to_follow: int
+
+class FollowersResponse(BaseModel):
+    """Schema para lista de seguidores"""
+    followers: List[Farmer]
+    following: List[Farmer]
+    total_followers: int
+    total_following: int
+
+# Schemas para sugestões de cooperativas
+class CooperativeSuggestion(BaseModel):
+    """Schema para sugestão de cooperativa"""
+    farmer: Farmer
+    compatibility_score: float
+    reasons: List[str]
+
