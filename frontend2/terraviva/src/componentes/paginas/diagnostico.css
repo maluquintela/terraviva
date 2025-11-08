@@ -1,0 +1,96 @@
+.diagnostico-wrapper {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  font-family: 'Nexa-Light', sans-serif;
+}
+
+.titulo {
+  text-align: center;
+  color: #1E4620;
+  font-family: 'Nexa-Bold';
+  margin-bottom: 20px;
+}
+
+.progress-container {
+  width: 100%;
+  height: 10px;
+  background-color: #E6E6E6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1E4620, #2F6E32);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  color: #333;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.pergunta-box {
+  margin-top: 25px;
+}
+
+.pergunta-titulo {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.input-texto,
+.input-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+.opcoes-radio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-label {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.radio-label:hover,
+.radio-label input:checked + span {
+  background: #E8F3EA;
+  border-color: #1E4620;
+}
+
+.botao-confirmar {
+  width: 100%;
+  background-color: #1E4620;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'Nexa-Bold';
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.botao-confirmar:hover {
+  background-color: #24572a;
+}
