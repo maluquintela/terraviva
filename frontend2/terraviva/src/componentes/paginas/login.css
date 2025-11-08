@@ -1,0 +1,174 @@
+@font-face {
+  font-family: 'Nexa-Light';
+  /* O caminho correto para sair de src/componentes/paginas e ir para public */
+  src: url('../../../public/Nexa-ExtraLight.ttf') format('truetype'); 
+}
+
+@font-face {
+  font-family: 'Nexa-Bold';
+  src: url('../../../public/Nexa-Heavy.ttf') format('truetype');
+}
+/* Cores principais */
+:root {
+  --primary-color: #1E4620;
+  --primary-hover: #27632a;
+  --bg-gradient: linear-gradient(135deg, #1E4620, #3b7a3d);
+}
+
+/* Fundo geral */
+.login-page {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box; /* Adicionado para garantir que o padding não estoure a tela */
+}
+
+/* Card principal */
+.card {
+  background: #fff;
+  padding: 40px 35px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-sizing: border-box; /* Adicionado para consistência */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Logo */
+.logo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+/* Título */
+.title {
+  font-size: 24px;
+  font-family: 'Nexa-Bold';
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0 15px;
+  margin-bottom: 20px;
+  font-family: 'Nexa-Light', sans-serif;
+  color: #333;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Adicionado para garantir o padding correto */
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(30, 70, 32, 0.4);
+}
+
+/* Botão principal */
+.button {
+  width: 100%;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 18px;
+  font-family: 'Nexa-Bold', sans-serif;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background: var(--primary-hover);
+  transform: scale(1.03);
+}
+
+/* Área de cadastro */
+.signup-container {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.signup-text {
+  font-size: 14px;
+  color: #666;
+  font-family: 'Nexa-Light', sans-serif;
+}
+
+.signup-link {
+  font-size: 14px;
+  color: var(--primary-color);
+  font-family: 'Nexa-Bold', sans-serif;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.signup-link:hover {
+  color: var(--primary-hover);
+}
+
+/* Animação de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .card {
+    padding: 30px 25px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .input {
+    height: 45px;
+  }
+
+  .button {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
