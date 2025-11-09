@@ -2,31 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🌿 Estilos globais opcionais */
+@font-face {
+  font-family: "Nexa-ExtraLight";
+  src: url("./assets/fonts/Nexa-ExtraLight.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "Nexa-Heavy";
+  src: url("./assets/fonts/Nexa-Heavy.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* 🌿 Variáveis globais */
 :root {
   --verde: #2e7d32;
   --bege: #f5f5dc;
   --cinza-claro: #f9fafb;
   --texto: #1f2937;
+  --primary-color: #1E4620;
+  --primary-hover: #27632a;
+  --bg-gradient: linear-gradient(135deg, #1E4620, #3b7a3d);
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
   min-height: 100%;
-  background-color: var(--cinza-claro);
-  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+  font-family: "Nexa-ExtraLight", "Segoe UI", sans-serif;
   color: var(--texto);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-gradient);
 }
 
-/* ✨ Centralização padrão */
+/* ✨ Layout raiz */
 #root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.App {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  background: #0d3b2a;
+  border-radius: 36px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.app-content {
+  flex: 1;
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: start;
-  min-height: 100vh;
-  padding: 2rem;
+  align-items: stretch;
+  background: transparent;
 }
 
 /* 💚 Botões padrão */
@@ -39,6 +82,7 @@ button {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: "Nexa-Heavy", "Segoe UI", sans-serif;
 }
 
 button:hover {
@@ -47,38 +91,14 @@ button:hover {
 
 /* 📱 Responsividade básica */
 @media (max-width: 768px) {
-  #root {
-    padding: 1rem;
-  }
-
   button {
     width: 100%;
   }
 }
-/* Isso zera as margens e paddings padrões do navegador */
-body, html, #root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: 'Nexa-Light', sans-serif; /* Define sua fonte padrão */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
-  /* APLICANDO O FUNDO VERDE AQUI
-    O gradiente será aplicado ao corpo inteiro da página 
-  */
-  background: linear-gradient(135deg, #1E4620, #3b7a3d);
-}
 
 /* Garante que o box-sizing seja aplicado em tudo, facilitando a responsividade */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-}
-
-/* Definindo as variáveis globalmente para que o login.css possa usá-las */
-:root {
-  --primary-color: #1E4620;
-  --primary-hover: #27632a;
-  --bg-gradient: linear-gradient(135deg, #1E4620, #3b7a3d);
 }
