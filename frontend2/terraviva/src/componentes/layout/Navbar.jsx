@@ -1,15 +1,44 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import "./navbar.css";
 
 export default function Navbar() {
+  const location = useLocation();
+
+  if (["/", "/cadastro", "/diagnostico", "/chatbot"].includes(location.pathname)) {
+    return null;
+  }
+
   return (
-    <nav className="bg-green-800 text-white py-4 px-8 flex justify-between items-center">
-      <h1 className="text-xl font-bold">🌱 TerraViva</h1>
-      <div className="flex gap-6">
-        <Link to="/" className="hover:text-green-200">Login</Link>
-        <Link to="/diagnostico" className="hover:text-green-200">Diagnóstico</Link>
-        <Link to="/resultado" className="hover:text-green-200">Resultado</Link>
-      </div>
-    </nav>
+    <header className="navbar">
+      <div className="navbar__brand">🌱 TerraViva</div>
+      <nav className="navbar__links">
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            isActive ? "navbar__link navbar__link--active" : "navbar__link"
+          }
+        >
+          Login
+        </NavLink>
+        <NavLink
+          to="/cadastro"
+          className={({ isActive }) =>
+            isActive ? "navbar__link navbar__link--active" : "navbar__link"
+          }
+        >
+          Cadastro
+        </NavLink>
+        <NavLink
+          to="/diagnostico"
+          className={({ isActive }) =>
+            isActive ? "navbar__link navbar__link--active" : "navbar__link"
+          }
+        >
+          Diagnóstico
+        </NavLink>
+      </nav>
+    </header>
   );
 }

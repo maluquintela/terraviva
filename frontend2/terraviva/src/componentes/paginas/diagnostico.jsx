@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./diagnostico.css";
 
 // ✅ Array de perguntas
@@ -47,6 +48,7 @@ export default function Diagnostico() {
   const [currentStep, setCurrentStep] = useState(1);
   const [respostas, setRespostas] = useState({});
   const [cidades, setCidades] = useState([]);
+  const navigate = useNavigate();
 
   const totalSteps = perguntas.length;
   const progress = (currentStep / totalSteps) * 100;
@@ -64,7 +66,7 @@ export default function Diagnostico() {
         })
         .catch((err) => console.error("Erro ao buscar cidades:", err));
     }
-  }, [perguntaAtual.id]);
+  }, [perguntaAtual.id, cidades.length]);
 
   // 🔹 Atualiza resposta do usuário
   const handleChange = (valor) => {
@@ -82,70 +84,94 @@ export default function Diagnostico() {
   };
 
   return (
-    <div className="diagnostico-wrapper">
-      <h2 className="titulo">Diagnóstico da sua plantação</h2>
-
-      {/* Barra de progresso */}
-      <div className="progress-container">
-        <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-      </div>
-      <p className="progress-text">
-        Pergunta {currentStep} de {totalSteps}
-      </p>
-
-      {/* Pergunta atual */}
-      <div className="pergunta-box">
-        <p className="pergunta-titulo">{perguntaAtual.titulo}</p>
-
-        {/* Input dinâmico */}
-        {perguntaAtual.tipo === "text" && (
-          <input
-            type="text"
-            placeholder="Digite aqui..."
-            className="input-texto"
-            value={respostas[perguntaAtual.id] || ""}
-            onChange={(e) => handleChange(e.target.value)}
-          />
-        )}
-
-        {perguntaAtual.tipo === "select" && (
-          <select
-            className="input-select"
-            value={respostas[perguntaAtual.id] || ""}
-            onChange={(e) => handleChange(e.target.value)}
-          >
-            <option value="">Selecione uma opção</option>
-            {(perguntaAtual.id === 1 ? cidades : perguntaAtual.opcoes).map(
-              (op, i) => (
-                <option key={i} value={op}>
-                  {op}
-                </option>
-              )
-            )}
-          </select>
-        )}
-
-        {perguntaAtual.tipo === "radio" && (
-          <div className="opcoes-radio">
-            {perguntaAtual.opcoes.map((op, i) => (
-              <label key={i} className="radio-label">
-                <input
-                  type="radio"
-                  name={`pergunta-${perguntaAtual.id}`}
-                  value={op}
-                  checked={respostas[perguntaAtual.id] === op}
-                  onChange={(e) => handleChange(e.target.value)}
-                />
-                {op}
-              </label>
-            ))}
+    <div className="diagnostico-page">
+      <header className="diagnostico-header">
+        <button
+          type="button"
+          className="diagnostico-back"
+          onClick={() => navigate(-1)}
+          aria-label="Voltar"
+        >
+          ‹
+        </button>
+        <div className="diagnostico-header-info">
+          <h2 className="titulo">Diagnóstico da sua plantação:</h2>
+          <span className="diagnostico-passos">
+            Pergunta {currentStep} de {totalSteps}
+          </span>
+          <div className="progress-container">
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
-        )}
+        </div>
+      </header>
+
+      <div className="diagnostico-wrapper">
+        <div className="pergunta-box">
+          <p className="pergunta-titulo">{perguntaAtual.titulo}</p>
+
+          {perguntaAtual.tipo === "text" && (
+            <input
+              type="text"
+              placeholder="Digite aqui..."
+              className="input-texto"
+              value={respostas[perguntaAtual.id] || ""}
+              onChange={(e) => handleChange(e.target.value)}
+            />
+          )}
+
+          {perguntaAtual.tipo === "select" && (
+            <select
+              className="input-select"
+              value={respostas[perguntaAtual.id] || ""}
+              onChange={(e) => handleChange(e.target.value)}
+            >
+              <option value="">
+                {perguntaAtual.id === 1
+                  ? "Escolha a cidade"
+                  : perguntaAtual.id === 3
+                  ? "Digite aqui..."
+                  : "Selecione uma opção"}
+              </option>
+              {(perguntaAtual.id === 1 ? cidades : perguntaAtual.opcoes).map(
+                (op, i) => (
+                  <option key={i} value={op}>
+                    {op}
+                  </option>
+                )
+              )}
+            </select>
+          )}
+
+          {perguntaAtual.tipo === "radio" && (
+            <div className="opcoes-radio">
+              {perguntaAtual.opcoes.map((op, i) => (
+                <label key={i} className="radio-label">
+                  <input
+                    type="radio"
+                    name={`pergunta-${perguntaAtual.id}`}
+                    value={op}
+                    checked={respostas[perguntaAtual.id] === op}
+                    onChange={(e) => handleChange(e.target.value)}
+                  />
+                  <span>{op}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <button className="botao-confirmar" onClick={handleNext}>
+          {currentStep < totalSteps ? "Confirmar escolha" : "Finalizar"}
+        </button>
       </div>
 
-      {/* Botão de avanço */}
-      <button className="botao-confirmar" onClick={handleNext}>
-        {currentStep < totalSteps ? "Confirmar escolha" : "Finalizar"}
+      <button
+        className="diagnostico-fab"
+        type="button"
+        onClick={handleNext}
+        aria-label="Avançar"
+      >
+        »
       </button>
     </div>
   );

@@ -15,9 +15,9 @@
 
 /* Fundo principal */
 .login-page {
-  background: var(--primary-color);
-  min-height: 100vh;
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -52,6 +52,12 @@
   margin-bottom: 8px;
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Título */
 .title {
   font-size: 20px;
@@ -59,16 +65,17 @@
   margin-bottom: 18px;
   color: #333;
   text-align: center;
+  letter-spacing: -0.02em;
 }
 .highlight {
   color: var(--primary-color);
 }
 
-/* Inputs com ícones */
-.input-container {
-  position: relative;
+/* Inputs */
+.input-wrapper {
   width: 100%;
-  margin-bottom: 15px; /* reduzido de 20px */
+  position: relative;
+  margin-bottom: 16px;
 }
 
 .input {
@@ -90,7 +97,27 @@
 .input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 5px rgba(30, 70, 32, 0.4);
+  box-shadow: 0 0 0 4px rgba(30, 70, 32, 0.18);
+}
+
+.input::placeholder {
+  color: rgba(30, 70, 32, 0.4);
+}
+
+.input-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(30, 70, 32, 0.6);
+  padding: 0;
+}
+
+.input-toggle-icon {
+  display: block;
 }
 
 .input-icon {
@@ -131,7 +158,7 @@
 /* Botão principal */
 .button {
   width: 100%;
-  background: var(--primary-color);
+  background: #193f2b;
   color: #fff;
   font-size: 16px;
   font-family: 'Nexa-Bold', sans-serif;
@@ -152,19 +179,20 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .signup-text {
-  font-size: 14px;
-  color: #666;
-  font-family: 'Nexa-Light', sans-serif;
+  font-size: 13px;
+  color: #9ca3af;
+  font-family: 'Nexa-ExtraLight', sans-serif;
 }
 
 .signup-link {
-  font-size: 14px;
-  color: var(--primary-color);
-  font-family: 'Nexa-Bold', sans-serif;
-  text-decoration: underline;
+  font-size: 13px;
+  color: #8b5a2b;
+  font-family: 'Nexa-Heavy', sans-serif;
+  text-decoration: none;
   background: none;
   border: none;
   cursor: pointer;
@@ -191,7 +219,8 @@
 /* Responsividade */
 @media (max-width: 480px) {
   .card {
-    padding: 30px 25px;
+    padding: 32px 24px;
+    border-radius: 28px;
   }
   .title {
     font-size: 20px;

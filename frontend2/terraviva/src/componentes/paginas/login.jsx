@@ -13,8 +13,8 @@ export default function LoginScreen() {
 
   return (
     <div className="login-page">
-      <div className="card animate-fadeIn">
-        {/* Logo */}
+      <div className="login-hero" />
+      <form className="card animate-fadeIn" onSubmit={handleSubmit}>
         <div className="logo-container">
           <img src="/terraviva.png" alt="TerraViva Logo" className="logo" />
         </div>
@@ -56,17 +56,27 @@ export default function LoginScreen() {
           Entrar
         </button>
 
-        {/* Link Cadastre-se */}
         <div className="signup-container">
           <span className="signup-text">Não possui uma conta?</span>
           <button
+            type="button"
             className="signup-link"
             onClick={() => console.log('Cadastre-se clicado')}
           >
             Cadastre-se
           </button>
         </div>
-      </div>
+
+        {mensagem && (
+          <p
+            className={`login-feedback ${
+              mensagem.tipo === "erro" ? "erro" : "info"
+            }`}
+          >
+            {mensagem.texto}
+          </p>
+        )}
+      </form>
     </div>
   );
 }
