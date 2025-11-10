@@ -5,6 +5,7 @@ import Diagnostico from "./componentes/paginas/diagnostico";
 import Cadastro from "./componentes/paginas/cadastro";
 import Chatbot from "./componentes/paginas/chatbot";
 import Home from './componentes/paginas/Home';
+import PagNoticias from "./componentes/paginas/pagnoticias";
 import "./index.css";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/diagnostico" element={<Diagnostico />} />
             <Route path="/chatbot" element={<Chatbot />} />
             <Route path="/telainicial" element={<Home />} />
+            <Route path= "/dicas" element={<PagNoticias />} />
           </Routes>
         </main>
       </div>
