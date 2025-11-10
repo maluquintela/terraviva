@@ -79,7 +79,7 @@ export default function Diagnostico() {
       setCurrentStep(currentStep + 1);
     } else {
       console.log("Respostas finais:", respostas);
-      alert("Diagnóstico concluído! ✅");
+      navigate("/home");
     }
   };
 

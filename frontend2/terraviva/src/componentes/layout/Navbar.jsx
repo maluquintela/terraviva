@@ -5,7 +5,19 @@ import "./navbar.css";
 export default function Navbar() {
   const location = useLocation();
 
-  if (["/", "/cadastro", "/diagnostico", "/chatbot"].includes(location.pathname)) {
+  if (
+    [
+      "/",
+      "/cadastro",
+      "/diagnostico",
+      "/chatbot",
+      "/home",
+      "/noticias",
+      "/ajuda-tecnica",
+      "/mercado",
+      "/cooperativas",
+    ].includes(location.pathname)
+  ) {
     return null;
   }
 

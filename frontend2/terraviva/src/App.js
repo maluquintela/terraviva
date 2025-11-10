@@ -1,26 +1,56 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./componentes/layout/Navbar";
 import LoginScreen from "./componentes/paginas/login";
 import Diagnostico from "./componentes/paginas/diagnostico";
 import Cadastro from "./componentes/paginas/cadastro";
 import Chatbot from "./componentes/paginas/chatbot";
+import NoticiasScreen from "./screens/NoticiasScreen";
+import AjudaTecnicaScreen from "./screens/AjudaTecnicaScreen";
+import MercadoScreen from "./screens/MercadoScreen";
+import CooperativasScreen from "./screens/CooperativasScreen";
+import Home from "./componentes/paginas/home";
 import "./index.css";
+import { cn } from "./utils/cn";
+
+function AppContainer() {
+  const location = useLocation();
+  const isHomeContext = [
+    "/home",
+    "/noticias",
+    "/mercado",
+    "/cooperativas",
+  ].includes(location.pathname);
+
+  return (
+    <div className={cn("App", isHomeContext && "App--home")}>
+      <Navbar />
+      <main className="app-content">
+        <Routes>
+          <Route path="/" element={<LoginScreen />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/diagnostico" element={<Diagnostico />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/noticias" element={<NoticiasScreen />} />
+          <Route path="/ajuda-tecnica" element={<AjudaTecnicaScreen />} />
+          <Route path="/mercado" element={<MercadoScreen />} />
+          <Route path="/cooperativas" element={<CooperativasScreen />} />
+          <Route path="/chatbot" element={<Chatbot />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Navbar />
-        <main className="app-content">
-          <Routes>
-            <Route path="/" element={<LoginScreen />} />
-            <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="/diagnostico" element={<Diagnostico />} />
-            <Route path="/chatbot" element={<Chatbot />} />
-          </Routes>
-        </main>
-      </div>
+      <AppContainer />
     </Router>
   );
 }
