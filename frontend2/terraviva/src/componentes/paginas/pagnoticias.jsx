@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Menu, Search, Compass, Box, Leaf, ShoppingCart } from "lucide-react";
 import "./pagnoticias.css";
 
@@ -31,12 +32,12 @@ export default function PagNoticias() {
 
   return (
     <div className="pn-page">
-      <header className="pn-header">
+      <header className="pn-header" aria-hidden>
         <button className="pn-menu" aria-label="menu">
           <Menu size={20} strokeWidth={2} />
         </button>
 
-        <div className="pn-search">
+        <div className="pn-search" role="search">
           <input type="search" placeholder="Procure por produtores..." aria-label="Pesquisar produtores" />
           <button className="pn-search-btn" aria-label="Pesquisar">
             <Search size={18} strokeWidth={2} />
@@ -44,25 +45,32 @@ export default function PagNoticias() {
         </div>
       </header>
 
-      <main className="pn-main">
+      <main className="pn-main" role="main">
         <section className="pn-greeting">
           <h2>Olá, <strong>{userName}.</strong></h2>
           <p>O que o TerraViva pode fazer por você hoje?</p>
         </section>
 
-        <section className="pn-cards">
+        <section className="pn-cards" aria-live="polite">
           {cards.map((c) => (
-            <article key={c.id} className="pn-card" role="article" tabIndex={0}>
-              <div className="pn-card-media">
-                <img src={c.img} alt={c.title} />
-                <div className="pn-card-overlay">
-                  <h3>{c.title}</h3>
+            <Link
+              to={`/dicas/${c.id}`}
+              key={c.id}
+              className="pn-card-link"
+              aria-label={`${c.title} — abrir dica`}
+            >
+              <article className="pn-card" role="article" tabIndex={0}>
+                <div className="pn-card-media" aria-hidden>
+                  <img src={c.img} alt={c.title} />
+                  <div className="pn-card-overlay">
+                    <h3>{c.title}</h3>
+                  </div>
                 </div>
-              </div>
-              <div className="pn-card-body">
-                <p>{c.subtitle}</p>
-              </div>
-            </article>
+                <div className="pn-card-body">
+                  <p>{c.subtitle}</p>
+                </div>
+              </article>
+            </Link>
           ))}
         </section>
       </main>
