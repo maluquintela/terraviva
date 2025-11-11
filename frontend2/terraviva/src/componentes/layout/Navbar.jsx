@@ -5,19 +5,25 @@ import "./navbar.css";
 export default function Navbar() {
   const location = useLocation();
 
-  if (
-    [
-      "/",
-      "/cadastro",
-      "/diagnostico",
-      "/chatbot",
-      "/home",
-      "/noticias",
-      "/ajuda-tecnica",
-      "/mercado",
-      "/cooperativas",
-    ].includes(location.pathname)
-  ) {
+  const hiddenRoutes = [
+    "/",
+    "/cadastro",
+    "/diagnostico",
+    "/chatbot",
+    "/home",
+    "/noticias",
+    "/ajuda-tecnica",
+    "/mercado",
+    "/cooperativas",
+    "/perfil",
+  ];
+
+  const shouldHideNavbar =
+    hiddenRoutes.includes(location.pathname) ||
+    location.pathname.startsWith("/mercado") ||
+    location.pathname.startsWith("/cooperativas");
+
+  if (shouldHideNavbar) {
     return null;
   }
 

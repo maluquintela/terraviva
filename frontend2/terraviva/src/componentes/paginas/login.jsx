@@ -52,28 +52,28 @@ export default function LoginScreen() {
         </h2>
 
         <div className="input-wrapper">
-          <input
-            type="text"
+        <input
+          type="text"
             name="usuario"
-            placeholder="Usuário"
-            className="input"
+          placeholder="Usuário"
+          className="input"
             value={form.usuario}
             onChange={handleChange}
             autoComplete="username"
-          />
+        />
         </div>
 
         <div className="input-wrapper">
-          <input
+        <input
             type={mostrarSenha ? "text" : "password"}
             name="senha"
-            placeholder="Senha"
-            className="input"
+          placeholder="Senha"
+          className="input"
             value={form.senha}
             onChange={handleChange}
             autoComplete="current-password"
-          />
-          <button
+        />
+        <button
             type="button"
             className="input-toggle"
             onClick={() => setMostrarSenha((prev) => !prev)}

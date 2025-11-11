@@ -13,19 +13,23 @@ import Chatbot from "./componentes/paginas/chatbot";
 import NoticiasScreen from "./screens/NoticiasScreen";
 import AjudaTecnicaScreen from "./screens/AjudaTecnicaScreen";
 import MercadoScreen from "./screens/MercadoScreen";
+import ProducerProfileScreen from "./screens/ProducerProfileScreen";
+import ProducerChatScreen from "./screens/ProducerChatScreen";
+import UserProfileScreen from "./screens/UserProfileScreen";
 import CooperativasScreen from "./screens/CooperativasScreen";
+import CooperativaProdutorChat from "./screens/CooperativaProdutorChat";
+import CooperativaGrupoChat from "./screens/CooperativaGrupoChat";
 import Home from "./componentes/paginas/home";
 import "./index.css";
 import { cn } from "./utils/cn";
 
 function AppContainer() {
   const location = useLocation();
-  const isHomeContext = [
-    "/home",
-    "/noticias",
-    "/mercado",
-    "/cooperativas",
-  ].includes(location.pathname);
+  const homeLikePrefixes = ["/home", "/mercado"];
+  const homeLikeExact = ["/noticias", "/ajuda-tecnica", "/cooperativas"];
+  const isHomeContext =
+    homeLikePrefixes.some((prefix) => location.pathname.startsWith(prefix)) ||
+    homeLikeExact.includes(location.pathname);
 
   return (
     <div className={cn("App", isHomeContext && "App--home")}>
@@ -39,7 +43,12 @@ function AppContainer() {
           <Route path="/noticias" element={<NoticiasScreen />} />
           <Route path="/ajuda-tecnica" element={<AjudaTecnicaScreen />} />
           <Route path="/mercado" element={<MercadoScreen />} />
+          <Route path="/mercado/produtor/:id" element={<ProducerProfileScreen />} />
+          <Route path="/mercado/produtor/:id/chat" element={<ProducerChatScreen />} />
+          <Route path="/perfil" element={<UserProfileScreen />} />
           <Route path="/cooperativas" element={<CooperativasScreen />} />
+          <Route path="/cooperativas/chat/produtor/:id" element={<CooperativaProdutorChat />} />
+          <Route path="/cooperativas/chat/grupo/:id" element={<CooperativaGrupoChat />} />
           <Route path="/chatbot" element={<Chatbot />} />
         </Routes>
       </main>
