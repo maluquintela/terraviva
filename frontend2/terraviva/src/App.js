@@ -5,7 +5,6 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import Navbar from "./componentes/layout/Navbar";
 import LoginScreen from "./componentes/paginas/login";
 import Diagnostico from "./componentes/paginas/diagnostico";
 import Cadastro from "./componentes/paginas/cadastro";
@@ -20,6 +19,8 @@ import CooperativasScreen from "./screens/CooperativasScreen";
 import CooperativaProdutorChat from "./screens/CooperativaProdutorChat";
 import CooperativaGrupoChat from "./screens/CooperativaGrupoChat";
 import Home from "./componentes/paginas/home";
+import Home from './componentes/paginas/Home';
+import PagNoticias from "./componentes/paginas/pagnoticias";
 import "./index.css";
 import { cn } from "./utils/cn";
 
@@ -65,3 +66,4 @@ function App() {
 }
 
 export default App;
+

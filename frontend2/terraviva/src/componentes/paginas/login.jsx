@@ -1,42 +1,33 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./login.css";
-
-const estadoInicial = {
-  usuario: "",
-  senha: "",
-};
+import React, { useState } from 'react';
+import { Eye, EyeOff, User, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import './login.css';
 
 export default function LoginScreen() {
-  const [form, setForm] = useState(estadoInicial);
-  const [mensagem, setMensagem] = useState(null);
-  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [mensagem, setMensagem] = useState(null); // 👈 Adiciona o estado da mensagem
   const navigate = useNavigate();
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  // 👇 Corrige o handleSubmit
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+    // Exemplo simples de validação:
+    const usuario = e.target[0].value;
+    const senha = e.target[1].value;
 
-    if (!form.usuario.trim() || !form.senha.trim()) {
-      setMensagem({
-        tipo: "erro",
-        texto: "Informe usuário e senha para continuar.",
-      });
+    if (!usuario || !senha) {
+      setMensagem({ tipo: 'erro', texto: 'Preencha todos os campos.' });
       return;
     }
 
-    setMensagem({
-      tipo: "info",
-      texto:
-        "Login simulado com sucesso! Você pode seguir para o diagnóstico enquanto o backend não está disponível.",
-    });
-    setTimeout(() => {
-      navigate("/diagnostico");
-    }, 600);
+    // Se quiser, pode validar o login aqui (ex: API ou dados mock)
+    if (usuario === 'admin' && senha === '1234') {
+      setMensagem({ tipo: 'info', texto: 'Login realizado com sucesso!' });
+      setTimeout(() => navigate('/Diagnostico'), 1000);
+    } else {
+      setMensagem({ tipo: 'erro', texto: 'Usuário ou senha incorretos.' });
+    }
   };
 
   return (
@@ -64,70 +55,27 @@ export default function LoginScreen() {
         </div>
 
         <div className="input-wrapper">
-        <input
+          <input
             type={mostrarSenha ? "text" : "password"}
             name="senha"
-          placeholder="Senha"
-          className="input"
+            placeholder="Senha"
+            className="input"
             value={form.senha}
             onChange={handleChange}
             autoComplete="current-password"
-        />
-        <button
+          />
+          <button
             type="button"
-            className="input-toggle"
-            onClick={() => setMostrarSenha((prev) => !prev)}
-            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+            className="icon-button"
+            onClick={() => setShowPassword(!showPassword)}
+            aria-label="mostrar senha"
           >
-            {mostrarSenha ? (
-              <svg
-                className="input-toggle-icon"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M12 9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3Z"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="input-toggle-icon"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M3 3l18 18"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M5.53 7.11C3.843 8.612 2.75 10 2.75 10s3.5 6 9.999 6c1.36 0 2.614-.266 3.75-.708M9.88 9.88A3.001 3.001 0 0115 12a3 3 0 01-5.117 2.117M18.47 15.89C20.157 14.388 21.25 13 21.25 13s-3.5-6-10-6c-.68 0-1.335.064-1.965.18"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
+            {showPassword ? <EyeOff /> : <Eye />}
           </button>
         </div>
 
-        <button className="button" type="submit">
+        {/* Botão Entrar */}
+        <button type="submit" className="button">
           Entrar
         </button>
 
@@ -136,7 +84,7 @@ export default function LoginScreen() {
           <button
             type="button"
             className="signup-link"
-            onClick={() => navigate("/cadastro")}
+            onClick={() => console.log('Cadastre-se clicado')}
           >
             Cadastre-se
           </button>
@@ -145,7 +93,7 @@ export default function LoginScreen() {
         {mensagem && (
           <p
             className={`login-feedback ${
-              mensagem.tipo === "erro" ? "erro" : "info"
+              mensagem.tipo === 'erro' ? 'erro' : 'info'
             }`}
           >
             {mensagem.texto}

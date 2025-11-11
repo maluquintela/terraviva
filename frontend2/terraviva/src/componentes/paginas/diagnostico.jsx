@@ -1,76 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./diagnostico.css";
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import './diagnostico.css';
 
-// ✅ Array de perguntas
-const perguntas = [
-  {
-    id: 1,
-    titulo: "Onde fica localizada a sua plantação?",
-    tipo: "select",
-    opcoes: [], // será preenchido com as cidades da Paraíba
-  },
-  {
-    id: 2,
-    titulo: "O que você costuma produzir na sua plantação?",
-    tipo: "text",
-  },
-  {
-    id: 3,
-    titulo: "Qual o orçamento para a sua plantação?",
-    tipo: "select",
-    opcoes: ["Até R$2.000", "De R$2.000 a R$5.000", "De R$5.000 a R$10.000", "Acima de R$10.000"],
-  },
-  {
-    id: 4,
-    titulo: "Em média, quanto sobra da sua plantação após as vendas?",
-    tipo: "select",
-    opcoes: ["Menos de 10%", "De 10% a 30%", "De 30% a 50%", "Mais de 50%"],
-  },
-  {
-    id: 5,
-    titulo:
-      "Para a venda do seu excedente, qual a opção mais confortável para você?",
-    tipo: "radio",
-    opcoes: [
-      "Cooperações semanais",
-      "Cooperações a longo prazo",
-      "Vendas direta ao consumidor",
-      "Vendas a mercados e ao varejo",
-      "Vendas institucionais",
-      "Vendas por meio de canais digitais",
-    ],
-  },
-];
-
-// ✅ Componente principal
-export default function Diagnostico() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [respostas, setRespostas] = useState({});
-  const [cidades, setCidades] = useState([]);
+export default function DiagnosticoPlantacao() {
+  const [passo, setPasso] = useState(1);
+  const [cidade, setCidade] = useState('');
+  const [producao, setProducao] = useState('');
+  const [orcamento, setOrcamento] = useState('');
+  const [sobraVendas, setSobraVendas] = useState('');
+  const [vendaPreferida, setVendaPreferida] = useState('');
+  const [clientePreferido, setClientePreferido] = useState('');
+  const [municipios, setMunicipios] = useState([]);
   const navigate = useNavigate();
 
-  const totalSteps = perguntas.length;
-  const progress = (currentStep / totalSteps) * 100;
-
-  const perguntaAtual = perguntas[currentStep - 1];
-
-  // 🔹 Busca cidades da Paraíba na API do IBGE
   useEffect(() => {
-    if (perguntaAtual.id === 1 && cidades.length === 0) {
-      fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados/PB/municipios")
-        .then((res) => res.json())
-        .then((data) => {
-          const nomes = data.map((c) => c.nome);
-          setCidades(nomes);
-        })
-        .catch((err) => console.error("Erro ao buscar cidades:", err));
-    }
-  }, [perguntaAtual.id, cidades.length]);
+    const fetchCidades = async () => {
+      try {
+        const response = await fetch(
+          'https://servicodados.ibge.gov.br/api/v1/localidades/estados/25/municipios'
+        );
+        const data = await response.json();
+        setMunicipios(data.map(m => m.nome).sort());
+      } catch (error) {
+        console.error('Erro ao carregar municípios:', error);
+      }
+    };
+    fetchCidades();
+  }, []);
 
-  // 🔹 Atualiza resposta do usuário
-  const handleChange = (valor) => {
-    setRespostas({ ...respostas, [perguntaAtual.id]: valor });
+  const getProgresso = () => {
+    let respostasPreenchidas = 0;
+    if (cidade) respostasPreenchidas++;
+    if (producao) respostasPreenchidas++;
+    if (orcamento) respostasPreenchidas++;
+    if (sobraVendas) respostasPreenchidas++;
+    if (vendaPreferida && clientePreferido) respostasPreenchidas++;
+    return (respostasPreenchidas / 5) * 100;
   };
 
   // 🔹 Próxima pergunta
@@ -80,99 +46,166 @@ export default function Diagnostico() {
     } else {
       console.log("Respostas finais:", respostas);
       navigate("/home");
+  const proximoPasso = () => {
+    if (passo < 5) setPasso(passo + 1);
+  };
+
+  const voltarPasso = () => {
+    if (passo > 1) setPasso(passo - 1);
+  };
+
+  const concluirQuestionario = () => {
+    if (vendaPreferida && clientePreferido) {
+      // Aqui você pode adicionar a lógica para salvar as respostas
+      navigate('/telainicial"'); // ou para onde desejar redirecionar
     }
   };
 
   return (
-    <div className="diagnostico-page">
-      <header className="diagnostico-header">
-        <button
-          type="button"
-          className="diagnostico-back"
-          onClick={() => navigate(-1)}
-          aria-label="Voltar"
-        >
-          ‹
+    <div className="container-diagnostico">
+      <header className="header-diagnostico">
+        <button className="botao-voltar" onClick={voltarPasso} disabled={passo === 1}>
+          <ChevronLeft size={24} />
         </button>
-        <div className="diagnostico-header-info">
-          <h2 className="titulo">Diagnóstico da sua plantação:</h2>
-          <span className="diagnostico-passos">
-            Pergunta {currentStep} de {totalSteps}
-          </span>
-          <div className="progress-container">
-            <div className="progress-fill" style={{ width: `${progress}%` }} />
-          </div>
+        <h1 className="titulo-diagnostico">Diagnóstico da sua plantação</h1>
+        <div className="barra-progresso-container">
+          <div className="barra-progresso" style={{ width: `${getProgresso()}%` }} />
         </div>
       </header>
 
-      <div className="diagnostico-wrapper">
-        <div className="pergunta-box">
-          <p className="pergunta-titulo">{perguntaAtual.titulo}</p>
-
-          {perguntaAtual.tipo === "text" && (
-            <input
-              type="text"
-              placeholder="Digite aqui..."
-              className="input-texto"
-              value={respostas[perguntaAtual.id] || ""}
-              onChange={(e) => handleChange(e.target.value)}
-            />
-          )}
-
-          {perguntaAtual.tipo === "select" && (
+      <main className="main-diagnostico">
+        {passo === 1 && (
+          <section className="secao-pergunta">
+            <p className="pergunta-numero">Pergunta 1 de 5</p>
+            <h2 className="pergunta-texto">Onde fica localizada a sua plantação?</h2>
             <select
               className="input-select"
-              value={respostas[perguntaAtual.id] || ""}
-              onChange={(e) => handleChange(e.target.value)}
+              value={cidade}
+              onChange={(e) => setCidade(e.target.value)}
             >
-              <option value="">
-                {perguntaAtual.id === 1
-                  ? "Escolha a cidade"
-                  : perguntaAtual.id === 3
-                  ? "Digite aqui..."
-                  : "Selecione uma opção"}
-              </option>
-              {(perguntaAtual.id === 1 ? cidades : perguntaAtual.opcoes).map(
-                (op, i) => (
-                  <option key={i} value={op}>
-                    {op}
-                  </option>
-                )
-              )}
+              <option value="">Escolha a cidade</option>
+              {municipios.map((cidade) => (
+                <option key={cidade} value={cidade}>{cidade}</option>
+              ))}
             </select>
-          )}
+            {cidade && (
+              <button className="botao-confirmar" onClick={proximoPasso}>
+                Próxima pergunta
+              </button>
+            )}
+          </section>
+        )}
 
-          {perguntaAtual.tipo === "radio" && (
+        {passo === 2 && (
+          <section className="secao-pergunta">
+            <p className="pergunta-numero">Pergunta 2 de 5</p>
+            <h2 className="pergunta-texto">O que você costuma produzir na sua plantação?</h2>
+            <input
+              type="text"
+              className="input-texto"
+              value={producao}
+              onChange={(e) => setProducao(e.target.value)}
+              placeholder="Digite aqui..."
+            />
+            {producao && (
+              <button className="botao-confirmar" onClick={proximoPasso}>
+                Próxima pergunta
+              </button>
+            )}
+          </section>
+        )}
+
+        {passo === 3 && (
+          <section className="secao-pergunta">
+            <p className="pergunta-numero">Pergunta 3 de 5</p>
+            <h2 className="pergunta-texto">Qual o orçamento para a sua plantação?</h2>
+            <select
+              className="input-select"
+              value={orcamento}
+              onChange={(e) => setOrcamento(e.target.value)}
+            >
+              <option value="">Escolha a média:</option>
+              <option value="ate1000">Até R$ 1.000</option>
+              <option value="1000a5000">R$ 1.000 - R$ 5.000</option>
+              <option value="5000a10000">R$ 5.000 - R$ 10.000</option>
+              <option value="mais10000">Mais de R$ 10.000</option>
+            </select>
+            {orcamento && (
+              <button className="botao-confirmar" onClick={proximoPasso}>
+                Próxima pergunta
+              </button>
+            )}
+          </section>
+        )}
+
+        {passo === 4 && (
+          <section className="secao-pergunta">
+            <p className="pergunta-numero">Pergunta 4 de 5</p>
+            <h2 className="pergunta-texto">Em média, quanto sobra da sua plantação após as vendas?</h2>
+            <input
+              type="text"
+              className="input-texto"
+              value={sobraVendas}
+              onChange={(e) => setSobraVendas(e.target.value)}
+              placeholder="Digite aqui..."
+            />
+            {sobraVendas && (
+              <button className="botao-confirmar" onClick={proximoPasso}>
+                Próxima pergunta
+              </button>
+            )}
+          </section>
+        )}
+
+        {passo === 5 && (
+          <section className="secao-pergunta">
+            <p className="pergunta-numero">Pergunta 5 de 5</p>
+            <h2 className="pergunta-texto">
+              Para a venda do seu excedente, qual a opção que mais é confortável para você?
+            </h2>
             <div className="opcoes-radio">
-              {perguntaAtual.opcoes.map((op, i) => (
-                <label key={i} className="radio-label">
+              {['Cooperações semanais', 'Cooperações a longo prazo'].map((opcao) => (
+                <label key={opcao} className={`opcao-radio ${vendaPreferida === opcao ? 'selecionada' : ''}`}>
                   <input
                     type="radio"
-                    name={`pergunta-${perguntaAtual.id}`}
-                    value={op}
-                    checked={respostas[perguntaAtual.id] === op}
-                    onChange={(e) => handleChange(e.target.value)}
+                    name="venda"
+                    value={opcao}
+                    checked={vendaPreferida === opcao}
+                    onChange={() => setVendaPreferida(opcao)}
                   />
-                  <span>{op}</span>
+                  {opcao}
                 </label>
               ))}
             </div>
-          )}
-        </div>
 
-        <button className="botao-confirmar" onClick={handleNext}>
-          {currentStep < totalSteps ? "Confirmar escolha" : "Finalizar"}
-        </button>
-      </div>
-
-      <button
-        className="diagnostico-fab"
-        type="button"
-        onClick={handleNext}
-        aria-label="Avançar"
-      >
-        »
-      </button>
+            <h2 className="pergunta-texto">Para quem você gostaria de vender?</h2>
+            <div className="opcoes-radio">
+              {[
+                'Vendas direta ao consumidor',
+                'Vendas a mercados e ao varejo',
+                'Vendas institucionais',
+                'Vendas por meio de canais digitais'
+              ].map((opcao) => (
+                <label key={opcao} className={`opcao-radio ${clientePreferido === opcao ? 'selecionada' : ''}`}>
+                  <input
+                    type="radio"
+                    name="cliente"
+                    value={opcao}
+                    checked={clientePreferido === opcao}
+                    onChange={() => setClientePreferido(opcao)}
+                  />
+                  {opcao}
+                </label>
+              ))}
+            </div>
+            {vendaPreferida && clientePreferido && (
+              <button className="botao-concluir" onClick={concluirQuestionario}>
+                Concluir Questionário
+              </button>
+            )}
+          </section>
+        )}
+      </main>
     </div>
   );
 }

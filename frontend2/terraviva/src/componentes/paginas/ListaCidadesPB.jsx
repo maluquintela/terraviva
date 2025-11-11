@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Diagnostico.css";
+import "./diagnostico.css";
 
 export default function ListaCidadesPB({ value, onChange }) {
   const [municipios, setMunicipios] = useState([]);
