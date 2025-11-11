@@ -42,19 +42,27 @@ export default function LoginScreen() {
           Bem-vindo ao <span className="highlight">TerraViva!</span>
         </h2>
 
-        {/* Input Usuário */}
-        <div className="input-container">
-          <User className="input-icon" />
-          <input type="text" placeholder="Usuário" className="input" />
+        <div className="input-wrapper">
+        <input
+          type="text"
+            name="usuario"
+          placeholder="Usuário"
+          className="input"
+            value={form.usuario}
+            onChange={handleChange}
+            autoComplete="username"
+        />
         </div>
 
-        {/* Input Senha */}
-        <div className="input-container">
-          <Lock className="input-icon" />
+        <div className="input-wrapper">
           <input
-            type={showPassword ? 'text' : 'password'}
+            type={mostrarSenha ? "text" : "password"}
+            name="senha"
             placeholder="Senha"
             className="input"
+            value={form.senha}
+            onChange={handleChange}
+            autoComplete="current-password"
           />
           <button
             type="button"

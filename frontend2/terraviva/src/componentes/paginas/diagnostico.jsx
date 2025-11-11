@@ -39,6 +39,13 @@ export default function DiagnosticoPlantacao() {
     return (respostasPreenchidas / 5) * 100;
   };
 
+  // 🔹 Próxima pergunta
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      console.log("Respostas finais:", respostas);
+      navigate("/home");
   const proximoPasso = () => {
     if (passo < 5) setPasso(passo + 1);
   };

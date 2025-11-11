@@ -55,6 +55,10 @@
   box-shadow:none;
 }
 
+.chatbot-back svg {
+  stroke: #ffffff;
+}
+
 .chatbot-title{
   flex:1;
   margin:0 10px;
