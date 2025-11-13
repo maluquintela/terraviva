@@ -7,8 +7,8 @@ import {
   MoreVertical,
   MessageSquarePlus,
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getProdutorById } from "./mercadoData";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { fetchListingById } from "../api/marketplace";
 import "./producerChat.css";
 
 const gerarId = () =>
@@ -34,12 +34,62 @@ const initialMessages = [
 export default function ProducerChatScreen() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const produtor = useMemo(() => getProdutorById(id), [id]);
+  const location = useLocation();
+  const [listing, setListing] = useState(() => location.state?.listing ?? null);
   const [messages, setMessages] = useState(initialMessages);
   const [draft, setDraft] = useState("");
   const [unread, setUnread] = useState(0);
   const [showProposal, setShowProposal] = useState(false);
   const scrollRef = useRef(null);
+  const [loading, setLoading] = useState(!location.state?.listing);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    async function loadListing() {
+      if (location.state?.listing) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchListingById(id);
+        if (active) {
+          setListing(data);
+        }
+      } catch (err) {
+        if (active) {
+          setError(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar os dados do produtor."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadListing();
+    return () => {
+      active = false;
+    };
+  }, [id, location.state]);
+
+  const produtor = useMemo(() => {
+    if (!listing) return null;
+    const farmer = listing.farmer ?? {};
+    const avatarUrl = farmer.avatar_url
+      ? farmer.avatar_url
+      : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          farmer.name ?? "Produtor"
+        )}&background=34a853&color=ffffff`;
+    return {
+      id: listing.id,
+      nome: farmer.name ?? "Produtor parceiro",
+      avatar: avatarUrl,
+    };
+  }, [listing]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -100,6 +150,30 @@ export default function ProducerChatScreen() {
     }
     return undefined;
   }, [unread]);
+
+  if (loading) {
+    return (
+      <div className="producer-chat__fallback">
+        <p>Carregando conversa…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="producer-chat__fallback">
+        <button
+          type="button"
+          className="producer-chat__back"
+          onClick={() => navigate("/mercado")}
+        >
+          <ArrowLeft size={22} />
+          Voltar ao Mercado
+        </button>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   if (!produtor) {
     return (

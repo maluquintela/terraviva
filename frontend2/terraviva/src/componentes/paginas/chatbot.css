@@ -75,7 +75,10 @@
   background:var(--bg);
   padding:18px 20px;
   overflow-y:auto;
+  overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
+  max-height:calc(100vh - 180px); /* Garante que não ultrapasse a altura da tela */
+  min-height:400px;
 }
 
 .chatbot-thread{
@@ -122,6 +125,17 @@
   color:#222;
   border:1px solid var(--cinza-claro);
   border-bottom-left-radius:8px;
+}
+
+/* animação de digitação */
+.chatbot-bubble--typing{
+  opacity:0.7;
+  font-style:italic;
+}
+
+/* scroll suave */
+.chatbot-body{
+  scroll-behavior:smooth;
 }
 
 /* images */

@@ -229,3 +229,131 @@ class CooperativeSuggestion(BaseModel):
     compatibility_score: float
     reasons: List[str]
 
+# Schemas para Posts de Cooperativas (Rede Social)
+class CooperativePostBase(BaseModel):
+    """Schema base para posts de cooperativas"""
+    content: str
+    image_url: Optional[str] = None
+
+class CooperativePostCreate(CooperativePostBase):
+    """Schema para criar post em cooperativa"""
+    cooperative_id: int
+
+class CooperativePost(CooperativePostBase):
+    """Schema para post de cooperativa"""
+    id: int
+    cooperative_id: int
+    farmer_id: int
+    likes_count: int = 0
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+class CooperativePostWithDetails(CooperativePost):
+    """Schema para post com detalhes do autor"""
+    farmer: Farmer
+    comments_count: int = 0
+
+# Schemas para Comentários em Posts
+class PostCommentBase(BaseModel):
+    """Schema base para comentários"""
+    content: str
+
+class PostCommentCreate(PostCommentBase):
+    """Schema para criar comentário"""
+    post_id: int
+
+class PostComment(PostCommentBase):
+    """Schema para comentário"""
+    id: int
+    post_id: int
+    farmer_id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class PostCommentWithAuthor(PostComment):
+    """Schema para comentário com autor"""
+    farmer: Farmer
+
+# Schemas para Likes em Posts
+class PostLikeCreate(BaseModel):
+    """Schema para criar like em post"""
+    post_id: int
+
+class PostLike(BaseModel):
+    """Schema para like"""
+    id: int
+    post_id: int
+    farmer_id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Schemas para Mensagens Diretas (Chat/DM)
+class DirectMessageCreate(BaseModel):
+    """Schema para enviar mensagem"""
+    receiver_id: int
+    content: str
+
+class DirectMessage(BaseModel):
+    """Schema para mensagem"""
+    id: int
+    sender_id: int
+    receiver_id: int
+    content: str
+    read: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class DirectMessageWithFarmer(DirectMessage):
+    """Schema para mensagem com dados do remetente"""
+    sender: Farmer
+    receiver: Farmer
+
+class ConversationSummary(BaseModel):
+    """Schema para resumo de conversa"""
+    conversation_id: int
+    other_farmer: Farmer
+    last_message: Optional[str] = None
+    last_message_at: datetime
+    unread_count: int = 0
+
+# Schemas para Feed/Recomendações (tipo Tinder)
+class FarmerRecommendation(BaseModel):
+    """Schema para recomendação de produtor no feed"""
+    farmer: Farmer
+    compatibility_score: float  # 0-100
+    distance_km: Optional[float] = None
+    shared_products: List[str] = []
+    complementary_products: List[str] = []
+    reasons: List[str] = []  # Motivos da recomendação
+
+class FeedItem(BaseModel):
+    """Schema para item do feed tipo Tinder"""
+    farmer: Farmer
+    match_score: float
+    distance: str
+    products_in_common: List[str]
+    can_complement: List[str]
+    highlight: str  # Frase de destaque tipo "80% compatível!"
+    last_message: Optional[str] = None
+    last_message_at: Optional[datetime] = None
+    unread_count: int = 0
+
+# Schemas para Feed de Recomendações (tipo Tinder)
+class FarmerMatch(BaseModel):
+    """Schema para match de produtor no feed"""
+    farmer: Farmer
+    match_score: float  # 0-100
+    distance_km: Optional[float] = None
+    compatibility_reasons: List[str]  # Por que deu match
+    complementary_products: List[str]  # Produtos que complementam
+    surplus_match: bool  # Se tem excedente que o outro precisa
+

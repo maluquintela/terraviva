@@ -1,32 +1,52 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff, User, Lock } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import './login.css';
+import React, { useState } from "react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import "./login.css";
+import { useAuth } from "../../hooks/useAuth";
+
+const initialState = {
+  email: "",
+  password: "",
+};
 
 export default function LoginScreen() {
+  const [form, setForm] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
-  const [mensagem, setMensagem] = useState(null); // 👈 Adiciona o estado da mensagem
+  const [status, setStatus] = useState({ type: null, message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  // 👇 Corrige o handleSubmit
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-    // Exemplo simples de validação:
-    const usuario = e.target[0].value;
-    const senha = e.target[1].value;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus({ type: null, message: "" });
 
-    if (!usuario || !senha) {
-      setMensagem({ tipo: 'erro', texto: 'Preencha todos os campos.' });
+    if (!form.email.trim() || !form.password.trim()) {
+      setStatus({ type: "error", message: "Informe e-mail e senha." });
       return;
     }
 
-    // Se quiser, pode validar o login aqui (ex: API ou dados mock)
-    if (usuario === 'admin' && senha === '1234') {
-      setMensagem({ tipo: 'info', texto: 'Login realizado com sucesso!' });
-      setTimeout(() => navigate('/Diagnostico'), 1000);
-    } else {
-      setMensagem({ tipo: 'erro', texto: 'Usuário ou senha incorretos.' });
+    setIsSubmitting(true);
+    try {
+      await login({ email: form.email.trim(), password: form.password });
+      setStatus({ type: "success", message: "Login realizado com sucesso!" });
+      setTimeout(() => navigate("/home"), 300);
+    } catch (error) {
+      console.error("Erro ao autenticar", error);
+      setStatus({
+        type: "error",
+        message:
+          error?.data?.detail ||
+          error?.message ||
+          "Não foi possível autenticar. Verifique suas credenciais.",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -43,60 +63,55 @@ export default function LoginScreen() {
         </h2>
 
         <div className="input-wrapper">
-        <input
-          type="text"
-            name="usuario"
-          placeholder="Usuário"
-          className="input"
-            value={form.usuario}
+          <Mail className="input-icon" size={18} />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="input"
+            value={form.email}
             onChange={handleChange}
             autoComplete="username"
-        />
+            required
+          />
         </div>
 
         <div className="input-wrapper">
+          <Lock className="input-icon" size={18} />
           <input
-            type={mostrarSenha ? "text" : "password"}
-            name="senha"
+            type={showPassword ? "text" : "password"}
+            name="password"
             placeholder="Senha"
             className="input"
-            value={form.senha}
+            value={form.password}
             onChange={handleChange}
             autoComplete="current-password"
+            required
           />
           <button
             type="button"
             className="icon-button"
-            onClick={() => setShowPassword(!showPassword)}
-            aria-label="mostrar senha"
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
           >
             {showPassword ? <EyeOff /> : <Eye />}
           </button>
         </div>
 
-        {/* Botão Entrar */}
-        <button type="submit" className="button">
-          Entrar
+        <button type="submit" className="button" disabled={isSubmitting}>
+          {isSubmitting ? "Entrando..." : "Entrar"}
         </button>
 
         <div className="signup-container">
           <span className="signup-text">Não possui uma conta?</span>
-          <button
-            type="button"
-            className="signup-link"
-            onClick={() => console.log('Cadastre-se clicado')}
-          >
+          <Link to="/cadastro" className="signup-link">
             Cadastre-se
-          </button>
+          </Link>
         </div>
 
-        {mensagem && (
-          <p
-            className={`login-feedback ${
-              mensagem.tipo === 'erro' ? 'erro' : 'info'
-            }`}
-          >
-            {mensagem.texto}
+        {status.message && (
+          <p className={`login-feedback ${status.type === "error" ? "erro" : "info"}`}>
+            {status.message}
           </p>
         )}
       </form>

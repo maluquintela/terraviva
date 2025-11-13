@@ -9,11 +9,46 @@ import {
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./mercado.css";
-import { PRODUTORES } from "./mercadoData";
+import { fetchListings } from "../api/marketplace";
 
 const formatarProduto = (produto) => {
   if (!produto) return "";
   return produto.charAt(0).toUpperCase() + produto.slice(1);
+};
+
+const mapListingToCard = (listing) => {
+  const farmer = listing.farmer ?? {};
+  const product = listing.product ?? {};
+  const quantityTotal = listing.quantity_total ?? null;
+  const quantitySold = listing.quantity_sold ?? 0;
+  const remaining =
+    quantityTotal != null && quantitySold != null
+      ? Math.max(quantityTotal - quantitySold, 0)
+      : null;
+
+  const produtoDetalhes = {
+    nome: product.name ?? product.category ?? "Produto disponível",
+    quantidade:
+      quantityTotal != null
+        ? `${quantityTotal} ${product.unit ?? ""}`.trim()
+        : undefined,
+    restante:
+      remaining != null ? `${remaining} ${product.unit ?? ""}`.trim() : undefined,
+    tipo: product.category ?? undefined,
+    disponibilidade: listing.status ? listing.status.replace("_", " ") : undefined,
+    classificacao: product.description ?? undefined,
+  };
+
+  return {
+    id: listing.id,
+    farmer,
+    cidade: listing.city ?? farmer.city ?? "Local não informado",
+    estado: listing.state ?? farmer.state ?? "",
+    produtos: [produtoDetalhes],
+    produtoDetalhes,
+    price: listing.price ?? null,
+    listing,
+  };
 };
 
 export default function MercadoScreen() {
@@ -23,6 +58,41 @@ export default function MercadoScreen() {
   const [query, setQuery] = useState("");
   const [selectedFiltro, setSelectedFiltro] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadListings() {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchListings({ status: "disponível" });
+        if (active) {
+          setListings(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        if (active) {
+          setError(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar os anúncios do marketplace."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadListings();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const state = location.state;
@@ -35,66 +105,68 @@ export default function MercadoScreen() {
     }
   }, [location, navigate]);
 
-  const produtosDisponiveis = useMemo(() => {
-    const conjunto = new Set();
-    PRODUTORES.forEach((produtor) =>
-      produtor.produtos.forEach((produto) => {
-        const nomeProduto =
-          typeof produto === "string" ? produto : produto.nome;
-        if (nomeProduto) {
-          conjunto.add(nomeProduto);
-        }
-      }),
-    );
-    return Array.from(conjunto).sort((a, b) =>
-      a.localeCompare(b, "pt-BR", { sensitivity: "base" }),
-    );
-  }, []);
+  const cards = useMemo(() => listings.map(mapListingToCard), [listings]);
 
-  const produtoresOrdenados = useMemo(() => {
-    return [...PRODUTORES].sort(
-      (a, b) => (a.distanciaKm ?? Number.POSITIVE_INFINITY) - (b.distanciaKm ?? Number.POSITIVE_INFINITY),
+  const produtosDisponiveis = useMemo(() => {
+    const nomes = cards.flatMap((card) =>
+      card.produtos.map((produto) => produto.nome).filter(Boolean)
     );
-  }, []);
+    return Array.from(new Set(nomes)).sort((a, b) =>
+      a.localeCompare(b, "pt-BR", { sensitivity: "base" })
+    );
+  }, [cards]);
+
+  const produtoresOrdenados = useMemo(
+    () =>
+      [...cards].sort((a, b) => {
+        const nomeA = a.farmer?.name?.toLowerCase() ?? "";
+        const nomeB = b.farmer?.name?.toLowerCase() ?? "";
+        return nomeA.localeCompare(nomeB, "pt-BR", { sensitivity: "base" });
+      }),
+    [cards]
+  );
 
   const resultadosBusca = useMemo(() => {
     const texto = query.trim().toLowerCase();
 
-    return PRODUTORES.filter((produtor) => {
-      const nomesProdutos = produtor.produtos.map((produto) =>
-        typeof produto === "string" ? produto : produto.nome,
-      );
-      const atendeFiltro =
-        !selectedFiltro ||
-        nomesProdutos.some(
-          (produto) => produto.toLowerCase() === selectedFiltro.toLowerCase(),
+    return cards
+      .filter((card) => {
+        const nomesProdutos = card.produtos.map((produto) => produto.nome ?? "");
+        const atendeFiltro =
+          !selectedFiltro ||
+          nomesProdutos.some(
+            (produto) => produto.toLowerCase() === selectedFiltro.toLowerCase()
+          );
+
+        if (!atendeFiltro) {
+          return false;
+        }
+
+        if (!texto) {
+          return true;
+        }
+
+        const campoLocalizacao = `${card.cidade} ${card.estado}`.toLowerCase();
+        const nomeProdutor = (card.farmer?.name ?? "").toLowerCase();
+        const produtos = nomesProdutos.join(" ").toLowerCase();
+        const descricaoProduto =
+          (card.produtoDetalhes?.classificacao ?? "").toLowerCase();
+
+        return (
+          nomeProdutor.includes(texto) ||
+          campoLocalizacao.includes(texto) ||
+          produtos.includes(texto) ||
+          descricaoProduto.includes(texto)
         );
+      })
+      .sort((a, b) => {
+        const nomeA = a.farmer?.name?.toLowerCase() ?? "";
+        const nomeB = b.farmer?.name?.toLowerCase() ?? "";
+        return nomeA.localeCompare(nomeB, "pt-BR", { sensitivity: "base" });
+      });
+  }, [cards, query, selectedFiltro]);
 
-      if (!atendeFiltro) {
-        return false;
-      }
-
-      if (!texto) {
-        return true;
-      }
-
-      const campoLocalizacao = `${produtor.cidade} ${produtor.estado}`.toLowerCase();
-      const nome = produtor.nome.toLowerCase();
-      const produtos = nomesProdutos.join(" ").toLowerCase();
-
-      return (
-        nome.includes(texto) ||
-        campoLocalizacao.includes(texto) ||
-        produtos.includes(texto)
-      );
-    }).sort(
-      (a, b) => (a.distanciaKm ?? Number.POSITIVE_INFINITY) - (b.distanciaKm ?? Number.POSITIVE_INFINITY),
-    );
-  }, [query, selectedFiltro]);
-
-  const handleToggleSearch = () => {
-    setIsSearchActive(true);
-  };
+  const handleToggleSearch = () => setIsSearchActive(true);
 
   const handleCloseSearch = () => {
     setIsSearchActive(false);
@@ -158,50 +230,69 @@ export default function MercadoScreen() {
         </div>
 
         <section className="marketplace__feed" aria-live="polite">
-          {produtoresOrdenados.map((produtor) => (
-            <article key={produtor.id} className="producer-card">
-              <div className="producer-card__avatar" aria-hidden="true">
-                <ShoppingCart size={22} />
-              </div>
-              <div className="producer-card__content">
-                <header className="producer-card__header">
-                  <div>
-                    <h2 className="producer-card__name">{produtor.nome}</h2>
-                    <p className="producer-card__location">
-                      {produtor.cidade}, {produtor.estado}
-                    </p>
-                  </div>
-                  <span className="producer-card__distance">
-                    {produtor.distanciaKm ?? "—"} km
-                  </span>
-                </header>
+          {loading ? (
+            <div className="marketplace__status" role="status">
+              Carregando anúncios…
+            </div>
+          ) : error ? (
+            <div className="marketplace__status marketplace__status--error" role="alert">
+              {error}
+            </div>
+          ) : produtoresOrdenados.length === 0 ? (
+            <div className="marketplace__status" role="note">
+              Nenhum anúncio disponível no momento.
+            </div>
+          ) : (
+            produtoresOrdenados.map((card) => (
+              <article key={card.id} className="producer-card">
+                <div className="producer-card__avatar" aria-hidden="true">
+                  <ShoppingCart size={22} />
+                </div>
+                <div className="producer-card__content">
+                  <header className="producer-card__header">
+                    <div>
+                      <h2 className="producer-card__name">
+                        {card.farmer?.name ?? "Produtor parceiro"}
+                      </h2>
+                      <p className="producer-card__location">
+                        {card.cidade}
+                        {card.estado ? `, ${card.estado}` : ""}
+                      </p>
+                    </div>
+                    {card.price != null && (
+                      <span className="producer-card__distance">
+                        R$ {Number(card.price).toLocaleString("pt-BR")}
+                      </span>
+                    )}
+                  </header>
 
-                <div className="producer-card__products" aria-label="Produtos disponíveis">
-                  {produtor.produtos.map((produto) => {
-                    const nomeProduto =
-                      typeof produto === "string" ? produto : produto.nome;
-                    return (
+                  <div className="producer-card__products" aria-label="Produtos disponíveis">
+                    {card.produtos.map((produto) => (
                       <span
-                        key={`${produtor.id}-${nomeProduto}`}
+                        key={`${card.id}-${produto.nome}`}
                         className="product-chip"
                       >
-                        {formatarProduto(nomeProduto)}
+                        {formatarProduto(produto.nome)}
                       </span>
-                    );
-                  })}
-                </div>
+                    ))}
+                  </div>
 
-                <button
-                  type="button"
-                  className="producer-card__cta"
-                  aria-label={`Ver perfil de ${produtor.nome}`}
-                  onClick={() => navigate(`/mercado/produtor/${produtor.id}`)}
-                >
-                  Ver perfil para saber mais
-                </button>
-              </div>
-            </article>
-          ))}
+                  <button
+                    type="button"
+                    className="producer-card__cta"
+                    aria-label={`Ver perfil de ${card.farmer?.name ?? "produtor"}`}
+                    onClick={() =>
+                      navigate(`/mercado/produtor/${card.id}`, {
+                        state: { listing: card.listing },
+                      })
+                    }
+                  >
+                    Ver perfil para saber mais
+                  </button>
+                </div>
+              </article>
+            ))
+          )}
         </section>
       </div>
 
@@ -274,50 +365,51 @@ export default function MercadoScreen() {
                   Nenhum produtor encontrado com esse filtro. Tente outro alimento.
                 </div>
               ) : (
-                resultadosBusca.map((produtor) => (
-                  <article key={produtor.id} className="search-result">
+                resultadosBusca.map((card) => (
+                  <article key={card.id} className="search-result">
                     <div className="search-result__header">
                       <div>
-                        <h3 className="search-result__name">{produtor.nome}</h3>
+                        <h3 className="search-result__name">
+                          {card.farmer?.name ?? "Produtor"}
+                        </h3>
                         <div className="search-result__meta">
                           <span>
-                            {produtor.cidade}, {produtor.estado}
+                            {card.cidade}, {card.estado}
                           </span>
-                          <span>
-                            {produtor.unidades ?? "—"} unidades disponíveis
-                          </span>
+                          {card.produtoDetalhes?.quantidade && (
+                            <span>{card.produtoDetalhes.quantidade}</span>
+                          )}
                         </div>
                       </div>
-                      <span className="producer-card__distance">
-                        {produtor.distanciaKm ?? "—"} km
-                      </span>
+                      {card.price != null && (
+                        <span className="producer-card__distance">
+                          R$ {Number(card.price).toLocaleString("pt-BR")}
+                        </span>
+                      )}
                     </div>
 
                     <div className="producer-card__products" aria-label="Produtos disponíveis">
-                      {produtor.produtos.map((produto) => {
-                        const nomeProduto =
-                          typeof produto === "string" ? produto : produto.nome;
-                        return (
-                          <span
-                            key={`${produtor.id}-${nomeProduto}`}
-                            className="product-chip"
-                          >
-                            {formatarProduto(nomeProduto)}
-                          </span>
-                        );
-                      })}
+                      {card.produtos.map((produto) => (
+                        <span
+                          key={`${card.id}-${produto.nome}`}
+                          className="product-chip"
+                        >
+                          {formatarProduto(produto.nome)}
+                        </span>
+                      ))}
                     </div>
 
                     <button
                       type="button"
                       className="search-result__cta"
-                      aria-label={`Ver perfil de ${produtor.nome}`}
+                      aria-label={`Ver perfil de ${card.farmer?.name ?? "produtor"}`}
                       onClick={() =>
-                        navigate(`/mercado/produtor/${produtor.id}`, {
+                        navigate(`/mercado/produtor/${card.id}`, {
                           state: {
                             from: "search",
                             query,
                             selectedFiltro,
+                            listing: card.listing,
                           },
                         })
                       }

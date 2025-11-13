@@ -666,3 +666,361 @@ def search_marketplace(
     results["listings"] = listings
     
     return results
+
+# ========== POSTS DE COOPERATIVAS (REDE SOCIAL) ==========
+
+@router.post("/cooperatives/{cooperative_id}/posts", response_model=schemas.CooperativePostWithDetails, status_code=status.HTTP_201_CREATED)
+def create_cooperative_post(
+    cooperative_id: int,
+    post: schemas.CooperativePostBase,
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db)
+):
+    """
+    Criar um post/publicação em uma cooperativa.
+    
+    Exemplo de request:
+    {
+        "content": "Pessoal, consegui fechar uma ótima venda de 500kg de feijão! 🎉",
+        "image_url": "https://exemplo.com/imagem.jpg"
+    }
+    """
+    # Verificar se a cooperativa existe
+    cooperative = db.query(models.Cooperative).filter(
+        models.Cooperative.id == cooperative_id
+    ).first()
+    
+    if not cooperative:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cooperativa não encontrada"
+        )
+    
+    # Verificar se o agricultor é membro da cooperativa
+    membership = db.query(models.CooperativeMembership).filter(
+        models.CooperativeMembership.farmer_id == current_farmer.id,
+        models.CooperativeMembership.cooperative_id == cooperative_id
+    ).first()
+    
+    if not membership:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você precisa ser membro desta cooperativa para postar"
+        )
+    
+    # Criar o post
+    db_post = models.CooperativePost(
+        cooperative_id=cooperative_id,
+        farmer_id=current_farmer.id,
+        content=post.content,
+        image_url=post.image_url
+    )
+    
+    db.add(db_post)
+    db.commit()
+    db.refresh(db_post)
+    
+    # Retornar com detalhes
+    return schemas.CooperativePostWithDetails(
+        id=db_post.id,
+        cooperative_id=db_post.cooperative_id,
+        farmer_id=db_post.farmer_id,
+        content=db_post.content,
+        image_url=db_post.image_url,
+        likes_count=db_post.likes_count,
+        created_at=db_post.created_at,
+        updated_at=db_post.updated_at,
+        farmer=db_post.farmer,
+        comments_count=0
+    )
+
+@router.get("/cooperatives/{cooperative_id}/posts", response_model=List[schemas.CooperativePostWithDetails])
+def get_cooperative_posts(
+    cooperative_id: int,
+    skip: int = 0,
+    limit: int = 20,
+    db: Session = Depends(get_db)
+):
+    """
+    Listar posts de uma cooperativa (feed da cooperativa).
+    
+    Retorna os posts mais recentes primeiro.
+    """
+    # Verificar se a cooperativa existe
+    cooperative = db.query(models.Cooperative).filter(
+        models.Cooperative.id == cooperative_id
+    ).first()
+    
+    if not cooperative:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cooperativa não encontrada"
+        )
+    
+    # Buscar posts
+    posts = db.query(models.CooperativePost).filter(
+        models.CooperativePost.cooperative_id == cooperative_id
+    ).order_by(models.CooperativePost.created_at.desc()).offset(skip).limit(limit).all()
+    
+    # Retornar com detalhes
+    result = []
+    for post in posts:
+        comments_count = db.query(models.PostComment).filter(
+            models.PostComment.post_id == post.id
+        ).count()
+        
+        result.append(schemas.CooperativePostWithDetails(
+            id=post.id,
+            cooperative_id=post.cooperative_id,
+            farmer_id=post.farmer_id,
+            content=post.content,
+            image_url=post.image_url,
+            likes_count=post.likes_count,
+            created_at=post.created_at,
+            updated_at=post.updated_at,
+            farmer=post.farmer,
+            comments_count=comments_count
+        ))
+    
+    return result
+
+@router.post("/posts/{post_id}/comments", response_model=schemas.PostCommentWithAuthor, status_code=status.HTTP_201_CREATED)
+def create_post_comment(
+    post_id: int,
+    comment: schemas.PostCommentBase,
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db)
+):
+    """
+    Comentar em um post de cooperativa.
+    
+    Exemplo de request:
+    {
+        "content": "Parabéns pela venda! 🎊"
+    }
+    """
+    # Verificar se o post existe
+    post = db.query(models.CooperativePost).filter(
+        models.CooperativePost.id == post_id
+    ).first()
+    
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Post não encontrado"
+        )
+    
+    # Verificar se o agricultor é membro da cooperativa
+    membership = db.query(models.CooperativeMembership).filter(
+        models.CooperativeMembership.farmer_id == current_farmer.id,
+        models.CooperativeMembership.cooperative_id == post.cooperative_id
+    ).first()
+    
+    if not membership:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você precisa ser membro desta cooperativa para comentar"
+        )
+    
+    # Criar comentário
+    db_comment = models.PostComment(
+        post_id=post_id,
+        farmer_id=current_farmer.id,
+        content=comment.content
+    )
+    
+    db.add(db_comment)
+    db.commit()
+    db.refresh(db_comment)
+    
+    # Retornar com autor
+    return schemas.PostCommentWithAuthor(
+        id=db_comment.id,
+        post_id=db_comment.post_id,
+        farmer_id=db_comment.farmer_id,
+        content=db_comment.content,
+        created_at=db_comment.created_at,
+        farmer=db_comment.farmer
+    )
+
+@router.get("/posts/{post_id}/comments", response_model=List[schemas.PostCommentWithAuthor])
+def get_post_comments(
+    post_id: int,
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db)
+):
+    """
+    Listar comentários de um post.
+    
+    Retorna os comentários mais antigos primeiro (ordem cronológica).
+    """
+    # Verificar se o post existe
+    post = db.query(models.CooperativePost).filter(
+        models.CooperativePost.id == post_id
+    ).first()
+    
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Post não encontrado"
+        )
+    
+    # Buscar comentários
+    comments = db.query(models.PostComment).filter(
+        models.PostComment.post_id == post_id
+    ).order_by(models.PostComment.created_at.asc()).offset(skip).limit(limit).all()
+    
+    # Retornar com autores
+    result = []
+    for comment in comments:
+        result.append(schemas.PostCommentWithAuthor(
+            id=comment.id,
+            post_id=comment.post_id,
+            farmer_id=comment.farmer_id,
+            content=comment.content,
+            created_at=comment.created_at,
+            farmer=comment.farmer
+        ))
+    
+    return result
+
+@router.post("/posts/{post_id}/like")
+def like_post(
+    post_id: int,
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db)
+):
+    """
+    Curtir um post de cooperativa.
+    
+    Retorna:
+    {
+        "message": "Post curtido com sucesso",
+        "likes_count": 5
+    }
+    """
+    # Verificar se o post existe
+    post = db.query(models.CooperativePost).filter(
+        models.CooperativePost.id == post_id
+    ).first()
+    
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Post não encontrado"
+        )
+    
+    # Verificar se já curtiu
+    existing_like = db.query(models.PostLike).filter(
+        models.PostLike.post_id == post_id,
+        models.PostLike.farmer_id == current_farmer.id
+    ).first()
+    
+    if existing_like:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Você já curtiu este post"
+        )
+    
+    # Criar like
+    db_like = models.PostLike(
+        post_id=post_id,
+        farmer_id=current_farmer.id
+    )
+    
+    db.add(db_like)
+    
+    # Atualizar contador de likes
+    post.likes_count += 1
+    
+    db.commit()
+    
+    return {
+        "message": "Post curtido com sucesso",
+        "likes_count": post.likes_count
+    }
+
+@router.delete("/posts/{post_id}/like")
+def unlike_post(
+    post_id: int,
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db)
+):
+    """
+    Remover curtida de um post.
+    
+    Retorna:
+    {
+        "message": "Curtida removida com sucesso",
+        "likes_count": 4
+    }
+    """
+    # Verificar se o post existe
+    post = db.query(models.CooperativePost).filter(
+        models.CooperativePost.id == post_id
+    ).first()
+    
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Post não encontrado"
+        )
+    
+    # Buscar like
+    like = db.query(models.PostLike).filter(
+        models.PostLike.post_id == post_id,
+        models.PostLike.farmer_id == current_farmer.id
+    ).first()
+    
+    if not like:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Você não curtiu este post"
+        )
+    
+    # Remover like
+    db.delete(like)
+    
+    # Atualizar contador
+    post.likes_count = max(0, post.likes_count - 1)
+    
+    db.commit()
+    
+    return {
+        "message": "Curtida removida com sucesso",
+        "likes_count": post.likes_count
+    }
+
+@router.delete("/posts/{post_id}")
+def delete_post(
+    post_id: int,
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db)
+):
+    """
+    Deletar um post (apenas o autor pode deletar).
+    """
+    # Buscar post
+    post = db.query(models.CooperativePost).filter(
+        models.CooperativePost.id == post_id
+    ).first()
+    
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Post não encontrado"
+        )
+    
+    # Verificar se é o autor
+    if post.farmer_id != current_farmer.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você só pode deletar seus próprios posts"
+        )
+    
+    # Deletar post (comentários e likes serão deletados em cascata)
+    db.delete(post)
+    db.commit()
+    
+    return {"message": "Post deletado com sucesso"}

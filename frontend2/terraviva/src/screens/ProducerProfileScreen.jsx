@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   Heart,
-  HeartOff,
   MapPin,
   TrendingUp,
   Ellipsis,
@@ -13,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getProdutorById } from "./mercadoData";
+import { fetchListingById } from "../api/marketplace";
 import "./producerProfile.css";
 
 const STATUS_LABELS = {
@@ -23,23 +22,171 @@ const STATUS_LABELS = {
   declined: { label: "Solicitação recusada", tone: "danger" },
 };
 
-const formatarDescricao = (produtor) =>
-  produtor?.descricao ??
-  "Produtor parceiro da rede TerraViva com foco em cooperativas sustentáveis.";
-
 export default function ProducerProfileScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
 
-  const produtor = useMemo(() => getProdutorById(id), [id]);
-  const [isFavorito, setIsFavorito] = useState(false);
+  const [listing, setListing] = useState(() => location.state?.listing ?? null);
+  const [loading, setLoading] = useState(!location.state?.listing);
+  const [error, setError] = useState(null);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [exibirModalProduto, setExibirModalProduto] = useState(false);
   const [exibirModalCoop, setExibirModalCoop] = useState(false);
-  const [statusCoop, setStatusCoop] = useState(produtor?.cooperativa?.status ?? "none");
+
+  useEffect(() => {
+    let active = true;
+    async function loadListing() {
+      if (location.state?.listing) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchListingById(id);
+        if (active) {
+          setListing(data);
+        }
+      } catch (err) {
+        if (active) {
+          setError(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar os detalhes deste anúncio."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadListing();
+    return () => {
+      active = false;
+    };
+  }, [id, location.state]);
+
+  const produtor = useMemo(() => {
+    if (!listing) {
+      return null;
+    }
+
+    const farmer = listing.farmer ?? {};
+    const product = listing.product ?? {};
+    const quantityTotal = listing.quantity_total ?? null;
+    const quantitySold = listing.quantity_sold ?? 0;
+    const restante =
+      quantityTotal != null && quantitySold != null
+        ? Math.max(quantityTotal - quantitySold, 0)
+        : null;
+
+    const percentualVendido =
+      quantityTotal && quantityTotal > 0
+        ? Math.round((quantitySold / quantityTotal) * 100)
+        : null;
+
+    const produtos = [
+      {
+        nome: product.name ?? product.category ?? "Produto disponível",
+        quantidade:
+          quantityTotal != null
+            ? `${quantityTotal} ${product.unit ?? ""}`.trim()
+            : "Sob consulta",
+        tipo: product.category ?? "Não informado",
+        disponibilidade: listing.status
+          ? listing.status.replace("_", " ")
+          : "Disponível",
+        classificacao: product.description ?? undefined,
+        restante:
+          restante != null ? `${restante} ${product.unit ?? ""}`.trim() : undefined,
+      },
+    ];
+
+    const statusProducao = {
+      resumo:
+        restante != null && quantityTotal != null
+          ? `Restam ${restante} ${product.unit ?? ""} de um total de ${quantityTotal}.`
+          : "Atualize seu anúncio para informar disponibilidade.",
+      percentual: percentualVendido ?? 0,
+      cultivoPrincipal: product.name ?? product.category ?? "Produção atual",
+    };
+
+    const bio =
+      farmer.bio ??
+      product.description ??
+      "Produtor parceiro da rede TerraViva com foco em cooperativas sustentáveis.";
+
+    const avatarUrl = farmer.avatar_url
+      ? farmer.avatar_url
+      : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          farmer.name ?? "Produtor"
+        )}&background=34a853&color=ffffff`;
+
+    return {
+      id: listing.id,
+      nome: farmer.name ?? "Produtor parceiro",
+      cidade: listing.city ?? farmer.city ?? "Local não informado",
+      estado: listing.state ?? farmer.state ?? "",
+      avatar: avatarUrl,
+      descricao: bio,
+      statusProducao,
+      produtos,
+      contato: farmer.contact ?? listing.contact ?? "(informação não fornecida)",
+      listing,
+      farmer,
+    };
+  }, [listing]);
+
+  const [isFavorito, setIsFavorito] = useState(false);
+  const [statusCoop, setStatusCoop] = useState("none");
+  useEffect(() => {
+    if (produtor?.listing?.status === "accepted") {
+      setStatusCoop("accepted");
+    } else {
+      setStatusCoop("none");
+    }
+  }, [produtor]);
   const origemPesquisa =
     location.state && location.state.from === "search" ? location.state : null;
+
+  const abrirModalProduto = (produto) => {
+    setProdutoSelecionado(produto);
+    setExibirModalProduto(true);
+  };
+
+  const fecharModalProduto = () => {
+    setExibirModalProduto(false);
+    setProdutoSelecionado(null);
+  };
+
+  const confirmarCooperativa = () => {
+    setStatusCoop("pending");
+    setExibirModalCoop(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="producer-profile__fallback">
+        <p>Carregando detalhes do anúncio…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="producer-profile__fallback">
+        <button
+          type="button"
+          className="fallback__back"
+          onClick={() => navigate("/mercado")}
+        >
+          <ArrowLeft size={22} />
+          Voltar ao Mercado
+        </button>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   if (!produtor) {
     return (
@@ -58,21 +205,7 @@ export default function ProducerProfileScreen() {
   }
 
   const statusInfo = STATUS_LABELS[statusCoop] ?? STATUS_LABELS.none;
-
-  const abrirModalProduto = (produto) => {
-    setProdutoSelecionado(produto);
-    setExibirModalProduto(true);
-  };
-
-  const fecharModalProduto = () => {
-    setExibirModalProduto(false);
-    setProdutoSelecionado(null);
-  };
-
-  const confirmarCooperativa = () => {
-    setStatusCoop("pending");
-    setExibirModalCoop(false);
-  };
+  const produtoPrincipal = produtor.produtos[0];
 
   return (
     <div className="producer-profile" role="main">
@@ -127,7 +260,7 @@ export default function ProducerProfileScreen() {
               <MapPin size={16} strokeWidth={2.2} />
               {produtor.cidade}, {produtor.estado}
             </span>
-            <p>{formatarDescricao(produtor)}</p>
+            <p>{produtor.descricao}</p>
             <button
               type="button"
               className="producer-profile__link"
@@ -151,7 +284,7 @@ export default function ProducerProfileScreen() {
               </span>
               <h3>{produtor.statusProducao?.resumo ?? "Dados de produção indisponíveis"}</h3>
               <p>
-                Disponibilidade atual:{" "}
+                Volume vendido:{" "}
                 <strong>{produtor.statusProducao?.percentual ?? 0}%</strong>
               </p>
             </div>
@@ -196,7 +329,11 @@ export default function ProducerProfileScreen() {
           <button
             type="button"
             className="cta-button cta-button--primary"
-            onClick={() => navigate(`/mercado/produtor/${produtor.id}/chat`)}
+            onClick={() =>
+              navigate(`/mercado/produtor/${produtor.id}/chat`, {
+                state: { listing: produtor.listing },
+              })
+            }
           >
             <MessageCircle size={18} /> Entrar em contato com o produtor
           </button>
@@ -244,6 +381,10 @@ export default function ProducerProfileScreen() {
               <div>
                 <dt>Qualidade / Classificação</dt>
                 <dd>{produtoSelecionado.classificacao ?? "Não informado"}</dd>
+              </div>
+              <div>
+                <dt>Estoque restante</dt>
+                <dd>{produtoSelecionado.restante ?? "Sob consulta"}</dd>
               </div>
             </dl>
 

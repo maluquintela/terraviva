@@ -5,108 +5,55 @@ import {
   Users,
   UserCircle2,
   MessageSquare,
-  Circle,
-  Dot,
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
 import "./cooperativas.css";
+import { fetchListings, fetchCooperatives } from "../api/marketplace";
+import { fetchFeedRecommendations } from "../api/social";
 
-const INDIVIDUAL_CHATS = [
-  {
-    id: 1,
-    nome: "João Silva",
-    cidade: "Patos, PB",
-    online: true,
-    ultimaMensagem: "Combinaremos a entrega na...",
-    timestamp: "10:30",
-    naoLidas: 1,
-    avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=160&q=60",
-  },
-  {
-    id: 2,
-    nome: "Maria Santos",
-    cidade: "Sousa, PB",
-    online: false,
-    ultimaMensagem: "Gostei da proposta, vamos...",
-    timestamp: "Ontem",
-    naoLidas: 0,
-    avatar: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=160&q=60",
-  },
-  {
-    id: 3,
-    nome: "Carlos Oliveira",
-    cidade: "Cajazeiras, PB",
-    online: true,
-    ultimaMensagem: "Você tem disponibilidade para...",
-    timestamp: "05/11",
-    naoLidas: 3,
-    avatar: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=160&q=60",
-  },
-];
+const mapListingToChat = (listing) => {
+  const farmer = listing.farmer ?? {};
+  const avatarUrl = farmer.avatar_url
+    ? farmer.avatar_url
+    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        farmer.name ?? "Produtor"
+      )}&background=1a73e8&color=ffffff`;
 
-const GROUP_CHATS = [
-  {
-    id: 201,
-    nome: "Cooperativa de Mel",
-    produto: "mel",
-    membros: 5,
-    ultimaMensagem: "Reunião marcada para quinta...",
-    timestamp: "10:15",
-    naoLidas: 2,
-    icone: "🍯",
-    objetivo: "Organizar logística de vendas diretas de mel.",
-    administrador: "Você",
-    colaboradores: [
-      { nome: "Você", papel: "Administrador" },
-      { nome: "João Silva", papel: "Produtor" },
-      { nome: "Maria Santos", papel: "Produtora" },
-      { nome: "Carlos Oliveira", papel: "Produtor" },
-      { nome: "Ana Bezerra", papel: "Produtora" },
-    ],
-  },
-  {
-    id: 202,
-    nome: "Cooperativa de Tomate",
-    produto: "tomate",
-    membros: 3,
-    ultimaMensagem: "Precisamos combinar o transporte...",
-    timestamp: "Ontem",
-    naoLidas: 0,
-    icone: "🍅",
-    objetivo: "Planejar envios semanais para feiras urbanas.",
-    administrador: "Você",
-    colaboradores: [
-      { nome: "Você", papel: "Administrador" },
-      { nome: "Paula Lima", papel: "Produtora" },
-      { nome: "Rafael Pinheiro", papel: "Produtor" },
-    ],
-  },
-  {
-    id: 203,
-    nome: "Cooperativa de Cenoura",
-    produto: "cenoura",
-    membros: 4,
-    ultimaMensagem: "Nova demanda recebida!",
-    timestamp: "05/11",
-    naoLidas: 5,
-    icone: "🥕",
-    objetivo: "Aumentar a oferta de hortaliças orgânicas.",
-    administrador: "Você",
-    colaboradores: [
-      { nome: "Você", papel: "Administrador" },
-      { nome: "Lais Guimarães", papel: "Produtora" },
-      { nome: "Mateus Araújo", papel: "Produtor" },
-      { nome: "Glaucia Torres", papel: "Produtora" },
-    ],
-  },
-];
+  return {
+    id: listing.id,
+    nome: farmer.name ?? "Produtor parceiro",
+    cidade: `${listing.city ?? farmer.city ?? "Local não informado"}, ${
+      listing.state ?? farmer.state ?? ""
+    }`.trim(),
+    avatar: avatarUrl,
+    produtos: listing.product?.name ?? listing.product?.category ?? "Produto",
+    listing,
+  };
+};
+
+const mapCooperative = (cooperative) => ({
+  id: cooperative.id,
+  nome: cooperative.name ?? "Cooperativa",
+  produto: cooperative.main_product ?? "Produção diversificada",
+  descricao:
+    cooperative.description ??
+    "Cooperativa cadastrada na rede TerraViva aguardando novos parceiros.",
+  criadaEm: cooperative.created_at ?? null,
+  membros: Array.isArray(cooperative.members) ? cooperative.members.length : 0,
+});
 
 export default function CooperativasScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("produtores");
   const [search, setSearch] = useState("");
+  const [producerListings, setProducerListings] = useState([]);
+  const [cooperativeList, setCooperativeList] = useState([]);
+  const [loadingProducers, setLoadingProducers] = useState(true);
+  const [loadingCooperatives, setLoadingCooperatives] = useState(true);
+  const [errorProducers, setErrorProducers] = useState(null);
+  const [errorCooperatives, setErrorCooperatives] = useState(null);
 
   useEffect(() => {
     if (location.state?.reopenTab) {
@@ -116,35 +63,129 @@ export default function CooperativasScreen() {
     }
   }, [location, navigate]);
 
-  const filteredIndividualChats = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return INDIVIDUAL_CHATS;
-    return INDIVIDUAL_CHATS.filter(
-      (chat) =>
-        chat.nome.toLowerCase().includes(term) ||
-        chat.cidade.toLowerCase().includes(term),
-    );
-  }, [search]);
+  useEffect(() => {
+    let active = true;
+    async function loadProducerChats() {
+      setLoadingProducers(true);
+      setErrorProducers(null);
+      try {
+        // Buscar recomendações tipo Tinder
+        const recommendations = await fetchFeedRecommendations({ limit: 20 });
+        
+        if (active) {
+          // Mapear recomendações para o formato de chat
+          const mappedChats = recommendations.map(rec => ({
+            id: rec.farmer.id,
+            nome: rec.farmer.name,
+            cidade: `${rec.farmer.city}, ${rec.farmer.state}`,
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(rec.farmer.name)}&background=1a73e8&color=ffffff`,
+            produtos: rec.farmer.crops || "Produtos diversos",
+            matchScore: rec.match_score,
+            distance: rec.distance,
+            highlight: rec.highlight,
+            farmer: rec.farmer
+          }));
+          
+          setProducerListings(mappedChats);
+        }
+      } catch (err) {
+        if (active) {
+          setErrorProducers(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar os produtores recomendados."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoadingProducers(false);
+        }
+      }
+    }
+    loadProducerChats();
+    return () => {
+      active = false;
+    };
+  }, []);
 
-  const filteredGroupChats = useMemo(() => {
+  useEffect(() => {
+    let active = true;
+    async function loadCooperatives() {
+      setLoadingCooperatives(true);
+      setErrorCooperatives(null);
+      try {
+        const data = await fetchCooperatives();
+        if (active) {
+          setCooperativeList(Array.isArray(data) ? data.map(mapCooperative) : []);
+        }
+      } catch (err) {
+        if (active) {
+          setErrorCooperatives(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar as cooperativas cadastradas."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoadingCooperatives(false);
+        }
+      }
+    }
+    loadCooperatives();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const filteredProducerChats = useMemo(() => {
     const term = search.trim().toLowerCase();
-    if (!term) return GROUP_CHATS;
-    return GROUP_CHATS.filter(
-      (group) =>
-        group.nome.toLowerCase().includes(term) ||
-        group.produto.toLowerCase().includes(term),
-    );
-  }, [search]);
+    if (!term) return producerListings;
+    return producerListings.filter((chat) => {
+      const nome = chat.nome.toLowerCase();
+      const cidade = chat.cidade.toLowerCase();
+      const produto = (chat.produtos ?? "").toLowerCase();
+      return nome.includes(term) || cidade.includes(term) || produto.includes(term);
+    });
+  }, [producerListings, search]);
+
+  const filteredCooperatives = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return cooperativeList;
+    return cooperativeList.filter((coop) => {
+      const nome = coop.nome.toLowerCase();
+      const produto = (coop.produto ?? "").toLowerCase();
+      const descricao = (coop.descricao ?? "").toLowerCase();
+      return nome.includes(term) || produto.includes(term) || descricao.includes(term);
+    });
+  }, [cooperativeList, search]);
 
   const handleNavigateChat = (chat) => {
     navigate(`/cooperativas/chat/produtor/${chat.id}`, {
-      state: { from: "produtores", chat },
+      state: {
+        from: "produtores",
+        chat: {
+          ...chat,
+          listing: chat.listing,
+        },
+      },
     });
   };
 
   const handleNavigateGroup = (group) => {
     navigate(`/cooperativas/chat/grupo/${group.id}`, {
-      state: { from: "cooperativas", group },
+      state: {
+        from: "cooperativas",
+        group: {
+          id: group.id,
+          nome: group.nome,
+          membros: group.membros ?? 0,
+          icone: group.produto.slice(0, 1).toUpperCase(),
+          objetivo: group.descricao,
+          administrador: "Você",
+          colaboradores: [],
+        },
+      },
     });
   };
 
@@ -201,81 +242,83 @@ export default function CooperativasScreen() {
 
       <section className="coops-list" aria-live="polite">
         {activeTab === "produtores" ? (
-          filteredIndividualChats.length === 0 ? (
+          loadingProducers ? (
+            <div className="coops-empty" role="status">
+              Carregando produtores…
+            </div>
+          ) : errorProducers ? (
+            <div className="coops-empty" role="alert">
+              {errorProducers}
+            </div>
+          ) : filteredProducerChats.length === 0 ? (
             <div className="coops-empty">
               <UserCircle2 size={42} />
               <h3>Nenhum produtor encontrado</h3>
               <p>Ajuste a busca para encontrar novas conversas individuais.</p>
             </div>
           ) : (
-            filteredIndividualChats.map((chat) => (
+            filteredProducerChats.map((chat) => (
               <button
                 key={chat.id}
                 type="button"
-                className={`coops-card ${chat.naoLidas > 0 ? "has-unread" : ""}`}
+                className="coops-card"
                 onClick={() => handleNavigateChat(chat)}
               >
                 <div className="coops-card__avatar">
                   <img src={chat.avatar} alt={`Foto de ${chat.nome}`} />
-                  <span
-                    className={`coops-status ${chat.online ? "is-online" : "is-offline"}`}
-                    aria-label={chat.online ? "Online" : "Offline"}
-                  />
                 </div>
 
                 <div className="coops-card__content">
                   <div className="coops-card__row">
                     <h3>{chat.nome}</h3>
-                    <time>{chat.timestamp}</time>
+                    <span className="coops-card__badge">Produto: {chat.produtos}</span>
                   </div>
                   <p className="coops-card__meta">{chat.cidade}</p>
-                  <p className="coops-card__message">{chat.ultimaMensagem}</p>
+                  <p className="coops-card__message">
+                    Clique para combinar logística e formar uma cooperativa.
+                  </p>
                 </div>
 
-                <div className="coops-card__meta">
-                  {chat.naoLidas > 0 ? (
-                    <span className="coops-badge">{chat.naoLidas}</span>
-                  ) : (
-                    <Circle size={10} strokeWidth={2} />
-                  )}
-                </div>
                 <ArrowRight size={18} className="coops-card__arrow" />
               </button>
             ))
           )
-        ) : filteredGroupChats.length === 0 ? (
+        ) : loadingCooperatives ? (
+          <div className="coops-empty" role="status">
+            Carregando cooperativas…
+          </div>
+        ) : errorCooperatives ? (
+          <div className="coops-empty" role="alert">
+            {errorCooperatives}
+          </div>
+        ) : filteredCooperatives.length === 0 ? (
           <div className="coops-empty">
             <Users size={42} />
             <h3>Nenhuma cooperativa encontrada</h3>
             <p>Use os filtros ou comece um novo grupo para colaborar.</p>
           </div>
         ) : (
-          filteredGroupChats.map((group) => (
+          filteredCooperatives.map((group) => (
             <button
               key={group.id}
               type="button"
-              className={`coops-card coops-card--group ${
-                group.naoLidas > 0 ? "has-unread" : ""
-              }`}
+              className="coops-card coops-card--group"
               onClick={() => handleNavigateGroup(group)}
             >
               <div className="coops-card__icon" aria-hidden="true">
-                {group.icone}
+                {group.produto.slice(0, 1).toUpperCase()}
               </div>
               <div className="coops-card__content">
                 <div className="coops-card__row">
                   <h3>{group.nome}</h3>
-                  <time>{group.timestamp}</time>
                 </div>
-                <p className="coops-card__meta">{group.membros} membros ativos</p>
-                <p className="coops-card__message">{group.ultimaMensagem}</p>
-              </div>
-              <div className="coops-card__meta">
-                {group.naoLidas > 0 ? (
-                  <span className="coops-badge">{group.naoLidas}</span>
-                ) : (
-                  <Dot size={16} />
-                )}
+                <p className="coops-card__meta">
+                  Foco: {group.produto}
+                  {group.criadaEm
+                    ? ` • criada em ${new Date(group.criadaEm).toLocaleDateString("pt-BR")}`
+                    : ""}
+                </p>
+                <p className="coops-card__message">{group.descricao}</p>
               </div>
               <ArrowRight size={18} className="coops-card__arrow" />
             </button>
@@ -285,8 +328,8 @@ export default function CooperativasScreen() {
 
       <footer className="coops-footer">
         <p>
-          Alternar entre conversas individuais e grupos ajuda a organizar os
-          fluxos de comunicação com facilidade.
+          Alternar entre conversas individuais e grupos ajuda a organizar os fluxos de comunicação
+          com facilidade.
         </p>
       </footer>
     </div>

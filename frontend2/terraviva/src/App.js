@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import LoginScreen from "./componentes/paginas/login";
 import Diagnostico from "./componentes/paginas/diagnostico";
 import Cadastro from "./componentes/paginas/cadastro";
@@ -19,10 +14,11 @@ import CooperativasScreen from "./screens/CooperativasScreen";
 import CooperativaProdutorChat from "./screens/CooperativaProdutorChat";
 import CooperativaGrupoChat from "./screens/CooperativaGrupoChat";
 import Home from "./componentes/paginas/home";
-import Home from './componentes/paginas/Home';
-import PagNoticias from "./componentes/paginas/pagnoticias";
+import Navbar from "./componentes/layout/Navbar";
 import "./index.css";
 import { cn } from "./utils/cn";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function AppContainer() {
   const location = useLocation();
@@ -39,18 +35,102 @@ function AppContainer() {
         <Routes>
           <Route path="/" element={<LoginScreen />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/diagnostico" element={<Diagnostico />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/noticias" element={<NoticiasScreen />} />
-          <Route path="/ajuda-tecnica" element={<AjudaTecnicaScreen />} />
-          <Route path="/mercado" element={<MercadoScreen />} />
-          <Route path="/mercado/produtor/:id" element={<ProducerProfileScreen />} />
-          <Route path="/mercado/produtor/:id/chat" element={<ProducerChatScreen />} />
-          <Route path="/perfil" element={<UserProfileScreen />} />
-          <Route path="/cooperativas" element={<CooperativasScreen />} />
-          <Route path="/cooperativas/chat/produtor/:id" element={<CooperativaProdutorChat />} />
-          <Route path="/cooperativas/chat/grupo/:id" element={<CooperativaGrupoChat />} />
-          <Route path="/chatbot" element={<Chatbot />} />
+          <Route
+            path="/diagnostico"
+            element={
+              <ProtectedRoute>
+                <Diagnostico />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/noticias"
+            element={
+              <ProtectedRoute>
+                <NoticiasScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ajuda-tecnica"
+            element={
+              <ProtectedRoute>
+                <AjudaTecnicaScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mercado"
+            element={
+              <ProtectedRoute>
+                <MercadoScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mercado/produtor/:id"
+            element={
+              <ProtectedRoute>
+                <ProducerProfileScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mercado/produtor/:id/chat"
+            element={
+              <ProtectedRoute>
+                <ProducerChatScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <UserProfileScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cooperativas"
+            element={
+              <ProtectedRoute>
+                <CooperativasScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cooperativas/chat/produtor/:id"
+            element={
+              <ProtectedRoute>
+                <CooperativaProdutorChat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cooperativas/chat/grupo/:id"
+            element={
+              <ProtectedRoute>
+                <CooperativaGrupoChat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chatbot"
+            element={
+              <ProtectedRoute>
+                <Chatbot />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
     </div>
@@ -59,9 +139,11 @@ function AppContainer() {
 
 function App() {
   return (
-    <Router>
-      <AppContainer />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContainer />
+      </Router>
+    </AuthProvider>
   );
 }
 
