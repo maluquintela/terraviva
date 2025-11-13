@@ -20,13 +20,14 @@ import CooperativasScreen from "./screens/CooperativasScreen";
 import CooperativaProdutorChat from "./screens/CooperativaProdutorChat";
 import CooperativaGrupoChat from "./screens/CooperativaGrupoChat";
 import Home from "./componentes/paginas/home";
+import PagNoticias from "./componentes/paginas/pagnoticias";
 import "./index.css";
 import { cn } from "./utils/cn";
 
 function AppContainer() {
   const location = useLocation();
   const homeLikePrefixes = ["/home", "/mercado", "/cooperativas"];
-  const homeLikeExact = ["/", "/noticias", "/ajuda-tecnica", "/diagnostico", "/chatbot", "/perfil"];
+  const homeLikeExact = ["/", "/noticias", "/dicas", "/ajuda-tecnica", "/diagnostico", "/chatbot", "/perfil"];
   const isHomeContext =
     homeLikePrefixes.some((prefix) => location.pathname.startsWith(prefix)) ||
     homeLikeExact.includes(location.pathname);
@@ -41,6 +42,7 @@ function AppContainer() {
           <Route path="/diagnostico" element={<Diagnostico />} />
           <Route path="/home" element={<Home />} />
           <Route path="/noticias" element={<NoticiasScreen />} />
+          <Route path="/dicas" element={<PagNoticias />} />
           <Route path="/ajuda-tecnica" element={<AjudaTecnicaScreen />} />
           <Route path="/mercado" element={<MercadoScreen />} />
           <Route path="/mercado/produtor/:id" element={<ProducerProfileScreen />} />

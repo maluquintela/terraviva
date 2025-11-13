@@ -5,7 +5,7 @@ import logo from "../../assets/images/terraviva(1).png";
 import "./home.css";
 
 const ACTIONS = [
-  { to: "/noticias", icon: Leaf, label: "Notícias" },
+  { to: "/dicas", icon: Leaf, label: "Notícias" },
   { to: "/ajuda-tecnica", icon: Bot, label: "Ajuda Técnica" },
   { to: "/mercado", icon: ShoppingCart, label: "Mercado" },
   { to: "/cooperativas", icon: Handshake, label: "Cooperativas" },

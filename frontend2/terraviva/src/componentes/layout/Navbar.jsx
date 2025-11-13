@@ -13,6 +13,7 @@ export default function Navbar() {
     "/home",
     "/noticias",
     "/ajuda-tecnica",
+    "/dicas",
     "/mercado",
     "/cooperativas",
     "/perfil",
