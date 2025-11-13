@@ -1,12 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  Paperclip,
-  Send,
-  Circle,
-  MoreVertical,
-  MessageSquarePlus,
-} from "lucide-react";
+import { Paperclip, Send, Circle, MessageSquarePlus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProdutorById } from "./mercadoData";
 import "./producerChat.css";
@@ -109,7 +102,7 @@ export default function ProducerChatScreen() {
           className="producer-chat__back"
           onClick={() => navigate("/mercado")}
         >
-          <ArrowLeft size={22} />
+          <span className="producer-chat__icon">&lt;</span>
           Voltar ao Mercado
         </button>
         <p>Produtor não encontrado para iniciar conversa.</p>
@@ -132,26 +125,27 @@ export default function ProducerChatScreen() {
           }}
           aria-label="Voltar para o perfil do produtor"
         >
-          <ArrowLeft size={22} strokeWidth={2.2} />
+          <span className="producer-chat__icon">&lt;</span>
         </button>
 
-        <div className="producer-chat__identity">
-          <img src={produtor.avatar} alt="" role="presentation" />
-          <div>
-            <h1>{produtor.nome}</h1>
-            <span>
-              <Circle size={10} /> Online agora
-            </span>
-          </div>
+        <div className="producer-chat__identity-wrapper">
+          <button
+            type="button"
+            className="producer-chat__identity"
+            onClick={() =>
+              navigate(`/mercado/produtor/${produtor.id}`, { state: { from: "chat" } })
+            }
+            aria-label={`Ver perfil de ${produtor.nome}`}
+          >
+            <img src={produtor.avatar} alt="" aria-hidden="true" />
+            <div>
+              <h1>{produtor.nome}</h1>
+              <span>
+                <Circle size={10} /> Online agora
+              </span>
+            </div>
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="producer-chat__icon-btn"
-          aria-label="Mais opções de conversa"
-        >
-          <MoreVertical size={20} strokeWidth={2.2} />
-        </button>
       </header>
 
       <div className="producer-chat__body" ref={scrollRef}>

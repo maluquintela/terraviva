@@ -1,38 +1,35 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, User, Lock } from 'lucide-react';
+import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 
 export default function LoginScreen() {
+  const [form, setForm] = useState({ usuario: "", senha: "" });
   const [showPassword, setShowPassword] = useState(false);
-  const [mensagem, setMensagem] = useState(null); // 👈 Adiciona o estado da mensagem
+  const [mensagem, setMensagem] = useState(null);
   const navigate = useNavigate();
 
-  // 👇 Corrige o handleSubmit
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Exemplo simples de validação:
-    const usuario = e.target[0].value;
-    const senha = e.target[1].value;
+    const { usuario, senha } = form;
 
     if (!usuario || !senha) {
-      setMensagem({ tipo: 'erro', texto: 'Preencha todos os campos.' });
+      setMensagem({ tipo: "erro", texto: "Preencha todos os campos." });
       return;
     }
 
-    // Se quiser, pode validar o login aqui (ex: API ou dados mock)
-    if (usuario === 'admin' && senha === '1234') {
-      setMensagem({ tipo: 'info', texto: 'Login realizado com sucesso!' });
-      setTimeout(() => navigate('/Diagnostico'), 1000);
-    } else {
-      setMensagem({ tipo: 'erro', texto: 'Usuário ou senha incorretos.' });
-    }
+    setMensagem({ tipo: "info", texto: "Login realizado com sucesso!" });
+    setTimeout(() => navigate("/diagnostico", { state: { from: "login" } }), 400);
   };
 
   return (
     <div className="login-page">
-      <div className="login-hero" />
       <form className="card animate-fadeIn" onSubmit={handleSubmit}>
         <div className="logo-container">
           <img src="/terraviva.png" alt="TerraViva Logo" className="logo" />
@@ -43,20 +40,20 @@ export default function LoginScreen() {
         </h2>
 
         <div className="input-wrapper">
-        <input
-          type="text"
+          <input
+            type="text"
             name="usuario"
-          placeholder="Usuário"
-          className="input"
+            placeholder="Usuário"
+            className="input"
             value={form.usuario}
             onChange={handleChange}
             autoComplete="username"
-        />
+          />
         </div>
 
         <div className="input-wrapper">
           <input
-            type={mostrarSenha ? "text" : "password"}
+            type={showPassword ? "text" : "password"}
             name="senha"
             placeholder="Senha"
             className="input"

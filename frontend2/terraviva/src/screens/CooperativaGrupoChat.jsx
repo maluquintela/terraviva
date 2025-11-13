@@ -1,14 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  MoreVertical,
-  Send,
-  Paperclip,
-  Info,
-  Users,
-  CircleDot,
-  Crown,
-} from "lucide-react";
+import { MoreVertical, Send, Image as ImageIcon, Info, Users, Crown } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./cooperativaChat.css";
 
@@ -87,6 +78,32 @@ export default function CooperativaGrupoChat() {
     setDraft("");
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const timestamp = new Date().toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `grp-img-${Date.now()}`,
+          author: "Você",
+          text: "",
+          timestamp,
+          type: "usuario",
+          image: reader.result,
+        },
+      ]);
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+  };
+
   const handleBack = () => {
     navigate("/cooperativas", {
       state: { reopenTab: "cooperativas", search: location.state?.search ?? "" },
@@ -102,7 +119,7 @@ export default function CooperativaGrupoChat() {
           onClick={handleBack}
           aria-label="Voltar para cooperativas"
         >
-          <ArrowLeft size={24} strokeWidth={2.4} />
+        <span className="coop-chat__icon">&lt;</span>
         </button>
 
         <div className="coop-chat__identity">
@@ -151,16 +168,31 @@ export default function CooperativaGrupoChat() {
             {message.type !== "usuario" && message.type !== "system" && (
               <strong>{message.author}</strong>
             )}
-            <p>{message.text}</p>
+            {message.image ? (
+              <img
+                src={message.image}
+                alt="Imagem enviada na conversa"
+                className="coop-bubble__image"
+              />
+            ) : (
+              <p>{message.text}</p>
+            )}
             <span>{message.timestamp}</span>
           </div>
         ))}
       </div>
 
       <footer className="coop-chat__footer">
-        <button type="button" className="coop-chat__attach" aria-label="Anexar">
-          <Paperclip size={20} strokeWidth={2.2} />
-        </button>
+        <label htmlFor="coop-group-upload" className="coop-chat__attach" aria-label="Anexar imagem">
+          <ImageIcon size={20} strokeWidth={2.2} />
+        </label>
+        <input
+          id="coop-group-upload"
+          type="file"
+          accept="image/*"
+          className="coop-chat__file-input"
+          onChange={handleFileChange}
+        />
         <input
           type="text"
           placeholder="Digite uma mensagem..."
@@ -182,21 +214,6 @@ export default function CooperativaGrupoChat() {
           <Send size={20} strokeWidth={2.2} />
         </button>
       </footer>
-
-      <nav className="coop-chat__menu">
-        <button type="button">
-          <CircleDot size={18} />
-          Ver informações
-        </button>
-        <button type="button" onClick={() => setShowMembers(true)}>
-          <Users size={18} />
-          Ver membros
-        </button>
-        <button type="button">
-          <MoreVertical size={18} />
-          Administração
-        </button>
-      </nav>
 
       {showMembers && (
         <div className="coop-modal" role="dialog" aria-modal="true">
@@ -224,12 +241,33 @@ export default function CooperativaGrupoChat() {
                 <h3>Colaboradores</h3>
                 <ul>
                   {(group.colaboradores ?? []).map((membro) => (
-                    <li key={`${membro.nome}-${membro.papel}`} className="coop-member">
-                      <Users size={16} />
-                      <div>
-                        <span>{membro.nome}</span>
-                        <small>{membro.papel}</small>
-                      </div>
+                    <li key={`${membro.nome}-${membro.papel}`}>
+                      {membro.nome === "Você" ? (
+                        <div className="coop-member">
+                          <Users size={16} />
+                          <div>
+                            <span>{membro.nome}</span>
+                            <small>{membro.papel}</small>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="coop-member coop-member--clickable"
+                          onClick={() => {
+                            setShowMembers(false);
+                            navigate(`/mercado/produtor/${membro.id}`, {
+                              state: { from: "coop-chat" },
+                            });
+                          }}
+                        >
+                          <Users size={16} />
+                          <div>
+                            <span>{membro.nome}</span>
+                            <small>{membro.papel}</small>
+                          </div>
+                        </button>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -241,7 +279,18 @@ export default function CooperativaGrupoChat() {
                   onClick={() => {
                     setShowMembers(false);
                     navigate("/mercado", {
-                      state: { focusInvite: true, from: "cooperativa", groupId: group.id },
+                      state: {
+                        focusInvite: true,
+                        from: "cooperativa",
+                        groupId: group.id,
+                        returnTo: {
+                          pathname: location.pathname,
+                          state: {
+                            group: groupInfo,
+                            search: location.state?.search ?? "",
+                          },
+                        },
+                      },
                     });
                   }}
                 >

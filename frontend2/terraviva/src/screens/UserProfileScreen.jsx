@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
-  ArrowLeft,
   Check,
   Edit3,
   Plus,
@@ -11,8 +10,11 @@ import {
   CircleDot,
   CircleX,
   ChevronDown,
+  Heart,
+  ArrowUpRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { PRODUTORES } from "./mercadoData";
 import "./userProfile.css";
 
 const INITIAL_USER = {
@@ -26,6 +28,8 @@ const INITIAL_USER = {
     endereco: "Sítio Esperança, Zona Rural",
   },
   bio: "Produtor familiar com 10 anos de experiência em cultivo orgânico. Interessado em formar cooperativas para escoamento de excedentes.",
+  areasAtuacao: ["Agricultura Familiar", "Apicultura", "Horticultura"],
+  favoritos: [1, 2],
 };
 
 const INITIAL_PRODUCTS = [
@@ -127,6 +131,14 @@ export default function UserProfileScreen() {
   const pendingCount = useMemo(
     () => requests.filter((req) => req.status === "pendente").length,
     [requests],
+  );
+
+  const favoriteProducers = useMemo(
+    () =>
+      PRODUTORES.filter((produtor) =>
+        user.favoritos?.includes(produtor.id),
+      ),
+    [user.favoritos],
   );
 
   const handleToggleEdit = () => {
@@ -275,7 +287,7 @@ export default function UserProfileScreen() {
           }}
           aria-label="Voltar para a tela anterior"
         >
-          <ArrowLeft size={40} strokeWidth={2.6} />
+          <span className="profile-header__back-icon">&lt;</span>
         </button>
 
         <h1>Meu Perfil</h1>
@@ -391,6 +403,54 @@ export default function UserProfileScreen() {
           </div>
 
         </div>
+      </section>
+
+      <section className="profile-section">
+        <header className="section-header section-header--favorites">
+          <div className="section-header__left">
+            <div className="section-header__title">
+              <h2>Produtores favoritos</h2>
+              <span className="favorites-icon" aria-hidden="true">
+                <Heart size={20} />
+              </span>
+            </div>
+            <p>Veja rapidamente os perfis salvos no marketplace.</p>
+          </div>
+        </header>
+
+        {favoriteProducers.length === 0 ? (
+          <div className="empty-state">
+            <CircleDot size={28} />
+            <h3>Nenhum produtor favorito</h3>
+            <p>Salve produtores no marketplace para acompanhar de perto.</p>
+          </div>
+        ) : (
+          <ul className="favorites-list">
+            {favoriteProducers.map((produtor) => (
+              <li key={produtor.id} className="favorite-card">
+                <img src={produtor.avatar} alt={`Foto de ${produtor.nome}`} />
+                <div className="favorite-card__info">
+                  <h3>{produtor.nome}</h3>
+                  <p>
+                    {produtor.cidade}, {produtor.estado}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="favorite-card__action"
+                  onClick={() =>
+                    navigate(`/mercado/produtor/${produtor.id}`, {
+                      state: { from: "profile-favorites" },
+                    })
+                  }
+                >
+                  <ArrowUpRight size={16} />
+                  Ver perfil
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section className="profile-section">

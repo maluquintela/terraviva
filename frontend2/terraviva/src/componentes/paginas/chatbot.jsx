@@ -131,7 +131,7 @@ export default function Chatbot() {
         <button
           type="button"
           className="chatbot-back"
-          onClick={() => navigate('/telainicial')}
+          onClick={() => navigate("/home")}
           aria-label="Voltar"
         >
           <ChevronLeft size={20} strokeWidth={2.5} />
@@ -188,43 +188,45 @@ export default function Chatbot() {
       </main>
 
       <footer className="chatbot-footer">
-        <input
-          ref={inputFileRef}
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-        <button
-          type="button"
-          className="chatbot-action"
-          aria-label="Enviar imagem"
-          title="Enviar imagem"
-          onClick={handleFileClick}
-        >
-          <ImageIcon size={18} />
-        </button>
+        <div>
+          <input
+            ref={inputFileRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          <button
+            type="button"
+            className="chatbot-action"
+            aria-label="Enviar imagem"
+            title="Enviar imagem"
+            onClick={handleFileClick}
+          >
+            <ImageIcon size={18} />
+          </button>
 
-        <textarea
-          ref={textareaRef}
-          className="chatbot-input"
-          placeholder="Como podemos te ajudar hoje?"
-          aria-label="Campo de mensagem"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          rows={1}
-        />
+          <textarea
+            ref={textareaRef}
+            className="chatbot-input"
+            placeholder="Como podemos te ajudar hoje?"
+            aria-label="Campo de mensagem"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            rows={1}
+          />
 
-        <button
-          type="button"
-          className="chatbot-send"
-          aria-label="Enviar"
-          onClick={handleSendText}
-          disabled={!text.trim()}
-        >
-          <Send size={18} />
-        </button>
+          <button
+            type="button"
+            className="chatbot-send"
+            aria-label="Enviar"
+            onClick={handleSendText}
+            disabled={!text.trim()}
+          >
+            <Send size={18} />
+          </button>
+        </div>
       </footer>
     </div>
   );

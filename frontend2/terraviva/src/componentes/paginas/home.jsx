@@ -5,7 +5,7 @@ import logo from "../../assets/images/terraviva(1).png";
 import "./home.css";
 
 const ACTIONS = [
-  { to: "/noticias", icon: Leaf, label: "Notícias" },
+  { to: "/dicas", icon: Leaf, label: "Notícias" },
   { to: "/ajuda-tecnica", icon: Bot, label: "Ajuda Técnica" },
   { to: "/mercado", icon: ShoppingCart, label: "Mercado" },
   { to: "/cooperativas", icon: Handshake, label: "Cooperativas" },
@@ -17,23 +17,26 @@ export default function Home() {
     <div className="home-page animate-fade-in">
       <div className="home-shell">
         <header className="home-header">
-          <h1 className="home-header__title">Olá, Nome!</h1>
-          <p className="home-header__subtitle">
-            O que o TerraViva pode fazer por você hoje?
-          </p>
+          <div className="home-header__intro">
+            <div className="home-header__identity">
+              <h1 className="home-header__title">Olá, Nome!</h1>
+              <p className="home-header__subtitle">
+                O que o TerraViva pode fazer por você hoje?
+              </p>
+            </div>
+            <div className="home-header__logo">
+              <img src={logo} alt="Logotipo TerraViva" />
+            </div>
+          </div>
         </header>
 
-        <section className="home-actions">
-          {ACTIONS.map((action) => (
-            <MainButton key={action.label} {...action} />
-          ))}
-        </section>
-
-        <footer className="home-footer">
-          <div className="home-footer__badge">
-            <img src={logo} alt="Símbolo TerraViva" />
-          </div>
-        </footer>
+        <main className="home-content">
+          <section className="home-actions">
+            {ACTIONS.map((action) => (
+              <MainButton key={action.label} {...action} />
+            ))}
+          </section>
+        </main>
       </div>
     </div>
   );

@@ -1,14 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  MoreVertical,
-  Send,
-  Paperclip,
-  Circle,
-  ShieldOff,
-  Trash2,
-  User2,
-} from "lucide-react";
+import { Send, Image as ImageIcon, Circle, ShieldOff, Trash2, User2 } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./cooperativaChat.css";
 
@@ -95,7 +86,7 @@ export default function CooperativaProdutorChat() {
           onClick={handleBack}
           aria-label="Voltar para cooperativas"
         >
-          <ArrowLeft size={24} strokeWidth={2.4} />
+          <span className="coop-chat__icon">&lt;</span>
         </button>
 
         <div className="coop-chat__identity">
@@ -109,13 +100,6 @@ export default function CooperativaProdutorChat() {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="coop-chat__icon-btn"
-          aria-label="Mais opções"
-        >
-          <MoreVertical size={20} />
-        </button>
       </header>
 
       <div className="coop-chat__body" ref={scrollRef}>
@@ -124,16 +108,53 @@ export default function CooperativaProdutorChat() {
             key={message.id}
             className={`coop-bubble coop-bubble--${message.author}`}
           >
-            <p>{message.text}</p>
+            {message.image ? (
+              <img
+                src={message.image}
+                alt="Imagem enviada na conversa"
+                className="coop-bubble__image"
+              />
+            ) : (
+              <p>{message.text}</p>
+            )}
             <span>{message.timestamp}</span>
           </div>
         ))}
       </div>
 
       <footer className="coop-chat__footer">
-        <button type="button" className="coop-chat__attach" aria-label="Anexar arquivo">
-          <Paperclip size={20} strokeWidth={2.2} />
-        </button>
+        <label htmlFor="coop-chat-upload" className="coop-chat__attach" aria-label="Anexar imagem">
+          <ImageIcon size={20} strokeWidth={2.2} />
+        </label>
+        <input
+          id="coop-chat-upload"
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+              const timestamp = new Date().toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `img-${Date.now()}`,
+                  author: "usuario",
+                  text: "",
+                  image: reader.result,
+                  timestamp,
+                },
+              ]);
+            };
+            reader.readAsDataURL(file);
+            event.target.value = "";
+          }}
+        />
         <input
           type="text"
           placeholder="Digite uma mensagem..."

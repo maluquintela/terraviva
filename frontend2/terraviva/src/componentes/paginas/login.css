@@ -33,11 +33,36 @@ body, html, #root {
 
 .login-page {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
+  padding: 24px 20px 32px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
-  background: #f6f6f6; /* cor clara, remove o verde escuro */
+  gap: 24px;
+  background: linear-gradient(135deg, #0f2f24 0%, #1b4332 35%, #245f44 100%);
+  box-sizing: border-box;
+}
+
+.login-hero {
+  display: none;
+  width: 100%;
+  min-height: 220px;
+  border-radius: 28px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%);
+  box-shadow: 0 20px 36px rgba(27, 67, 50, 0.22);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.36), transparent 58%),
+    radial-gradient(circle at 80% 35%, rgba(255, 255, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.22), transparent 52%);
+  opacity: 0.55;
 }
 
 
@@ -46,11 +71,11 @@ body, html, #root {
 ============================= */
 .card {
   background: #fff;
-  padding: 40px 36px;
+  padding: 38px 32px;
   border-radius: 32px;
   width: 100%;
-  max-width: 325px;   /* aumente conforme desejar */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+  max-width: 420px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -93,6 +118,14 @@ body, html, #root {
 .input-container {
   position: relative;
   width: 100%;
+  max-width: 600px;
+  margin-bottom: 16px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
   margin-bottom: 16px;
 }
 
@@ -101,7 +134,7 @@ body, html, #root {
   height: 44px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 0 48px 0 42px;
+  padding: 0 48px 0 14px;
   font-family: 'Nexa-Light', sans-serif;
   color: var(--text-color);
   background-color: var(--background-light);
@@ -165,6 +198,7 @@ body, html, #root {
 ============================= */
 .button {
   width: 100%;
+  max-width: 600px;
   background: var(--primary-color);
   color: #fff;
   font-size: 16px;
@@ -213,6 +247,103 @@ body, html, #root {
 .signup-link:hover {
   background: none;
   color: var(--primary-color);
+}
+
+@media (min-width: 768px) {
+  .login-page {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+    min-height: 100vh;
+    width: 100vw;
+  }
+
+  .login-hero {
+    display: none;
+  }
+
+  .card {
+    flex: 0 0 auto;
+    max-width: 600px;
+    width: 600px;
+    align-self: center;
+    margin: 0;
+    padding: 60px 80px;
+    border-radius: 32px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 32px;
+    margin-bottom: 28px;
+  }
+
+  .logo {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 20px;
+  }
+
+  .input {
+    height: 56px;
+    font-size: 17px;
+    border-radius: 14px;
+    padding: 0 52px 0 18px;
+  }
+
+  .button {
+    height: 56px;
+    font-size: 19px;
+    border-radius: 16px;
+    margin: 16px 0;
+  }
+
+  .signup-text,
+  .signup-link {
+    font-size: 16px;
+  }
+
+  .input-wrapper {
+    margin-bottom: 24px;
+  }
+
+  .icon-button svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    max-width: 700px;
+    width: 700px;
+    padding: 80px 100px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .input {
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .button {
+    height: 60px;
+    font-size: 20px;
+  }
 }
 
 /* =============================
