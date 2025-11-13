@@ -23,6 +23,7 @@ export default function MercadoScreen() {
   const [query, setQuery] = useState("");
   const [selectedFiltro, setSelectedFiltro] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const returnTo = location.state?.returnTo;
 
   useEffect(() => {
     const state = location.state;
@@ -31,7 +32,15 @@ export default function MercadoScreen() {
       setQuery(state.query ?? "");
       setSelectedFiltro(state.selectedFiltro ?? "");
       setShowFilters(Boolean(state.selectedFiltro));
-      navigate(location.pathname, { replace: true });
+      const { returnTo: stateReturnTo, focusInvite } = state;
+      const nextState =
+        stateReturnTo || focusInvite
+          ? {
+              ...(stateReturnTo ? { returnTo: stateReturnTo } : {}),
+              ...(focusInvite ? { focusInvite } : {}),
+            }
+          : undefined;
+      navigate(location.pathname, { replace: true, state: nextState });
     }
   }, [location, navigate]);
 
@@ -115,10 +124,21 @@ export default function MercadoScreen() {
           <button
             type="button"
             className="marketplace__back"
-            onClick={() => navigate("/home")}
+            onClick={() => {
+              if (returnTo?.pathname) {
+                navigate(returnTo.pathname, {
+                  state: returnTo.state,
+                  replace: true,
+                });
+              } else if (window.history.length > 1) {
+                navigate(-1);
+              } else {
+                navigate("/home");
+              }
+            }}
             aria-label="Voltar para a página principal"
           >
-            <ArrowLeft size={40} strokeWidth={2.4} />
+            <span className="marketplace__back-icon">&lt;</span>
           </button>
           <div className="marketplace__brand" aria-label="Cooperativa Mercado">
             <span>Cooperativa</span>
@@ -195,7 +215,11 @@ export default function MercadoScreen() {
                   type="button"
                   className="producer-card__cta"
                   aria-label={`Ver perfil de ${produtor.nome}`}
-                  onClick={() => navigate(`/mercado/produtor/${produtor.id}`)}
+                  onClick={() =>
+                    navigate(`/mercado/produtor/${produtor.id}`, {
+                      state: returnTo ? { returnTo } : undefined,
+                    })
+                  }
                 >
                   Ver perfil para saber mais
                 </button>
@@ -215,7 +239,7 @@ export default function MercadoScreen() {
                 onClick={handleCloseSearch}
                 aria-label="Voltar para o feed"
               >
-                <ArrowLeft size={28} strokeWidth={2.4} />
+                <span className="search-panel__back-icon">&lt;</span>
               </button>
               <h2 className="search-panel__title">Buscar produtores</h2>
             </header>
@@ -318,6 +342,7 @@ export default function MercadoScreen() {
                             from: "search",
                             query,
                             selectedFiltro,
+                            ...(returnTo ? { returnTo } : {}),
                           },
                         })
                       }

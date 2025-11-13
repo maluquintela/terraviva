@@ -56,7 +56,7 @@ export default function Navbar() {
         >
           Diagnóstico
         </NavLink>
-      </nav>
+    </nav>
     </header>
   );
 }

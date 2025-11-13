@@ -133,6 +133,11 @@ export const PRODUTORES = [
   },
 ];
 
-export const getProdutorById = (id) =>
-  PRODUTORES.find((produtor) => produtor.id === Number(id));
+export const getProdutorById = (id) => {
+  // Se for "demo", retorna o primeiro produtor como exemplo
+  if (id === "demo") {
+    return PRODUTORES[0];
+  }
+  return PRODUTORES.find((produtor) => produtor.id === Number(id));
+};
 

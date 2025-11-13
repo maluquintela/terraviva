@@ -25,6 +25,32 @@
   gap: 12px;
 }
 
+.producer-profile__back-btn {
+  width: 56px;
+  height: 56px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #184332;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.producer-profile__back-btn:hover {
+  opacity: 0.85;
+}
+
+.producer-profile__back-btn:active {
+  transform: scale(0.97);
+}
+
+.producer-profile__back-icon {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .producer-profile__title {
   flex: 1;
   margin: 0;
@@ -44,14 +70,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #184332;
+  box-shadow: 0 8px 18px rgba(24, 67, 50, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
 .producer-profile__icon-btn[data-active="true"] {
   background: rgba(217, 48, 79, 0.12);
   border-color: rgba(217, 48, 79, 0.4);
   color: #d9304f;
-}
-  color: #184332;
-  box-shadow: 0 8px 18px rgba(24, 67, 50, 0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .producer-profile__icon-btn:active {
@@ -132,6 +159,7 @@
   gap: 16px;
   align-items: center;
   box-shadow: 0 14px 24px rgba(24, 67, 50, 0.08);
+  width: 100%;
 }
 
 .status-card__icon {
@@ -251,18 +279,34 @@
   border: 1px solid rgba(219, 219, 217, 0.8);
   font-size: 0.92rem;
   color: #184332;
+  gap: 12px;
+}
+
+.table__row span {
+  justify-self: flex-start;
 }
 
 .table__action {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  border: 1px solid rgba(24, 67, 50, 0.16);
-  background: #ffffff;
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #184332;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.table__action:hover {
+  opacity: 0.85;
+}
+
+.table__action:active {
+  transform: scale(0.95);
+}
+
+.table__action svg {
+  width: 32px;
+  height: 32px;
 }
 
 .table__hint {
@@ -270,6 +314,108 @@
   text-align: center;
   font-size: 0.78rem;
   color: rgba(0, 0, 0, 0.58);
+}
+
+.producer-profile__heart-btn {
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #184332;
+  transition: transform 0.15s ease;
+}
+
+.producer-profile__heart-btn[data-active="true"] {
+  color: #d9304f;
+}
+
+.producer-profile__heart-btn:active {
+  transform: scale(0.95);
+}
+
+@media (min-width: 1024px) {
+  .producer-profile {
+    padding: 56px 40px 80px;
+  }
+
+  .producer-profile__inner {
+    max-width: 1120px;
+    gap: 36px;
+  }
+
+  .producer-profile__header {
+    padding: 8px 4px;
+  }
+
+  .producer-profile__back-btn {
+    width: 72px;
+    height: 72px;
+  }
+
+  .producer-profile__back-icon {
+    font-size: 58px;
+  }
+
+  .producer-profile__heart-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .producer-profile__hero {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 32px;
+    padding: 36px 40px;
+  }
+
+  .producer-profile__avatar {
+    width: 180px;
+    height: 180px;
+  }
+
+  .producer-profile__identity {
+    align-items: flex-start;
+  }
+
+  .producer-profile__identity h2 {
+    font-size: 1.68rem;
+  }
+
+  .producer-profile__status {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    width: 100%;
+  }
+
+  .producer-profile__status .status-card {
+    padding: 32px;
+  }
+
+  .producer-profile__table {
+    padding: 32px 36px;
+  }
+
+  .producer-profile__table .table__head,
+  .producer-profile__table .table__row {
+    grid-template-columns: 2fr auto;
+  }
+
+  .table__action svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .producer-profile__actions {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .producer-profile__actions .cta-button {
+    flex: 1;
+  }
 }
 
 .producer-profile__actions {
@@ -454,13 +600,19 @@
 .fallback__back {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   padding: 10px 16px;
   border-radius: 14px;
   border: 1px solid rgba(24, 67, 50, 0.2);
   background: #ffffff;
   color: #184332;
   font-weight: 600;
+}
+
+.fallback__back-icon {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 @keyframes fadeIn {
