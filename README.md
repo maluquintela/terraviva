@@ -16,7 +16,7 @@
 - [Funcionalidades Principais](#-funcionalidades-principais)
 - [Arquitetura do Sistema](#-arquitetura-do-sistema)
 - [Instalação e Configuração](#-instalação-e-configuração)
-  - [Credenciais de Teste](#5️⃣-credenciais-de-teste)
+- [Credenciais de Teste](#5️⃣-credenciais-de-teste)
 - [Documentação Completa](#-documentação-completa)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [Testando a API](#-testando-a-api)
