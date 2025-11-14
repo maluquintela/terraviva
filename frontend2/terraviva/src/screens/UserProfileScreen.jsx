@@ -116,7 +116,7 @@ const mapApiRequestToCard = (request) => {
     solicitante: requester.name ?? "Produtor parceiro",
     localizacao: location || "Local não informado",
     produto: productName ?? "Produtos diversos",
-    quantidade,
+    quantidade: quantity,
     mensagem: request.message ?? "Solicitação de cooperativa",
     status: request.status,
     data: request.created_at
