@@ -12,7 +12,7 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
 from database import SessionLocal, models, schemas
-from auth import get_current_farmer
+from backend.auth import get_current_farmer
 
 router = APIRouter(prefix="/marketplace", tags=["marketplace"])
 

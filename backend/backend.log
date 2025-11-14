@@ -1,261 +1,340 @@
-INFO:     Will watch for changes in these directories: ['/home/maluquintela/terraviva/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [111971] using StatReload
-INFO:     Started server process [111989]
+INFO:     Will watch for changes in these directories: ['/Users/luisaugustomelodequeirozoliveira/terraviva-4/terraviva']
+INFO:     Uvicorn running on http://127.0.0.1:8003 (Press CTRL+C to quit)
+INFO:     Started reloader process [53493] using StatReload
+INFO:     Started server process [53508]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     127.0.0.1:57306 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44902 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44902 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44902 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49604 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49604 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45826 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45826 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45832 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45832 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45826 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45832 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45832 - "OPTIONS /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45832 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45832 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46982 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46982 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32774 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32774 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33698 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33698 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47312 - "OPTIONS /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47312 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47312 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54330 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54344 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51426 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51420 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51426 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51420 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35536 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35536 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "OPTIONS /marketplace/listings/5 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /marketplace/listings/5 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /marketplace/listings/5 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40668 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40668 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "OPTIONS /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35528 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50268 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50268 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50268 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41520 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41520 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46734 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46734 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37752 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37752 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48648 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48636 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48648 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48636 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32844 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32844 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35828 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35812 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35828 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35812 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51906 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51906 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52544 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52544 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54520 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54520 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-WARNING:  StatReload detected changes in 'ai_context.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [111989]
-INFO:     Started server process [124510]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'auth.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [124510]
-WARNING:  StatReload detected changes in 'seed_listings.py'. Reloading...
-INFO:     Started server process [124556]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Started server process [124569]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:36448 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36448 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36448 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45688 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45688 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45688 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49376 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49376 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49376 - "OPTIONS /social/farmers/5/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49376 - "GET /social/farmers/5/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49376 - "GET /social/farmers/5/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33150 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33150 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33150 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33150 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40478 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40478 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40492 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40492 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33356 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33356 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45404 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45404 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45404 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51480 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51480 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51480 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59702 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59702 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59706 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59706 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59702 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59706 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-WARNING:  StatReload detected changes in 'test_marketplace.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [124569]
-INFO:     Started server process [128209]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:47058 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47048 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47058 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47048 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-WARNING:  StatReload detected changes in 'routers/marketplace.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [128209]
-INFO:     Started server process [129340]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'routers/marketplace.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [129340]
-INFO:     Started server process [129455]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'routers/marketplace.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [129455]
-INFO:     Started server process [129998]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:49200 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49202 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49202 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49200 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49202 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49200 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41488 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41488 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41488 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53408 - "OPTIONS /marketplace/listings/2 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53408 - "GET /marketplace/listings/2 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53408 - "GET /marketplace/listings/2 HTTP/1.1" 200 OK
-WARNING:  StatReload detected changes in 'create_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [129998]
-INFO:     Started server process [130663]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:53434 - "OPTIONS /marketplace/listings/1 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53434 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53434 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
-WARNING:  StatReload detected changes in 'create_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [130663]
-INFO:     Started server process [130780]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:58654 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57438 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57438 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34624 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34624 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
-WARNING:  StatReload detected changes in 'test_marketplace.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [130780]
-INFO:     Started server process [132307]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:46106 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46106 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46106 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55912 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55912 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54714 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54714 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54714 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37228 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37228 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33236 - "OPTIONS /marketplace/listings/1 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33236 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33236 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49584 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49584 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49584 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49598 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49598 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49584 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49598 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49584 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38600 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38600 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38592 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38592 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62821 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62836 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62837 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62836 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62837 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62837 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62836 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+
+🌾 CONTEXTO DO AGRICULTOR (RECARREGADO DO BANCO):
+   ID: 14
+   Nome: Desenvolvedor Local
+   Cidade: Alhandra, PB
+   Orçamento: R$ 1500.0
+   Culturas: tomate, pimentão, cebola
+   Bio: Agricultor de Alhandra, PB. Cultiva tomate, pimentão e cebola com orçamento de R$ 1500/mês. Prefere cooperações de longo prazo e vendas diretas ao consumidor.
+
+
+
+📝 PROMPT ENVIADO PARA IA:
+   Agricultor: Desenvolvedor Local (Alhandra, PB)
+   Orçamento: R$ 1500.0
+
+   USER PROMPT (primeiras 500 chars):
+   
+CONTEXTO DO AGRICULTOR E REGIÃO:
+
+📍 **Localização**: Alhandra, PB (Paraíba)
+
+🌡️ **Clima Regional**: Tropical semiárido e tropical úmido
+   - Temperatura média atual (primavera): 20-26°C
+   - Precipitação anual: 400-1200mm
+
+🌱 **Solo da Região**: Neossolo e luvissolo
+
+📅 **Época Atual**: Primavera (Novembro)
+   - Culturas recomendadas para esta época: milho
+
+🌾 **Culturas Principais da Região**: milho, feijão, mandioca, cana-de-açúcar, abacaxi
+
+⚠️ **Pragas Comuns na Região**: lagarta, broca, pulgão...
+
+
+INFO:     127.0.0.1:62840 - "POST /questions/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63120 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63121 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63120 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63121 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63120 - "OPTIONS /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63121 - "OPTIONS /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63120 - "GET /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63121 - "GET /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63120 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63121 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63155 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63156 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63157 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63158 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63156 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63158 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63155 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63157 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63169 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63168 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63171 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63170 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63174 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63176 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63173 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63175 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63229 - "OPTIONS /questions/ HTTP/1.1" 200 OK
+
+🌾 CONTEXTO DO AGRICULTOR (RECARREGADO DO BANCO):
+   ID: 14
+   Nome: Desenvolvedor Local
+   Cidade: Alhandra, PB
+   Orçamento: R$ 1500.0
+   Culturas: tomate, pimentão, cebola
+   Bio: Agricultor de Alhandra, PB. Cultiva tomate, pimentão e cebola com orçamento de R$ 1500/mês. Prefere cooperações de longo prazo e vendas diretas ao consumidor.
+
+
+
+📝 PROMPT ENVIADO PARA IA:
+   Agricultor: Desenvolvedor Local (Alhandra, PB)
+   Orçamento: R$ 1500.0
+
+   USER PROMPT (primeiras 500 chars):
+   
+CONTEXTO DO AGRICULTOR E REGIÃO:
+
+📍 **Localização**: Alhandra, PB (Paraíba)
+
+🌡️ **Clima Regional**: Tropical semiárido e tropical úmido
+   - Temperatura média atual (primavera): 20-26°C
+   - Precipitação anual: 400-1200mm
+
+🌱 **Solo da Região**: Neossolo e luvissolo
+
+📅 **Época Atual**: Primavera (Novembro)
+   - Culturas recomendadas para esta época: milho
+
+🌾 **Culturas Principais da Região**: milho, feijão, mandioca, cana-de-açúcar, abacaxi
+
+⚠️ **Pragas Comuns na Região**: lagarta, broca, pulgão...
+
+
+INFO:     127.0.0.1:63229 - "POST /questions/ HTTP/1.1" 200 OK
+
+🌾 CONTEXTO DO AGRICULTOR (RECARREGADO DO BANCO):
+   ID: 14
+   Nome: Desenvolvedor Local
+   Cidade: Alhandra, PB
+   Orçamento: R$ 1500.0
+   Culturas: tomate, pimentão, cebola
+   Bio: Agricultor de Alhandra, PB. Cultiva tomate, pimentão e cebola com orçamento de R$ 1500/mês. Prefere cooperações de longo prazo e vendas diretas ao consumidor.
+
+
+
+📝 PROMPT ENVIADO PARA IA:
+   Agricultor: Desenvolvedor Local (Alhandra, PB)
+   Orçamento: R$ 1500.0
+
+   USER PROMPT (primeiras 500 chars):
+   
+CONTEXTO DO AGRICULTOR E REGIÃO:
+
+📍 **Localização**: Alhandra, PB (Paraíba)
+
+🌡️ **Clima Regional**: Tropical semiárido e tropical úmido
+   - Temperatura média atual (primavera): 20-26°C
+   - Precipitação anual: 400-1200mm
+
+🌱 **Solo da Região**: Neossolo e luvissolo
+
+📅 **Época Atual**: Primavera (Novembro)
+   - Culturas recomendadas para esta época: milho
+
+🌾 **Culturas Principais da Região**: milho, feijão, mandioca, cana-de-açúcar, abacaxi
+
+⚠️ **Pragas Comuns na Região**: lagarta, broca, pulgão...
+
+
+INFO:     127.0.0.1:63304 - "POST /questions/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63330 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63331 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63330 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63331 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63339 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63341 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63338 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63340 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63561 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63562 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63563 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63562 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63561 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63563 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63573 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63572 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63578 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63580 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63577 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63579 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63585 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63586 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63586 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63585 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63585 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63586 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63772 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63772 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63780 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63781 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63781 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63780 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63785 - "OPTIONS /farmers/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63785 - "PUT /farmers/1 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:63788 - "PUT /farmers/1 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:63788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63789 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63792 - "PUT /farmers/1 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:63792 - "PUT /farmers/1 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:63792 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63793 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64001 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64000 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64000 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64001 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64000 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64001 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64034 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64035 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64043 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64044 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64043 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64044 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65239 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65240 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65239 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65240 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65249 - "OPTIONS /questions/ HTTP/1.1" 200 OK
+
+🌾 CONTEXTO DO AGRICULTOR (RECARREGADO DO BANCO):
+   ID: 14
+   Nome: Desenvolvedor Local
+   Cidade: Alhandra, PB
+   Orçamento: R$ 1500.0
+   Culturas: tomate, pimentão, cebola
+   Bio: Agricultor de Alhandra, PB. Cultiva tomate, pimentão e cebola com orçamento de R$ 1500/mês. Prefere cooperações de longo prazo e vendas diretas ao consumidor.
+
+
+
+📝 PROMPT ENVIADO PARA IA:
+   Agricultor: Desenvolvedor Local (Alhandra, PB)
+   Orçamento: R$ 1500.0
+
+   USER PROMPT (primeiras 500 chars):
+   
+CONTEXTO DO AGRICULTOR E REGIÃO:
+
+📍 **Localização**: Alhandra, PB (Paraíba)
+
+🌡️ **Clima Regional**: Tropical semiárido e tropical úmido
+   - Temperatura média atual (primavera): 20-26°C
+   - Precipitação anual: 400-1200mm
+
+🌱 **Solo da Região**: Neossolo e luvissolo
+
+📅 **Época Atual**: Primavera (Novembro)
+   - Culturas recomendadas para esta época: milho
+
+🌾 **Culturas Principais da Região**: milho, feijão, mandioca, cana-de-açúcar, abacaxi
+
+⚠️ **Pragas Comuns na Região**: lagarta, broca, pulgão...
+
+
+INFO:     127.0.0.1:65249 - "POST /questions/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65253 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65311 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65310 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65315 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65316 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65317 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65318 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65318 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65316 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65315 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65317 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65316 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65317 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65318 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65315 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65326 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65325 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65352 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65351 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65354 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65353 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65366 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65367 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65375 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65376 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65375 - "OPTIONS /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65376 - "OPTIONS /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65375 - "GET /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65376 - "GET /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65380 - "GET /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "GET /social/farmers/7/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65380 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "OPTIONS /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65380 - "OPTIONS /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65380 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65389 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65390 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65395 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65396 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65395 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65396 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65396 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65398 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65395 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65397 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65401 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65400 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65403 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65402 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65414 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65416 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65413 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65415 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65424 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65425 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65424 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65425 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65428 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65429 - "GET /social/farmers/3/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49957 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49958 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49957 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49958 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49957 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49958 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49960 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49961 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49958 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49961 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49957 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49960 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49961 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49960 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49958 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49957 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49964 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49963 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49966 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49963 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49964 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49966 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49969 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49971 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49968 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49970 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49976 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49974 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49973 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49975 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51095 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51095 - "GET /openapi.json HTTP/1.1" 200 OK

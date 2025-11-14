@@ -11,9 +11,9 @@ from sqlalchemy.orm import Session
 from typing import List, Tuple, Optional
 import os
 from database import SessionLocal, models, schemas
-from auth import get_current_farmer
+from backend.auth import get_current_farmer
 from dotenv import load_dotenv
-from ai_context import get_chatgpt_prompts
+from backend.ai_context import get_chatgpt_prompts
 
 load_dotenv()
 
@@ -52,24 +52,59 @@ def get_ai_response(
         
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key or api_key == "sua_chave_openai_aqui":
-            # Fallback para resposta simulada se não houver chave
+            # Fallback para resposta contextualizada simulada se não houver chave
+            from backend.ai_context import get_season_from_date, build_context_prompt
+            
             season = ""
+            season_name = "primavera"
             if sent_at:
-                from ai_context import get_season_from_date
-                season = f" nesta época de {get_season_from_date(sent_at)}"
+                season_name = get_season_from_date(sent_at)
+                season = f" nesta época de {season_name}"
             
             location = ""
-            if farmer_context and farmer_context.city and farmer_context.state:
-                location = f" em {farmer_context.city}, {farmer_context.state}"
+            budget_msg = ""
+            crops_msg = ""
+            
+            if farmer_context:
+                if farmer_context.city and farmer_context.state:
+                    location = f" em {farmer_context.city}, {farmer_context.state}"
+                
+                if farmer_context.budget:
+                    if farmer_context.budget <= 50:
+                        budget_msg = "\n\n💰 **Dica de orçamento limitado**: Priorize soluções gratuitas ou de muito baixo custo, como compostagem caseira, sementes crioulas e adubação verde."
+                    elif farmer_context.budget <= 200:
+                        budget_msg = "\n\n💰 **Dica de orçamento moderado**: Você pode investir em insumos básicos e ferramentas simples que tragam bom retorno."
+                    elif farmer_context.budget >= 1000:
+                        budget_msg = f"\n\n💰 **Ótimo orçamento (R$ {farmer_context.budget:.0f}/mês)**: Você pode investir em infraestrutura, sistemas de irrigação, estufas e insumos de qualidade."
+                
+                if farmer_context.crops:
+                    crops_msg = f"\n\n🌱 **Sobre suas culturas** ({farmer_context.crops}): "
+                    
+                    # Dicas específicas por cultura
+                    crops_lower = farmer_context.crops.lower()
+                    if "tomate" in crops_lower:
+                        crops_msg += "Tomate precisa de boa luminosidade e solo rico em matéria orgânica. "
+                    if "pimentão" in crops_lower:
+                        crops_msg += "Pimentão gosta de clima quente e irrigação regular. "
+                    if "alface" in crops_lower:
+                        crops_msg += "Alface prefere clima ameno e cresce rápido (45-60 dias). "
+                    if "milho" in crops_lower:
+                        crops_msg += "Milho é resistente e se adapta bem a vários solos. "
+                    if "feijão" in crops_lower:
+                        crops_msg += "Feijão enriquece o solo com nitrogênio e cresce bem em consórcio. "
             
             return f"""Olá{location}! Sobre sua pergunta{season}: "{question}"
 
-Como agrônomo experiente, posso te ajudar! Para uma resposta completa à sua dúvida, é importante observar:
-1. Quais são as condições específicas do seu plantio?
-2. Como está o clima e o solo na sua região?
-3. Há quanto tempo essa situação está ocorrendo?
+Como agrônomo experiente{location}, posso te orientar:
 
-Se possível, compartilhe mais detalhes para uma orientação mais precisa. Enquanto isso, continue observando suas plantas e tomando notas.""", 0.5
+1. **Análise da situação**: Observe as condições específicas do seu plantio - solo, clima e desenvolvimento das plantas
+2. **Práticas recomendadas para a {season_name}**: 
+   - Mantenha o solo bem nutrido com matéria orgânica
+   - Ajuste a irrigação conforme o clima local
+   - Monitore pragas e doenças típicas desta época
+3. **Registro e acompanhamento**: Anote mudanças e resultados para otimizar sua produção{crops_msg}{budget_msg}
+
+Para orientações mais específicas, compartilhe detalhes sobre: condições do solo, histórico do plantio, e sintomas observados.""", 0.75
         
         client = OpenAI(api_key=api_key)
         
@@ -140,9 +175,26 @@ async def ask_question(
     O farmer_id é obtido automaticamente do token de autenticação
     """
     
-    # Usar o farmer autenticado
-    farmer = current_farmer
-    farmer_id = farmer.id
+    # IMPORTANTE: Recarregar o farmer do banco para pegar dados atualizados
+    # (o current_farmer pode estar em cache do token)
+    farmer_id = current_farmer.id
+    farmer = db.query(models.Farmer).filter(models.Farmer.id == farmer_id).first()
+    
+    if not farmer:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Agricultor não encontrado"
+        )
+    
+    # Log de debug para verificar contexto do agricultor
+    print(f"\n🌾 CONTEXTO DO AGRICULTOR (RECARREGADO DO BANCO):")
+    print(f"   ID: {farmer.id}")
+    print(f"   Nome: {farmer.name}")
+    print(f"   Cidade: {farmer.city}, {farmer.state}")
+    print(f"   Orçamento: R$ {farmer.budget}")
+    print(f"   Culturas: {farmer.crops}")
+    print(f"   Bio: {farmer.bio}")
+    print(f"\n")
     
     # Processar imagem se enviada (placeholder - implementar análise de imagem futuramente)
     image_analysis = None

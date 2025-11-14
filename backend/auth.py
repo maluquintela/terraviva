@@ -84,7 +84,8 @@ def get_current_farmer(credentials: HTTPAuthorizationCredentials = Depends(secur
     
     # Suporte para desenvolvimento local com fake token
     if token.startswith("local-"):
-        # Buscar ou criar farmer de desenvolvimento
+        # IMPORTANTE: Sempre buscar o farmer MAIS RECENTE do banco
+        # Isso garante que atualizações no diagnóstico sejam refletidas
         farmer = db.query(models.Farmer).filter(models.Farmer.email == "dev@local.test").first()
         if farmer is None:
             # Criar farmer de desenvolvimento se não existir
@@ -103,6 +104,10 @@ def get_current_farmer(credentials: HTTPAuthorizationCredentials = Depends(secur
             db.add(farmer)
             db.commit()
             db.refresh(farmer)
+        
+        # IMPORTANTE: Forçar refresh dos dados do banco
+        db.expire(farmer)
+        db.refresh(farmer)
         return farmer
     
     # Autenticação normal com JWT
@@ -122,5 +127,9 @@ def get_current_farmer(credentials: HTTPAuthorizationCredentials = Depends(secur
             detail="Agricultor não encontrado",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+    # IMPORTANTE: Forçar refresh dos dados do banco para garantir dados atualizados
+    db.expire(farmer)
+    db.refresh(farmer)
     
     return farmer

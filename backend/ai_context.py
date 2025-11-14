@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Optional
 import pytz
 from database import models
-from regional_data import get_region_info
+from backend.regional_data import get_region_info
 
 
 def get_season_from_date(date_str: str) -> str:
@@ -353,8 +353,19 @@ def get_chatgpt_prompts(
     Returns:
         Dict com 'system' e 'user' prompts
     """
+    system_prompt = build_system_prompt()
+    user_prompt = build_user_prompt(question, farmer, sent_at, image_analysis)
+    
+    # Log de debug para verificar o prompt sendo enviado
+    print(f"\n📝 PROMPT ENVIADO PARA IA:")
+    print(f"   Agricultor: {farmer.name} ({farmer.city}, {farmer.state})")
+    print(f"   Orçamento: R$ {farmer.budget}")
+    print(f"\n   USER PROMPT (primeiras 500 chars):")
+    print(f"   {user_prompt[:500]}...")
+    print(f"\n")
+    
     return {
-        "system": build_system_prompt(),
-        "user": build_user_prompt(question, farmer, sent_at, image_analysis)
+        "system": system_prompt,
+        "user": user_prompt
     }
 
