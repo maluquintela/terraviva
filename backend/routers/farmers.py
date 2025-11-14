@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from database import SessionLocal, models, schemas
-from auth import get_password_hash, verify_password, create_access_token, get_current_farmer
+from backend.auth import get_password_hash, verify_password, create_access_token, get_current_farmer
 from datetime import timedelta
 import json
 
@@ -24,41 +24,6 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/", response_model=schemas.Farmer, status_code=status.HTTP_201_CREATED)
-def create_farmer(farmer: schemas.FarmerCreate, db: Session = Depends(get_db)):
-    """Cadastrar novo agricultor"""
-    # Verificar se já existe um agricultor com o mesmo email
-    existing_farmer = db.query(models.Farmer).filter(models.Farmer.email == farmer.email).first()
-    if existing_farmer:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Já existe um agricultor com este email"
-        )
-    
-    # Criar hash da senha
-    hashed_password = get_password_hash(farmer.password)
-    
-    # Criar novo agricultor
-    db_farmer = models.Farmer(
-        name=farmer.name,
-        email=farmer.email,
-        password_hash=hashed_password,
-        region=farmer.region,
-        city=farmer.city,
-        state=farmer.state,
-        crops=farmer.crops,
-        budget=farmer.budget,
-        production_weekly=farmer.production_weekly,
-        surplus=farmer.surplus,
-        sale_preference=farmer.sale_preference,
-        contact=farmer.contact
-    )
-    
-    db.add(db_farmer)
-    db.commit()
-    db.refresh(db_farmer)
-    
-    return db_farmer
 
 @router.get("/", response_model=List[schemas.Farmer])
 def list_farmers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -203,8 +168,22 @@ def diagnose_farmer(
     farmer.budget = diagnostic.budget
     farmer.production_weekly = diagnostic.production_weekly
     farmer.surplus = diagnostic.surplus
-    farmer.sale_preference = diagnostic.sale_preference
+    
+    # Atualizar sale_preference (compatibilidade com sale_target do frontend)
+    if diagnostic.sale_target:
+        farmer.sale_preference = diagnostic.sale_target
+    elif diagnostic.sale_preference:
+        farmer.sale_preference = diagnostic.sale_preference
+    
+    # Atualizar cooperation_type
+    if diagnostic.cooperation_type:
+        farmer.cooperation_type = diagnostic.cooperation_type
+    
     farmer.contact = diagnostic.contact
+    
+    # Atualizar bio se fornecida
+    if diagnostic.bio:
+        farmer.bio = diagnostic.bio
     
     # Criar perfil de diagnóstico em JSON
     diagnostic_profile = {
@@ -214,16 +193,29 @@ def diagnose_farmer(
         "budget": diagnostic.budget,
         "production_weekly": diagnostic.production_weekly,
         "surplus": diagnostic.surplus,
-        "sale_preference": diagnostic.sale_preference,
+        "sale_preference": diagnostic.sale_target or diagnostic.sale_preference,
+        "cooperation_type": diagnostic.cooperation_type,
         "contact": diagnostic.contact
     }
     farmer.diagnostic_profile = json.dumps(diagnostic_profile, ensure_ascii=False)
     
-    # Gerar biografia automaticamente
-    farmer.update_bio()
+    # Gerar biografia automaticamente se não foi fornecida
+    if not diagnostic.bio:
+        farmer.update_bio()
     
     db.commit()
     db.refresh(farmer)
+    
+    # Log de debug para confirmar salvamento
+    print(f"\n✅ DIAGNÓSTICO SALVO COM SUCESSO:")
+    print(f"   Farmer ID: {farmer.id}")
+    print(f"   Cidade: {farmer.city}, {farmer.state}")
+    print(f"   Orçamento: R$ {farmer.budget}")
+    print(f"   Culturas: {farmer.crops}")
+    print(f"   Tipo de cooperação: {farmer.cooperation_type}")
+    print(f"   Canal de venda: {farmer.sale_preference}")
+    print(f"   Bio: {farmer.bio}")
+    print(f"\n")
     
     return schemas.DiagnosticResponse(
         farmer_id=farmer.id,

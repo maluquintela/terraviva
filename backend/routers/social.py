@@ -17,7 +17,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
 from database import SessionLocal, models, schemas
-from auth import get_current_farmer
+from backend.auth import get_current_farmer
 
 router = APIRouter(prefix="/social", tags=["social-tinder-chat"])
 
