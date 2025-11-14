@@ -1,7 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Paperclip, Send, Circle, MessageSquarePlus } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getProdutorById } from "./mercadoData";
+import {
+  Send,
+  Circle,
+  MessageSquarePlus,
+  Image as ImageIcon,
+  X,
+} from "lucide-react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { fetchListingById } from "../api/marketplace";
 import "./producerChat.css";
 
 const gerarId = () =>
@@ -27,12 +33,65 @@ const initialMessages = [
 export default function ProducerChatScreen() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const produtor = useMemo(() => getProdutorById(id), [id]);
+  const location = useLocation();
+  const [listing, setListing] = useState(() => location.state?.listing ?? null);
   const [messages, setMessages] = useState(initialMessages);
   const [draft, setDraft] = useState("");
   const [unread, setUnread] = useState(0);
   const [showProposal, setShowProposal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
   const scrollRef = useRef(null);
+  const [loading, setLoading] = useState(!location.state?.listing);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    async function loadListing() {
+      if (location.state?.listing) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchListingById(id);
+        if (active) {
+          setListing(data);
+        }
+      } catch (err) {
+        if (active) {
+          setError(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar os dados do produtor."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadListing();
+    return () => {
+      active = false;
+    };
+  }, [id, location.state]);
+
+  const produtor = useMemo(() => {
+    if (!listing) return null;
+    const farmer = listing.farmer ?? {};
+    const avatarUrl = farmer.avatar_url
+      ? farmer.avatar_url
+      : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          farmer.name ?? "Produtor"
+        )}&background=34a853&color=ffffff`;
+    return {
+      id: listing.id,
+      nome: farmer.name ?? "Produtor parceiro",
+      avatar: avatarUrl,
+    };
+  }, [listing]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -40,20 +99,46 @@ export default function ProducerChatScreen() {
     }
   }, [messages.length]);
 
+  const handleImageSelect = (event) => {
+    const file = event.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleSend = () => {
     const texto = draft.trim();
-    if (!texto) return;
+    if (!texto && !selectedImage) return;
 
     const timestamp = new Date().toLocaleTimeString("pt-BR", {
       hour: "2-digit",
       minute: "2-digit",
     });
 
-    setMessages((prev) => [
-      ...prev,
-      { id: gerarId(), author: "usuario", text: texto, timestamp },
-    ]);
+    const newMessage = {
+      id: gerarId(),
+      author: "usuario",
+      text: texto || (selectedImage ? "📷 Imagem enviada" : ""),
+      timestamp,
+      image: imagePreview || null,
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
     setDraft("");
+    handleRemoveImage();
 
     setTimeout(() => {
       setMessages((prev) => [
@@ -94,6 +179,30 @@ export default function ProducerChatScreen() {
     return undefined;
   }, [unread]);
 
+  if (loading) {
+    return (
+      <div className="producer-chat__fallback">
+        <p>Carregando conversa…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="producer-chat__fallback">
+        <button
+          type="button"
+          className="producer-chat__back"
+          onClick={() => navigate("/mercado")}
+        >
+          <span className="producer-chat__back-icon">&lt;</span>
+          Voltar ao Mercado
+        </button>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   if (!produtor) {
     return (
       <div className="producer-chat__fallback">
@@ -102,7 +211,7 @@ export default function ProducerChatScreen() {
           className="producer-chat__back"
           onClick={() => navigate("/mercado")}
         >
-          <span className="producer-chat__icon">&lt;</span>
+          <span className="producer-chat__back-icon">&lt;</span>
           Voltar ao Mercado
         </button>
         <p>Produtor não encontrado para iniciar conversa.</p>
@@ -125,27 +234,24 @@ export default function ProducerChatScreen() {
           }}
           aria-label="Voltar para o perfil do produtor"
         >
-          <span className="producer-chat__icon">&lt;</span>
+          <span className="producer-chat__back-icon">&lt;</span>
         </button>
 
-        <div className="producer-chat__identity-wrapper">
-          <button
-            type="button"
-            className="producer-chat__identity"
-            onClick={() =>
-              navigate(`/mercado/produtor/${produtor.id}`, { state: { from: "chat" } })
-            }
-            aria-label={`Ver perfil de ${produtor.nome}`}
-          >
-            <img src={produtor.avatar} alt="" aria-hidden="true" />
-            <div>
-              <h1>{produtor.nome}</h1>
-              <span>
-                <Circle size={10} /> Online agora
-              </span>
-            </div>
-          </button>
+        <div className="producer-chat__identity">
+            <img
+              src={produtor.avatar}
+              alt=""
+              role="presentation"
+              className="avatar-circle"
+            />
+          <div>
+            <h1>{produtor.nome}</h1>
+            <span>
+              <Circle size={10} /> Online agora
+            </span>
+          </div>
         </div>
+
       </header>
 
       <div className="producer-chat__body" ref={scrollRef}>
@@ -154,6 +260,13 @@ export default function ProducerChatScreen() {
             key={message.id}
             className={`chat-bubble chat-bubble--${message.author}`}
           >
+            {message.image && (
+              <img 
+                src={message.image} 
+                alt="Imagem enviada" 
+                className="chat-bubble__image"
+              />
+            )}
             <p>{message.text}</p>
             <span>{message.timestamp}</span>
           </div>
@@ -167,12 +280,21 @@ export default function ProducerChatScreen() {
       )}
 
       <footer className="producer-chat__footer">
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept="image/*"
+          onChange={handleImageSelect}
+          style={{ display: 'none' }}
+          aria-label="Selecionar imagem"
+        />
         <button
           type="button"
           className="producer-chat__attachment"
-          aria-label="Anexar arquivo"
+          onClick={() => fileInputRef.current?.click()}
+          aria-label="Anexar imagem"
         >
-          <Paperclip size={20} strokeWidth={2.2} />
+          <ImageIcon size={30} strokeWidth={2.4} />
         </button>
         <input
           type="text"
@@ -192,10 +314,25 @@ export default function ProducerChatScreen() {
           className="producer-chat__send"
           onClick={handleSend}
           aria-label="Enviar mensagem"
+          disabled={!draft.trim() && !selectedImage}
         >
           <Send size={20} strokeWidth={2.2} />
         </button>
       </footer>
+
+      {imagePreview && (
+        <div className="producer-chat__image-preview-floating">
+          <img src={imagePreview} alt="Preview" />
+          <button
+            type="button"
+            className="producer-chat__image-remove"
+            onClick={handleRemoveImage}
+            aria-label="Remover imagem"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
 
       <button
         type="button"

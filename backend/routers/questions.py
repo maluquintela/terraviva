@@ -6,13 +6,14 @@ project_root = Path(__file__).parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile, File
 from sqlalchemy.orm import Session
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import os
 from database import SessionLocal, models, schemas
 from auth import get_current_farmer
 from dotenv import load_dotenv
+from ai_context import get_chatgpt_prompts
 
 load_dotenv()
 
@@ -27,8 +28,24 @@ def get_db():
     finally:
         db.close()
 
-def get_ai_response(question: str, farmer_context: models.Farmer = None) -> Tuple[str, float]:
-    """Obter resposta da IA usando OpenAI GPT-4"""
+def get_ai_response(
+    question: str,
+    farmer_context: models.Farmer = None,
+    sent_at: Optional[str] = None,
+    image_analysis: Optional[str] = None
+) -> Tuple[str, float]:
+    """
+    Obter resposta contextualizada da IA usando OpenAI GPT-4
+    
+    Args:
+        question: Pergunta do agricultor
+        farmer_context: Dados do agricultor
+        sent_at: Data/hora do envio (ISO 8601)
+        image_analysis: Análise de imagem anexada (opcional)
+    
+    Returns:
+        Tuple (resposta, confiança)
+    """
     try:
         # Usar OpenAI real
         from openai import OpenAI
@@ -36,42 +53,49 @@ def get_ai_response(question: str, farmer_context: models.Farmer = None) -> Tupl
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key or api_key == "sua_chave_openai_aqui":
             # Fallback para resposta simulada se não houver chave
-            return f"""Olá! Sobre sua pergunta: "{question}"
+            season = ""
+            if sent_at:
+                from ai_context import get_season_from_date
+                season = f" nesta época de {get_season_from_date(sent_at)}"
+            
+            location = ""
+            if farmer_context and farmer_context.city and farmer_context.state:
+                location = f" em {farmer_context.city}, {farmer_context.state}"
+            
+            return f"""Olá{location}! Sobre sua pergunta{season}: "{question}"
 
 Como agrônomo experiente, posso te ajudar! Para uma resposta completa à sua dúvida, é importante observar:
 1. Quais são as condições específicas do seu plantio?
-2. Em qual região você está?
+2. Como está o clima e o solo na sua região?
 3. Há quanto tempo essa situação está ocorrendo?
 
-Se possível, compartilhe mais detalhes para uma orientação mais precisa. Enquanto isso, continue observando suas plantas e tomando notas."""
+Se possível, compartilhe mais detalhes para uma orientação mais precisa. Enquanto isso, continue observando suas plantas e tomando notas.""", 0.5
         
         client = OpenAI(api_key=api_key)
         
-        # Construir contexto do agricultor se disponível
-        context = ""
+        # Construir prompts contextualizados usando o novo sistema
         if farmer_context:
-            context = f"""
-Contexto do agricultor:
-- Localização: {farmer_context.city}, {farmer_context.state}
-- Culturas: {farmer_context.crops or 'Não informado'}
-- Preferência de venda: {farmer_context.sale_preference}
-"""
+            prompts = get_chatgpt_prompts(
+                question=question,
+                farmer=farmer_context,
+                sent_at=sent_at,
+                image_analysis=image_analysis
+            )
+        else:
+            # Fallback se não houver contexto do agricultor
+            prompts = {
+                "system": "Você é um agrônomo experiente especializado em agricultura familiar brasileira.",
+                "user": f"Pergunta do agricultor: {question}\n\nResponda de forma clara e didática."
+            }
         
-        prompt = f"""Você é um agrônomo experiente que auxilia agricultores familiares brasileiros. 
-        Dê respostas simples, práticas e sustentáveis, explicando o porquê das recomendações.
-        Use o tom e contexto regional do agricultor quando fornecido.
-        {context}
-        Pergunta do agricultor: {question}
-        
-        Responda de forma clara e didática, como se estivesse conversando diretamente com o agricultor."""
-        
+        # Chamada ao ChatGPT com contexto completo
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Você é um agrônomo experiente especializado em agricultura familiar brasileira."},
-                {"role": "user", "content": prompt}
+                {"role": "system", "content": prompts["system"]},
+                {"role": "user", "content": prompts["user"]}
             ],
-            max_tokens=500,
+            max_tokens=600,
             temperature=0.7
         )
         
@@ -80,41 +104,68 @@ Contexto do agricultor:
         return answer, confidence
     
     except Exception as e:
-        # Se falhar, retornar resposta genérica
+        print(f"Erro ao obter resposta da IA: {e}")
+        # Se falhar, retornar resposta genérica contextualizada
+        location_str = ""
+        if farmer_context and farmer_context.city and farmer_context.state:
+            location_str = f" para sua região de {farmer_context.city}, {farmer_context.state}"
+        
         answer = f"""Olá! Sobre sua pergunta: "{question}"
 
-Como agrônomo, posso orientar que:
-1. Monitore regularmente suas plantas
+Como agrônomo{location_str}, posso orientar que:
+1. Monitore regularmente suas plantas e o clima local
 2. Mantenha o solo bem nutrido com matéria orgânica
-3. Observe as condições de luz e umidade
+3. Observe as condições de luz e umidade típicas da sua região
 4. Registre mudanças para acompanhamento
 
 Para uma resposta mais específica, compartilhe mais detalhes sobre sua situação."""
         return answer, 0.5
 
 @router.post("/", response_model=schemas.QuestionResponse)
-def ask_question(
-    question: schemas.QuestionCreate,
+async def ask_question(
+    question_text: str = Form(...),
+    sent_at: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None),
     current_farmer: models.Farmer = Depends(get_current_farmer),
     db: Session = Depends(get_db)
 ):
-    """Enviar pergunta para a IA e obter resposta"""
+    """
+    Enviar pergunta para a IA e obter resposta contextualizada
     
-    # Verificar se o farmer_id corresponde ao agricultor autenticado
-    if question.farmer_id != current_farmer.id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Você só pode fazer perguntas em seu próprio nome"
-        )
+    Aceita:
+    - question_text: Pergunta
+    - sent_at: Data/hora do envio (ISO 8601) - usado para determinar época do ano
+    - image: Imagem opcional (foto da plantação, praga, etc)
     
-    # Obter resposta da IA
-    farmer = db.query(models.Farmer).filter(models.Farmer.id == question.farmer_id).first()
-    ai_response, confidence = get_ai_response(question.question_text, farmer)
+    O farmer_id é obtido automaticamente do token de autenticação
+    """
+    
+    # Usar o farmer autenticado
+    farmer = current_farmer
+    farmer_id = farmer.id
+    
+    # Processar imagem se enviada (placeholder - implementar análise de imagem futuramente)
+    image_analysis = None
+    image_url = None
+    if image:
+        # TODO: Implementar análise de imagem com Vision API ou similar
+        # Por enquanto, apenas mencionar que há uma imagem
+        image_analysis = f"Imagem anexada: {image.filename}"
+        # TODO: Salvar imagem e obter URL
+        image_url = None
+    
+    # Obter resposta contextualizada da IA
+    ai_response, confidence = get_ai_response(
+        question=question_text,
+        farmer_context=farmer,
+        sent_at=sent_at,
+        image_analysis=image_analysis
+    )
     
     # Criar registro da pergunta no banco
     db_question = models.Question(
-        farmer_id=question.farmer_id,
-        question_text=question.question_text,
+        farmer_id=farmer_id,
+        question_text=question_text,
         answer_text=ai_response
     )
     
@@ -122,7 +173,7 @@ def ask_question(
     db.commit()
     db.refresh(db_question)
     
-    # Sem geração de áudio por enquanto
+    # Retornar resposta
     return schemas.QuestionResponse(
         question=db_question,
         answer_text=ai_response,
@@ -146,6 +197,19 @@ def get_question_history(
     
     questions = db.query(models.Question).filter(
         models.Question.farmer_id == farmer_id
+    ).order_by(models.Question.created_at.desc()).all()
+    
+    return questions
+
+
+@router.get("/history", response_model=List[schemas.Question])
+def get_my_question_history(
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db)
+):
+    """Obter histórico do agricultor autenticado (sem precisar passar ID)"""
+    questions = db.query(models.Question).filter(
+        models.Question.farmer_id == current_farmer.id
     ).order_by(models.Question.created_at.desc()).all()
     
     return questions
@@ -193,7 +257,13 @@ def ai_diagnose(
         )
     
     # Obter resposta da IA com contexto do agricultor
-    response_text, confidence = get_ai_response(request.question, farmer)
+    from datetime import datetime
+    sent_at = datetime.now().isoformat()
+    response_text, confidence = get_ai_response(
+        question=request.question,
+        farmer_context=farmer,
+        sent_at=sent_at
+    )
     
     # Salvar no histórico
     db_question = models.Question(

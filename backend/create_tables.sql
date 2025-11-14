@@ -72,6 +72,21 @@ CREATE TABLE IF NOT EXISTS cooperative_memberships (
     joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabela de Solicitações de Cooperativas
+CREATE TABLE IF NOT EXISTS cooperative_requests (
+    id SERIAL PRIMARY KEY,
+    requester_id INTEGER NOT NULL REFERENCES farmers(id),
+    receiver_id INTEGER NOT NULL REFERENCES farmers(id),
+    cooperative_id INTEGER REFERENCES cooperatives(id),
+    listing_id INTEGER REFERENCES listings(id),
+    message TEXT,
+    status VARCHAR(20) DEFAULT 'pendente',
+    conversation_id INTEGER REFERENCES conversations(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE,
+    responded_at TIMESTAMP WITH TIME ZONE
+);
+
 -- Criar índices para melhor performance
 CREATE INDEX IF NOT EXISTS idx_farmers_email ON farmers(email);
 CREATE INDEX IF NOT EXISTS idx_questions_farmer_id ON questions(farmer_id);
@@ -80,6 +95,8 @@ CREATE INDEX IF NOT EXISTS idx_listings_product_id ON listings(product_id);
 CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
 CREATE INDEX IF NOT EXISTS idx_cooperative_memberships_farmer ON cooperative_memberships(farmer_id);
 CREATE INDEX IF NOT EXISTS idx_cooperative_memberships_coop ON cooperative_memberships(cooperative_id);
+CREATE INDEX IF NOT EXISTS idx_cooperative_requests_receiver ON cooperative_requests(receiver_id);
+CREATE INDEX IF NOT EXISTS idx_cooperative_requests_status ON cooperative_requests(status);
 
 -- Comentários nas tabelas
 COMMENT ON TABLE farmers IS 'Tabela de agricultores familiares cadastrados na plataforma';

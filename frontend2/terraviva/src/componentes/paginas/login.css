@@ -8,27 +8,23 @@
   src: url('../../../public/Nexa-Heavy.ttf') format('truetype');
 }
 
-/* =============================
-   CORES E VARIÁVEIS
-============================= */
 :root {
-  --primary-color: #1B4332; /* Verde escuro */
+  --primary-color: #1B4332;
   --text-color: #333;
   --light-gray: #9ca3af;
   --error-color: #c62828;
   --background-light: #fafafa;
 }
 
-/* =============================
-   ESTRUTURA PRINCIPAL
-============================= */
-body, html, #root {
+body,
+html,
+#root {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   font-family: 'Nexa-Light', sans-serif;
-  background-color: none;
+  background-color: transparent;
 }
 
 .login-page {
@@ -39,70 +35,107 @@ body, html, #root {
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  gap: 24px;
-  background: linear-gradient(135deg, #0f2f24 0%, #1b4332 35%, #245f44 100%);
+  gap: 32px;
+  background: #1b4332;
+  background-image: 
+    radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.22), transparent 55%),
+    radial-gradient(circle at 50% 80%, rgba(36, 95, 68, 0.3), transparent 60%);
   box-sizing: border-box;
 }
 
 .login-hero {
   display: none;
-  width: 100%;
-  min-height: 220px;
-  border-radius: 28px;
-  background: linear-gradient(140deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%);
-  box-shadow: 0 20px 36px rgba(27, 67, 50, 0.22);
+}
+
+.login-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 520px;
+  color: #ffffff;
   position: relative;
-  overflow: hidden;
+  z-index: 2;
 }
 
-.login-hero::after {
-  content: "";
+.login-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.85rem;
+  font-family: 'Nexa-Bold';
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.login-hero h1 {
+  margin: 0;
+  font-size: 2.4rem;
+  line-height: 1.2;
+  font-family: 'Nexa-Bold';
+}
+
+.login-hero p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.login-hero__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.login-hero__list li::before {
+  content: "•";
+  margin-right: 10px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.login-hero__background {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.36), transparent 58%),
-    radial-gradient(circle at 80% 35%, rgba(255, 255, 255, 0.28), transparent 60%),
-    radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.22), transparent 52%);
-  opacity: 0.55;
+  inset: -15%;
+  background: transparent;
+  filter: blur(0px);
+  z-index: 1;
 }
 
-
-/* =============================
-   CARD DE LOGIN
-============================= */
 .card {
   background: #fff;
-  padding: 38px 32px;
+  padding: 40px 36px;
   border-radius: 32px;
   width: 100%;
-  max-width: 420px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  max-width: 460px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
   display: flex;
   flex-direction: column;
   align-items: center;
   animation: fadeIn 0.6s ease;
-}
-.card:hover {
-  transform: none; /* Sem efeito de subir */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
 }
 
-/* =============================
-   LOGO
-============================= */
 .logo {
-  width: 65px;
-  height: 65px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
-/* =============================
-   TÍTULO
-============================= */
 .title {
-  font-size: 20px;
+  font-size: 22px;
   font-family: 'Nexa-Bold';
-  margin-bottom: 18px;
+  margin-bottom: 22px;
   color: var(--text-color);
   text-align: center;
   letter-spacing: -0.02em;
@@ -112,29 +145,19 @@ body, html, #root {
   color: var(--primary-color);
 }
 
-/* =============================
-   INPUTS
-============================= */
-.input-container {
-  position: relative;
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 16px;
-}
-
 .input-wrapper {
   position: relative;
   width: 100%;
   max-width: 600px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .input {
   width: 100%;
-  height: 44px;
+  height: 48px;
   border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 0 48px 0 14px;
+  border-radius: 12px;
+  padding: 0 48px 0 16px;
   font-family: 'Nexa-Light', sans-serif;
   color: var(--text-color);
   background-color: var(--background-light);
@@ -149,24 +172,12 @@ body, html, #root {
 .input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 16px 6px rgba(27, 67, 50, 0.18);
-}
-
-/* Ícones */
-.input-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-  width: 14px;
-  height: 14px;
-  pointer-events: none;
+  box-shadow: 0 0 0 4px rgba(27, 67, 50, 0.14);
 }
 
 .icon-button {
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
@@ -175,182 +186,63 @@ body, html, #root {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   padding: 4px;
   color: #666;
 }
 
 .icon-button svg {
-  width: 18px;   /* diminui o ícone */
+  width: 18px;
   height: 18px;
-  display: block;
-  margin: auto;  /* centraliza vertical e horizontal */
 }
 
-.icon-button:hover {
-  background: transparent;
-  color: #666;
-}
-
-/* =============================
-   BOTÕES
-============================= */
 .button {
   width: 100%;
   max-width: 600px;
   background: var(--primary-color);
   color: #fff;
-  font-size: 16px;
+  font-size: 17px;
   font-family: 'Nexa-Bold', sans-serif;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 14px;
+  border-radius: 14px;
   border: none;
   cursor: pointer;
-  margin: 8px 0;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  margin: 12px 0;
+  box-shadow: 0 8px 16px rgba(27, 67, 50, 0.28);
+  position: relative;
+  z-index: 100;
+  pointer-events: auto;
 }
 
-
-/* =============================
-   CADASTRO
-============================= */
 .signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .signup-text {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--light-gray);
   font-family: 'Nexa-Light';
 }
 
 .signup-link {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--primary-color);
   background: none;
   font-family: 'Nexa-Bold';
   border: none;
-  border-radius: 0;
   padding: 0;
   cursor: pointer;
-  box-shadow: none;
   text-decoration: underline;
 }
 
-
-.signup-link:hover {
-  background: none;
-  color: var(--primary-color);
-}
-
-@media (min-width: 768px) {
-  .login-page {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    gap: 0;
-    min-height: 100vh;
-    width: 100vw;
-  }
-
-  .login-hero {
-    display: none;
-  }
-
-  .card {
-    flex: 0 0 auto;
-    max-width: 600px;
-    width: 600px;
-    align-self: center;
-    margin: 0;
-    padding: 60px 80px;
-    border-radius: 32px;
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .title {
-    font-size: 32px;
-    margin-bottom: 28px;
-  }
-
-  .logo {
-    width: 110px;
-    height: 110px;
-    margin-bottom: 20px;
-  }
-
-  .input {
-    height: 56px;
-    font-size: 17px;
-    border-radius: 14px;
-    padding: 0 52px 0 18px;
-  }
-
-  .button {
-    height: 56px;
-    font-size: 19px;
-    border-radius: 16px;
-    margin: 16px 0;
-  }
-
-  .signup-text,
-  .signup-link {
-    font-size: 16px;
-  }
-
-  .input-wrapper {
-    margin-bottom: 24px;
-  }
-
-  .icon-button svg {
-    width: 22px;
-    height: 22px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .card {
-    max-width: 700px;
-    width: 700px;
-    padding: 80px 100px;
-  }
-
-  .title {
-    font-size: 36px;
-  }
-
-  .logo {
-    width: 120px;
-    height: 120px;
-  }
-
-  .input {
-    height: 60px;
-    font-size: 18px;
-  }
-
-  .button {
-    height: 60px;
-    font-size: 20px;
-  }
-}
-
-/* =============================
-   FEEDBACK / ERRO
-============================= */
 .login-feedback {
-  margin-top: 14px;
+  margin-top: 18px;
   font-size: 14px;
   text-align: center;
 }
@@ -359,9 +251,6 @@ body, html, #root {
   color: var(--error-color);
 }
 
-/* =============================
-   ANIMAÇÃO
-============================= */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -373,20 +262,117 @@ body, html, #root {
   }
 }
 
-/* =============================
-   RESPONSIVIDADE
-============================= */
+@media (min-width: 900px) {
+  .login-page {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 0;
+    gap: 0;
+    min-height: 100vh;
+    width: 100vw;
+    position: relative;
+    background: #1b4332;
+    background-image: 
+      radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.28), transparent 60%),
+      radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.22), transparent 55%),
+      radial-gradient(circle at 50% 80%, rgba(36, 95, 68, 0.3), transparent 60%);
+  }
+
+  .login-hero {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 80px 96px;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .login-hero__background {
+    position: absolute;
+  }
+
+  .card {
+    flex: 0 0 480px;
+    margin: 0 96px;
+    padding: 72px 64px;
+    border-radius: 40px;
+    box-shadow: 0 32px 60px rgba(0, 0, 0, 0.22);
+    align-self: center;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+  }
+
+  .title {
+    font-size: 34px;
+    margin-bottom: 32px;
+  }
+
+  .logo {
+    width: 128px;
+    height: 128px;
+  }
+
+  .input {
+    height: 56px;
+    font-size: 17px;
+    border-radius: 16px;
+    padding: 0 54px 0 18px;
+  }
+
+  .button {
+    height: 58px;
+    font-size: 19px;
+    border-radius: 18px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .login-hero {
+    padding: 100px 140px;
+  }
+
+  .login-hero h1 {
+    font-size: 3.2rem;
+  }
+
+  .card {
+    flex: 0 0 520px;
+    padding: 84px 88px;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+  }
+
+  .title {
+    font-size: 38px;
+  }
+
+  .input {
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .button {
+    height: 62px;
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 480px) {
   .card {
     padding: 32px 24px;
     border-radius: 28px;
   }
+
   .title {
     font-size: 20px;
   }
+
   .input {
     height: 45px;
   }
+
   .button {
     font-size: 16px;
     padding: 12px;

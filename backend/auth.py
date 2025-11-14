@@ -51,6 +51,16 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 def verify_token(token: str) -> Optional[int]:
     """Verifica e decodifica o token JWT"""
+    # Suporte para tokens locais de desenvolvimento (fake tokens)
+    if token.startswith("local-"):
+        # Extrair ID do token local: "local-123" -> 123
+        try:
+            farmer_id = int(token.split("-")[1])
+            return farmer_id
+        except (IndexError, ValueError):
+            return None
+    
+    # Verificação normal de JWT para tokens reais
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         farmer_id: int = payload.get("sub")
@@ -71,6 +81,31 @@ def get_db():
 def get_current_farmer(credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)):
     """Dependency para obter o agricultor atual autenticado"""
     token = credentials.credentials
+    
+    # Suporte para desenvolvimento local com fake token
+    if token.startswith("local-"):
+        # Buscar ou criar farmer de desenvolvimento
+        farmer = db.query(models.Farmer).filter(models.Farmer.email == "dev@local.test").first()
+        if farmer is None:
+            # Criar farmer de desenvolvimento se não existir
+            farmer = models.Farmer(
+                name="Desenvolvedor Local",
+                email="dev@local.test",
+                password_hash=get_password_hash("dev123"),  # Senha hash obrigatória
+                region="Nordeste",  # Região obrigatória
+                city="Patos",
+                state="PB",
+                budget=100,
+                bio="Usuário de desenvolvimento local",
+                cooperation_type="semanal",
+                sale_target="direta"
+            )
+            db.add(farmer)
+            db.commit()
+            db.refresh(farmer)
+        return farmer
+    
+    # Autenticação normal com JWT
     farmer_id = verify_token(token)
     
     if farmer_id is None:

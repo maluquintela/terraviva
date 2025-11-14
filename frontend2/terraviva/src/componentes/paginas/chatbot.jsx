@@ -1,127 +1,297 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, MessageCircle, Image as ImageIcon, Send } from "lucide-react";
+import { ChevronLeft, Image as ImageIcon, MessageCircle, Send, X } from "lucide-react";
 import "./chatbot.css";
+import { submitQuestion } from "../../api/questions";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Chatbot() {
   const navigate = useNavigate();
+  const { farmer } = useAuth();
   const [text, setText] = useState("");
-  const [messages, setMessages] = useState([
+  const INITIAL_MESSAGES = [
     {
-      id: 1,
-      sender: "user",
-      type: "text",
-      text: "Você sabe identificar o que é isso na minha plantação e como resolver?"
-    },
-    {
-      id: 2,
-      sender: "user",
-      type: "image",
-      src:
-        "https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?auto=format&fit=crop&w=640&q=80"
-    },
-    {
-      id: 3,
+      id: "intro",
       sender: "bot",
-      type: "text",
       text:
-        "Parece que suas plantas estão com pulgões... Misture 1 litro de água, 2 colheres de sabão neutro e um fio de óleo de cozinha. Borrife nas folhas (parte de baixo) e repita a cada 3 dias."
-    }
-  ]);
+        "Olá! Sou o agrônomo virtual do TerraViva. Me conte sobre sua lavoura ou descreva algum problema que está observando.",
+    },
+  ];
+  const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const [status, setStatus] = useState({ type: null, message: "" });
+  const [isSending, setIsSending] = useState(false);
+  const [attachment, setAttachment] = useState(null);
   const threadRef = useRef(null);
-  const inputFileRef = useRef(null);
   const textareaRef = useRef(null);
-  const createdUrlsRef = useRef([]);
+  const fileInputRef = useRef(null);
 
-  // scroll to bottom on messages change
+  const formatInline = (text) => {
+    if (!text) return text;
+    const parts = text.split(/(\*\*.+?\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <strong key={`strong-${index}`}>
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
+  const renderMessageContent = (text) => {
+    if (!text) return null;
+
+    const lines = text.split(/\r?\n/);
+    const blocks = [];
+    let currentParagraph = [];
+    let currentList = null;
+
+    const flushParagraph = () => {
+      if (currentParagraph.length) {
+        blocks.push({
+          type: "paragraph",
+          content: currentParagraph.join(" ").trim(),
+        });
+        currentParagraph = [];
+      }
+    };
+
+    const flushList = () => {
+      if (currentList && currentList.items.length) {
+        blocks.push(currentList);
+      }
+      currentList = null;
+    };
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+
+      if (!trimmed) {
+        flushParagraph();
+        flushList();
+        return;
+      }
+
+      const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)/);
+      if (headingMatch) {
+        flushParagraph();
+        flushList();
+        blocks.push({
+          type: "heading",
+          level: headingMatch[1].length,
+          content: headingMatch[2],
+        });
+        return;
+      }
+
+      if (/^[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9].+:\s*$/.test(trimmed) && trimmed.length <= 80) {
+        flushParagraph();
+        flushList();
+        blocks.push({
+          type: "heading",
+          level: 4,
+          content: trimmed.replace(/:\s*$/, ""),
+        });
+        return;
+      }
+
+      const orderedMatch = trimmed.match(/^(\d+)\.\s+(.*)/);
+      const unorderedMatch = trimmed.match(/^[-•]\s+(.*)/);
+
+      if (orderedMatch) {
+        flushParagraph();
+        if (!currentList || currentList.type !== "ordered") {
+          flushList();
+          currentList = { type: "ordered", items: [] };
+        }
+        currentList.items.push(orderedMatch[2]);
+        return;
+      }
+
+      if (unorderedMatch) {
+        flushParagraph();
+        if (!currentList || currentList.type !== "unordered") {
+          flushList();
+          currentList = { type: "unordered", items: [] };
+        }
+        currentList.items.push(unorderedMatch[1]);
+        return;
+      }
+
+      flushList();
+      currentParagraph.push(trimmed);
+    });
+
+    flushParagraph();
+    flushList();
+
+    return blocks.map((block, index) => {
+      if (block.type === "heading") {
+        const HeadingTag = block.level <= 3 ? "h3" : "h4";
+        return (
+          <HeadingTag key={`heading-${index}`} className="chatbot-block-heading">
+            {formatInline(block.content)}
+          </HeadingTag>
+        );
+      }
+
+      if (block.type === "ordered") {
+        return (
+          <ol key={`ol-${index}`}>
+            {block.items.map((item, itemIndex) => (
+              <li key={`ol-${index}-${itemIndex}`}>{formatInline(item)}</li>
+            ))}
+          </ol>
+        );
+      }
+
+      if (block.type === "unordered") {
+        return (
+          <ul key={`ul-${index}`}>
+            {block.items.map((item, itemIndex) => (
+              <li key={`ul-${index}-${itemIndex}`}>{formatInline(item)}</li>
+            ))}
+          </ul>
+        );
+      }
+
+      return (
+        <p key={`p-${index}`}>
+          {formatInline(block.content)}
+        </p>
+      );
+    });
+  };
+
   useEffect(() => {
     const el = threadRef.current;
     if (!el) return;
-    // small timeout to wait images load
-    requestAnimationFrame(() => {
-      el.scrollTop = el.scrollHeight;
-    });
-  }, [messages]);
 
-  // cleanup created object URLs on unmount
-  useEffect(() => {
-    return () => {
-      createdUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
+    const scrollToBottom = () => {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: "smooth",
+      });
     };
-  }, []);
 
-  const handleSendText = () => {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-    const next = {
-      id: Date.now(),
-      sender: "user",
-      type: "text",
-      text: trimmed
-    };
-    setMessages((m) => [...m, next]);
-    setText("");
-    // simulate bot reply (optional)
-    setTimeout(() => {
-      setMessages((m) => [
-        ...m,
-        {
-          id: Date.now() + 1,
-          sender: "bot",
-          type: "text",
-          text: "Obrigado — vou analisar e te retornar com dicas."
-        }
-      ]);
-    }, 700);
-  };
+    scrollToBottom();
+    const timeoutId = setTimeout(scrollToBottom, 100);
+    return () => clearTimeout(timeoutId);
+  }, [messages, isSending]);
 
-  const handleFileClick = () => {
-    if (inputFileRef.current) inputFileRef.current.click();
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) return;
-    const url = URL.createObjectURL(file);
-    createdUrlsRef.current.push(url);
-    const next = {
-      id: Date.now(),
-      sender: "user",
-      type: "image",
-      src: url,
-      name: file.name
-    };
-    setMessages((m) => [...m, next]);
-    // clear input so same file can be selected again later
-    e.target.value = "";
-    // optionally simulate bot acknowledging image
-    setTimeout(() => {
-      setMessages((m) => [
-        ...m,
-        {
-          id: Date.now() + 1,
-          sender: "bot",
-          type: "text",
-          text: "Recebi a imagem, analisando..."
-        }
-      ]);
-    }, 600);
-  };
-
-  // auto-resize textarea
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
     ta.style.height = "auto";
-    const newHeight = Math.min(ta.scrollHeight, 200); // cap height
+    const newHeight = Math.min(ta.scrollHeight, 200);
     ta.style.height = `${newHeight}px`;
   }, [text]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendText();
+  const pushMessage = (message) => {
+    setMessages((prev) => [...prev, { id: `${Date.now()}-${Math.random()}`, ...message }]);
+    setTimeout(() => {
+      const el = threadRef.current;
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+    }, 150);
+  };
+
+  const handleFileButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setStatus({ type: "error", message: "Apenas imagens são suportadas." });
+      event.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setAttachment({ file, preview: reader.result });
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+  };
+
+  const handleRemoveAttachment = () => {
+    setAttachment(null);
+  };
+
+  const handleSend = async () => {
+    const trimmed = text.trim();
+    if (!trimmed && !attachment) return;
+    setStatus({ type: null, message: "" });
+    
+    pushMessage({ 
+      sender: "user", 
+      text: trimmed,
+      image: attachment?.preview,
+      imageName: attachment?.file?.name
+    });
+    
+    setText("");
+    const imageFile = attachment?.file || null;
+    setAttachment(null);
+
+    if (!farmer?.id) {
+      pushMessage({
+        sender: "bot",
+        text: "Não consegui identificar seu cadastro. Faça login novamente para continuar.",
+      });
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      console.log("📤 Enviando pergunta para o chatbot...", {
+        farmerId: farmer.id,
+        questionLength: trimmed.length,
+        hasImage: !!imageFile
+      });
+      const response = await submitQuestion({
+        farmerId: farmer.id,
+        questionText: trimmed,
+        imageFile,
+        sentAt: new Date().toISOString(),
+      });
+      console.log("✅ Resposta recebida do chatbot:", response);
+      pushMessage({
+        sender: "bot",
+        text:
+          response?.answer_text || "Recebi sua pergunta! Em breve enviarei recomendações detalhadas.",
+      });
+    } catch (error) {
+      console.error("❌ Erro ao enviar pergunta:", error);
+      console.error("   Status:", error?.status);
+      console.error("   Data:", error?.data);
+      setStatus({
+        type: "error",
+        message:
+          error?.data?.detail ||
+          error?.message ||
+          "Não foi possível enviar sua pergunta agora. Tente novamente em instantes.",
+      });
+      pushMessage({
+        sender: "bot",
+        text: "Encontrei dificuldades para processar. Pode tentar novamente?",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSend();
     }
   };
 
@@ -136,9 +306,7 @@ export default function Chatbot() {
         >
           <ChevronLeft size={20} strokeWidth={2.5} />
         </button>
-
         <h1 className="chatbot-title">Converse com o TerraViva.</h1>
-
         <button
           type="button"
           className="chatbot-help"
@@ -149,80 +317,98 @@ export default function Chatbot() {
         </button>
       </header>
 
+      {status.message && (
+        <div className={`chatbot-status ${status.type === "error" ? "erro" : "info"}`} role="alert">
+          {status.message}
+        </div>
+      )}
+
       <main className="chatbot-body" ref={threadRef} aria-live="polite">
         <div className="chatbot-thread">
-          {messages.map((msg) =>
-            msg.type === "text" ? (
-              <div
-                key={msg.id}
-                className={`chatbot-bubble-group ${
-                  msg.sender === "user" ? "chatbot-bubble-group--user" : ""
-                }`}
-              >
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`chatbot-bubble-group ${msg.sender === "user" ? "chatbot-bubble-group--user" : ""}`}
+            >
+              {msg.text && (
                 <div
                   className={`chatbot-bubble ${
                     msg.sender === "user" ? "chatbot-bubble--user" : "chatbot-bubble--bot"
                   }`}
                 >
-                  {msg.text}
+                  {renderMessageContent(msg.text)}
                 </div>
-              </div>
-            ) : (
-              <div
-                key={msg.id}
-                className={`chatbot-bubble-group ${
-                  msg.sender === "user" ? "chatbot-bubble-group--user" : ""
-                }`}
-              >
-                <figure
-                  className={`chatbot-media ${
-                    msg.sender === "user" ? "chatbot-media--user" : ""
-                  }`}
-                >
-                  <img src={msg.src} alt={msg.name || "imagem enviada"} />
-                </figure>
-              </div>
-            )
+              )}
+              {msg.image && (
+                <div className="chatbot-media">
+                  <img src={msg.image} alt={msg.imageName || "Imagem enviada"} />
+                </div>
+              )}
+            </div>
+          ))}
+          {isSending && (
+            <div className="chatbot-bubble-group">
+              <div className="chatbot-bubble chatbot-bubble--bot chatbot-bubble--typing">Analisando…</div>
+            </div>
           )}
         </div>
       </main>
 
-      <footer className="chatbot-footer">
-        <div>
-          <input
-            ref={inputFileRef}
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
+      {attachment && (
+        <div className="chatbot-attachment-preview">
+          <div className="chatbot-attachment-preview__thumb">
+            <img src={attachment.preview} alt="Pré-visualização" />
+          </div>
+          <span className="chatbot-attachment-preview__name" title={attachment.file.name}>
+            {attachment.file.name}
+          </span>
           <button
             type="button"
-            className="chatbot-action"
-            aria-label="Enviar imagem"
-            title="Enviar imagem"
-            onClick={handleFileClick}
+            className="chatbot-attachment-preview__remove"
+            onClick={handleRemoveAttachment}
+            aria-label="Remover imagem"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
+      <footer className="chatbot-footer">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="chatbot-file-input"
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+        />
+        <div className="chatbot-footer-content">
+          <button 
+            type="button" 
+            className="chatbot-action" 
+            aria-label="Abrir álbum" 
+            title="Abrir álbum"
+            onClick={handleFileButtonClick}
+            disabled={isSending}
           >
             <ImageIcon size={18} />
           </button>
-
           <textarea
             ref={textareaRef}
             className="chatbot-input"
             placeholder="Como podemos te ajudar hoje?"
             aria-label="Campo de mensagem"
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(event) => setText(event.target.value)}
             onKeyDown={handleKeyDown}
             rows={1}
           />
-
           <button
             type="button"
             className="chatbot-send"
             aria-label="Enviar"
-            onClick={handleSendText}
-            disabled={!text.trim()}
+            onClick={handleSend}
+            disabled={(!text.trim() && !attachment) || isSending}
           >
             <Send size={18} />
           </button>

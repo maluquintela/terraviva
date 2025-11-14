@@ -1,0 +1,1164 @@
+
+> terraviva@0.1.0 start
+> react-scripts start
+
+(node:79552) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:79552) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view terraviva in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://10.0.1.71:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 23:10:  'isHistoryLoading' is assigned a value but never used                                                                no-unused-vars
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 23:10:  'isHistoryLoading' is assigned a value but never used                                                                no-unused-vars
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 23:10:  'isHistoryLoading' is assigned a value but never used                                                                no-unused-vars
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 23:10:  'isHistoryLoading' is assigned a value but never used                                                                no-unused-vars
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 224:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 293:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 293:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 293:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 293:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 293:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 293:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 45:9:   'renderMessageContent' is assigned a value but never used                                                            no-unused-vars
+  Line 401:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 45:9:   'renderMessageContent' is assigned a value but never used                                                            no-unused-vars
+  Line 401:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 401:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 401:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 401:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 401:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 433:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 433:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 433:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 433:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 433:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 433:6:  React Hook useEffect has a missing dependency: 'INITIAL_MESSAGES'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 328:12:  'isHistoryLoading' is not defined  no-undef
+  Line 356:12:  'isHistoryLoading' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 10:19:  'token' is assigned a value but never used  no-unused-vars
+
+ERROR in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 328:12:  'isHistoryLoading' is not defined  no-undef
+  Line 356:12:  'isHistoryLoading' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 328:12:  'isHistoryLoading' is not defined  no-undef
+  Line 356:12:  'isHistoryLoading' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+ERROR in [eslint] 
+src/componentes/paginas/chatbot.jsx
+  Line 328:12:  'isHistoryLoading' is not defined  no-undef
+  Line 356:12:  'isHistoryLoading' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/App.js
+  Line 19:8:  'RedeSocialScreen' is defined but never used  no-unused-vars
+
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 9:3:    'Users' is defined but never used                     no-unused-vars
+  Line 14:10:  'fetchFeedRecommendations' is defined but never used  no-unused-vars
+  Line 14:36:  'fetchFarmerProfile' is defined but never used        no-unused-vars
+  Line 15:10:  'useAuth' is defined but never used                   no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 9:3:    'Users' is defined but never used                        no-unused-vars
+  Line 14:10:  'fetchFeedRecommendations' is defined but never used     no-unused-vars
+  Line 14:36:  'fetchFarmerProfile' is defined but never used           no-unused-vars
+  Line 60:11:  'farmer' is assigned a value but never used              no-unused-vars
+  Line 61:10:  'activeTab' is assigned a value but never used           no-unused-vars
+  Line 61:21:  'setActiveTab' is assigned a value but never used        no-unused-vars
+  Line 71:10:  'recommendations' is assigned a value but never used     no-unused-vars
+  Line 71:27:  'setRecommendations' is assigned a value but never used  no-unused-vars
+  Line 72:10:  'loadingSocial' is assigned a value but never used       no-unused-vars
+  Line 72:25:  'setLoadingSocial' is assigned a value but never used    no-unused-vars
+  Line 73:10:  'currentIndex' is assigned a value but never used        no-unused-vars
+  Line 73:24:  'setCurrentIndex' is assigned a value but never used     no-unused-vars
+  Line 74:10:  'showProfile' is assigned a value but never used         no-unused-vars
+  Line 74:23:  'setShowProfile' is assigned a value but never used      no-unused-vars
+  Line 75:10:  'selectedFarmer' is assigned a value but never used      no-unused-vars
+  Line 75:26:  'setSelectedFarmer' is assigned a value but never used   no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 9:3:    'Users' is defined but never used                                                                                          no-unused-vars
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 61:21:  'setActiveTab' is assigned a value but never used                                                                          no-unused-vars
+  Line 72:10:  'loadingSocial' is assigned a value but never used                                                                         no-unused-vars
+  Line 74:10:  'showProfile' is assigned a value but never used                                                                           no-unused-vars
+  Line 75:10:  'selectedFarmer' is assigned a value but never used                                                                        no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 215:9:  'handleNext' is assigned a value but never used                                                                            no-unused-vars
+  Line 223:9:  'handleViewProfile' is assigned a value but never used                                                                     no-unused-vars
+  Line 233:9:  'handleConversar' is assigned a value but never used                                                                       no-unused-vars
+  Line 239:9:  'currentCard' is assigned a value but never used                                                                           no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 72:10:  'loadingSocial' is assigned a value but never used                                                                         no-unused-vars
+  Line 74:10:  'showProfile' is assigned a value but never used                                                                           no-unused-vars
+  Line 75:10:  'selectedFarmer' is assigned a value but never used                                                                        no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 215:9:  'handleNext' is assigned a value but never used                                                                            no-unused-vars
+  Line 223:9:  'handleViewProfile' is assigned a value but never used                                                                     no-unused-vars
+  Line 233:9:  'handleConversar' is assigned a value but never used                                                                       no-unused-vars
+  Line 239:9:  'currentCard' is assigned a value but never used                                                                           no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 74:10:  'showProfile' is assigned a value but never used                                                                           no-unused-vars
+  Line 75:10:  'selectedFarmer' is assigned a value but never used                                                                        no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/App.js
+  Line 131:18:  'RedeSocialScreen' is not defined  react/jsx-no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in [eslint] 
+src/App.js
+  Line 131:18:  'RedeSocialScreen' is not defined  react/jsx-no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 60:11:  'farmer' is assigned a value but never used                                                                                no-unused-vars
+  Line 213:6:  React Hook useEffect has a missing dependency: 'recommendations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/App.js
+  Line 19:8:  'RedeSocialScreen' is defined but never used  no-unused-vars
+
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Failed to compile.
+
+Attempted import error: 'useAuth' is not exported from '../../context/AuthContext' (imported as 'useAuth').
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+src/componentes/paginas/redesocial.jsx
+  Line 12:11:  'farmer' is assigned a value but never used  no-unused-vars
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 16:6-13
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+ERROR in ./src/componentes/paginas/redesocial.jsx 648:10-17
+export 'useAuth' (imported as 'useAuth') was not found in '../../context/AuthContext' (possible exports: AuthProvider, useAuthContext)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/App.js
+  Line 139:18:  'RedeSocialScreen' is not defined  react/jsx-no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+ERROR in [eslint] 
+src/App.js
+  Line 139:18:  'RedeSocialScreen' is not defined  react/jsx-no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/screens/MercadoScreen.jsx
+  Line 75:28:  'fetchListings' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint] 
+src/componentes/paginas/diagnostico.jsx
+  Line 79:6:  React Hook useEffect has a missing dependency: 'form'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/componentes/paginas/login.jsx
+  Line 15:20:  'setMensagem' is assigned a value but never used  no-unused-vars
+
+src/screens/MercadoScreen.jsx
+  Line 9:3:    'MapPin' is defined but never used                    no-unused-vars
+  Line 10:3:   'TrendingUp' is defined but never used                no-unused-vars
+  Line 14:10:  'fetchFeedRecommendations' is defined but never used  no-unused-vars
+  Line 15:10:  'useAuth' is defined but never used                   no-unused-vars
+
+ERROR in [eslint] 
+src/screens/MercadoScreen.jsx
+  Line 75:28:  'fetchListings' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning

@@ -29,6 +29,8 @@ class Farmer(Base):
     sale_preference = Column(String(20), default="direta")  # direta, institucional, digital
     contact = Column(String(20))
     bio = Column(Text)  # Biografia gerada automaticamente
+    cooperation_type = Column(String(20))  # semanal ou longo_prazo
+    sale_target = Column(String(20))  # direta, mercados, institucional ou digital
     diagnostic_profile = Column(Text)  # Perfil de diagnóstico em JSON
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -150,6 +152,103 @@ class CooperativeMembership(Base):
     # Relacionamentos
     farmer = relationship("Farmer", back_populates="cooperative_memberships")
     cooperative = relationship("Cooperative", back_populates="memberships")
+
+class CooperativePost(Base):
+    """Modelo para posts/publicações em cooperativas"""
+    __tablename__ = "cooperative_posts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    cooperative_id = Column(Integer, ForeignKey("cooperatives.id"), nullable=False)
+    farmer_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    content = Column(Text, nullable=False)
+    image_url = Column(String(255))  # URL da imagem (opcional)
+    likes_count = Column(Integer, default=0)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    # Relacionamentos
+    cooperative = relationship("Cooperative")
+    farmer = relationship("Farmer")
+    comments = relationship("PostComment", back_populates="post", cascade="all, delete-orphan")
+    likes = relationship("PostLike", back_populates="post", cascade="all, delete-orphan")
+
+class PostComment(Base):
+    """Modelo para comentários em posts de cooperativas"""
+    __tablename__ = "post_comments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("cooperative_posts.id"), nullable=False)
+    farmer_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relacionamentos
+    post = relationship("CooperativePost", back_populates="comments")
+    farmer = relationship("Farmer")
+
+class PostLike(Base):
+    """Modelo para curtidas em posts de cooperativas"""
+    __tablename__ = "post_likes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("cooperative_posts.id"), nullable=False)
+    farmer_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relacionamentos
+    post = relationship("CooperativePost", back_populates="likes")
+    farmer = relationship("Farmer")
+
+class DirectMessage(Base):
+    """Modelo para mensagens diretas entre agricultores"""
+    __tablename__ = "direct_messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    sender_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    receiver_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    content = Column(Text, nullable=False)
+    read = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relacionamentos
+    sender = relationship("Farmer", foreign_keys=[sender_id])
+    receiver = relationship("Farmer", foreign_keys=[receiver_id])
+
+class Conversation(Base):
+    """Modelo para conversas entre agricultores (agrupa mensagens)"""
+    __tablename__ = "conversations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    farmer1_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    farmer2_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    last_message_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relacionamentos
+    farmer1 = relationship("Farmer", foreign_keys=[farmer1_id])
+    farmer2 = relationship("Farmer", foreign_keys=[farmer2_id])
+
+class CooperativeRequest(Base):
+    """Solicitações para formar cooperativas"""
+    __tablename__ = "cooperative_requests"
+
+    id = Column(Integer, primary_key=True, index=True)
+    requester_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    receiver_id = Column(Integer, ForeignKey("farmers.id"), nullable=False)
+    cooperative_id = Column(Integer, ForeignKey("cooperatives.id"), nullable=True)
+    listing_id = Column(Integer, ForeignKey("listings.id"), nullable=True)
+    message = Column(Text)
+    status = Column(String(20), default="pendente")  # pendente, aceito, recusado
+    conversation_id = Column(Integer, ForeignKey("conversations.id"), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    responded_at = Column(DateTime(timezone=True))
+
+    requester = relationship("Farmer", foreign_keys=[requester_id], backref="requests_sent")
+    receiver = relationship("Farmer", foreign_keys=[receiver_id], backref="requests_received")
+    cooperative = relationship("Cooperative")
+    listing = relationship("Listing")
+    conversation = relationship("Conversation")
 
 # Configurar relacionamento many-to-many após definição das classes
 Farmer.following = relationship(
