@@ -1,9 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./componentes/layout/Navbar";
 import LoginScreen from "./componentes/paginas/login";
 import Diagnostico from "./componentes/paginas/diagnostico";
 import Cadastro from "./componentes/paginas/cadastro";
 import Chatbot from "./componentes/paginas/chatbot";
+import PagNoticias from "./componentes/paginas/pagnoticias";
 import NoticiasScreen from "./screens/NoticiasScreen";
 import AjudaTecnicaScreen from "./screens/AjudaTecnicaScreen";
 import MercadoScreen from "./screens/MercadoScreen";
@@ -14,7 +16,6 @@ import CooperativasScreen from "./screens/CooperativasScreen";
 import CooperativaProdutorChat from "./screens/CooperativaProdutorChat";
 import CooperativaGrupoChat from "./screens/CooperativaGrupoChat";
 import Home from "./componentes/paginas/home";
-import Navbar from "./componentes/layout/Navbar";
 import "./index.css";
 import { cn } from "./utils/cn";
 import { AuthProvider } from "./context/AuthContext";
@@ -22,8 +23,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 function AppContainer() {
   const location = useLocation();
-  const homeLikePrefixes = ["/home", "/mercado"];
-  const homeLikeExact = ["/noticias", "/ajuda-tecnica", "/cooperativas"];
+  const homeLikePrefixes = ["/home", "/mercado", "/cooperativas"];
+  const homeLikeExact = ["/noticias", "/dicas", "/ajuda-tecnica"];
   const isHomeContext =
     homeLikePrefixes.some((prefix) => location.pathname.startsWith(prefix)) ||
     homeLikeExact.includes(location.pathname);
@@ -56,6 +57,14 @@ function AppContainer() {
             element={
               <ProtectedRoute>
                 <NoticiasScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dicas"
+            element={
+              <ProtectedRoute>
+                <PagNoticias />
               </ProtectedRoute>
             }
           />

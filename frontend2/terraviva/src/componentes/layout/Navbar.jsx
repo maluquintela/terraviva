@@ -13,6 +13,7 @@ export default function Navbar() {
     "/home",
     "/noticias",
     "/ajuda-tecnica",
+    "/dicas",
     "/mercado",
     "/cooperativas",
     "/perfil",
@@ -56,7 +57,7 @@ export default function Navbar() {
         >
           Diagnóstico
         </NavLink>
-      </nav>
+    </nav>
     </header>
   );
 }

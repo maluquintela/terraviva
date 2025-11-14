@@ -23,6 +23,15 @@ body {
   flex-direction: column;
   overflow: hidden; /* prevent double scroll */
 }
+
+@media (min-width: 768px) {
+  .container-diagnostico {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+  }
+}
+
 main-diagnostico {
   flex: 1;
   padding: 1rem;
@@ -36,7 +45,7 @@ main-diagnostico {
   gap: 1rem;
   position: sticky;
   top: 0;
-  background: white;
+  background: var(--verde-escuro);
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -45,7 +54,7 @@ main-diagnostico {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--verde-escuro);
+  color: white;
   padding: 8px;
   display: flex;
   align-items: center;
@@ -57,14 +66,14 @@ main-diagnostico {
 .botao-voltar:hover,
 .botao-voltar:focus {
   background: none;
-  color: var(--verde-escuro);
+  color: white;
   opacity: 0.8; /* subtle opacity change on hover instead of background */
 }
 
 .titulo-diagnostico {
   font-family: 'Nexa-Bold', sans-serif;
   font-size: 1.1rem;
-  color: var(--verde-escuro);
+  color: white;
   margin: 2;
   flex: 1;
 }
@@ -81,7 +90,7 @@ main-diagnostico {
 
 .barra-progresso {
   height: 100%;
-  background: var(--verde-escuro);
+  background: #8B4513;
   transition: width 0.3s ease-in-out;
 }
 
@@ -90,6 +99,19 @@ main-diagnostico {
   padding: 1rem;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.diagnostico-footer {
+  padding: 0.5rem 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+}
+
+.diagnostico-footer img {
+  width: 90px;
+  height: auto;
 }
 
 .secao-pergunta {
@@ -178,6 +200,80 @@ main-diagnostico {
 
 .opcao-radio input[type="radio"] {
   margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .container-diagnostico {
+    max-width: 100%;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .header-diagnostico {
+    padding: 24px 72px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .titulo-diagnostico {
+    font-size: 1.5rem;
+  }
+
+  .botao-voltar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .botao-voltar svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .barra-progresso-container {
+    max-width: 100%;
+  }
+
+  .main-diagnostico {
+    padding: 48px 72px 64px;
+    overflow-y: auto;
+  }
+
+  .secao-pergunta {
+    max-width: 800px;
+    padding: 2rem 2.5rem;
+  }
+
+  .pergunta-texto {
+    font-size: 1.3rem;
+  }
+
+  .pergunta-numero {
+    font-size: 1rem;
+  }
+
+  .input-select,
+  .input-texto {
+    font-size: 1.1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .opcao-radio {
+    padding: 1rem 1.5rem;
+    font-size: 1.05rem;
+  }
+
+  .botao-confirmar,
+  .botao-concluir {
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .diagnostico-footer img {
+    width: 120px;
+  }
 }
 
 @media (max-width: 480px) {

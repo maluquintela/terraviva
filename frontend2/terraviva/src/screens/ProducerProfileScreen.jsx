@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  ArrowLeft,
   Heart,
   MapPin,
   TrendingUp,
@@ -148,6 +147,7 @@ export default function ProducerProfileScreen() {
   }, [produtor]);
   const origemPesquisa =
     location.state && location.state.from === "search" ? location.state : null;
+  const returnTo = location.state?.returnTo;
 
   const abrirModalProduto = (produto) => {
     setProdutoSelecionado(produto);
@@ -196,7 +196,7 @@ export default function ProducerProfileScreen() {
           className="fallback__back"
           onClick={() => navigate("/mercado")}
         >
-          <ArrowLeft size={22} />
+          <span className="fallback__back-icon">&lt;</span>
           Voltar ao Mercado
         </button>
         <p>Produtor não encontrado. Tente novamente a partir da lista do mercado.</p>
@@ -213,7 +213,7 @@ export default function ProducerProfileScreen() {
         <header className="producer-profile__header">
           <button
             type="button"
-            className="producer-profile__icon-btn"
+            className="producer-profile__back-btn"
             onClick={() => {
               if (origemPesquisa) {
                 navigate("/mercado", {
@@ -221,7 +221,13 @@ export default function ProducerProfileScreen() {
                     reopenSearch: true,
                     query: origemPesquisa.query ?? "",
                     selectedFiltro: origemPesquisa.selectedFiltro ?? "",
+                    ...(returnTo ? { returnTo } : {}),
                   },
+                });
+              } else if (returnTo?.pathname) {
+                navigate(returnTo.pathname, {
+                  state: returnTo.state,
+                  replace: true,
                 });
               } else if (window.history.length > 1) {
                 navigate(-1);
@@ -231,20 +237,20 @@ export default function ProducerProfileScreen() {
             }}
             aria-label="Voltar para a tela anterior"
           >
-            <ArrowLeft size={28} strokeWidth={2.4} />
+            <span className="producer-profile__back-icon">&lt;</span>
           </button>
           <h1 className="producer-profile__title">Perfil do Produtor</h1>
           <button
             type="button"
-            className="producer-profile__icon-btn"
-          onClick={() => setIsFavorito((prev) => !prev)}
-          data-active={isFavorito}
+            className="producer-profile__heart-btn"
+            onClick={() => setIsFavorito((prev) => !prev)}
+            data-active={isFavorito}
             aria-label={isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
           >
             {isFavorito ? (
-            <Heart size={30} strokeWidth={2.4} fill="#d9304f" />
+              <Heart size={20} strokeWidth={2.6} fill="#d9304f" />
             ) : (
-            <Heart size={30} strokeWidth={2.4} />
+              <Heart size={20} strokeWidth={2.6} />
             )}
           </button>
         </header>

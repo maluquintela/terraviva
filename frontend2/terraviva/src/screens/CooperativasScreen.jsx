@@ -69,12 +69,10 @@ export default function CooperativasScreen() {
       setLoadingProducers(true);
       setErrorProducers(null);
       try {
-        // Buscar recomendações tipo Tinder
         const recommendations = await fetchFeedRecommendations({ limit: 20 });
-        
+
         if (active) {
-          // Mapear recomendações para o formato de chat
-          const mappedChats = recommendations.map(rec => ({
+          const mappedChats = recommendations.map((rec) => ({
             id: rec.farmer.id,
             nome: rec.farmer.name,
             cidade: `${rec.farmer.city}, ${rec.farmer.state}`,
@@ -83,9 +81,9 @@ export default function CooperativasScreen() {
             matchScore: rec.match_score,
             distance: rec.distance,
             highlight: rec.highlight,
-            farmer: rec.farmer
+            farmer: rec.farmer,
           }));
-          
+
           setProducerListings(mappedChats);
         }
       } catch (err) {

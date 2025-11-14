@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Menu, Search, Compass, Box, Leaf, ShoppingCart } from "lucide-react";
+import { Search } from "lucide-react";
 import "./pagnoticias.css";
 
 const cards = [
@@ -33,8 +33,8 @@ export default function PagNoticias() {
   return (
     <div className="pn-page">
       <header className="pn-header" aria-hidden>
-        <button className="pn-menu" aria-label="menu">
-          <Menu size={20} strokeWidth={2} />
+        <button className="pn-back" aria-label="Voltar" onClick={() => window.history.back()}>
+          <span className="pn-back__icon">&lt;</span>
         </button>
 
         <div className="pn-search" role="search">
@@ -75,23 +75,6 @@ export default function PagNoticias() {
         </section>
       </main>
 
-      <nav className="pn-bottomnav" aria-label="Navegação principal">
-        <button className="pn-nav-btn" aria-label="Explorar">
-          <Compass size={20} strokeWidth={1.8} />
-        </button>
-
-        <button className="pn-nav-btn" aria-label="Minhas produções">
-          <Box size={20} strokeWidth={1.8} />
-        </button>
-
-        <button className="pn-nav-btn pn-nav-btn--active" aria-label="Home">
-          <Leaf size={20} strokeWidth={1.8} />
-        </button>
-
-        <button className="pn-nav-btn" aria-label="Carrinho">
-          <ShoppingCart size={20} strokeWidth={1.8} />
-        </button>
-      </nav>
     </div>
   );
 }

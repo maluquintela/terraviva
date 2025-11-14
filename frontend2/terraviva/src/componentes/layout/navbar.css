@@ -10,6 +10,9 @@
 .navbar__brand {
   font-weight: 700;
   font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .navbar__links {
@@ -31,5 +34,3 @@
 .navbar__link--active {
   text-decoration: underline;
 }
-
-
