@@ -16,9 +16,10 @@
 - [Funcionalidades Principais](#-funcionalidades-principais)
 - [Arquitetura do Sistema](#-arquitetura-do-sistema)
 - [Instalação e Configuração](#-instalação-e-configuração)
+  - [Credenciais de Teste](#5️⃣-credenciais-de-teste)
 - [Documentação Completa](#-documentação-completa)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [Contribuindo](#-contribuindo)
+- [Testando a API](#-testando-a-api)
 
 ---
 
@@ -207,6 +208,25 @@ Acesse:
 - Frontend: http://localhost:3000
 - API Docs: http://localhost:8003/docs
 - ReDoc: http://localhost:8003/redoc
+
+### 5️⃣ Credenciais de Teste
+
+Para testar a aplicação, utilize o seguinte perfil de teste pré-cadastrado:
+
+```
+📧 Email: teste.backend@terraviva.com
+🔑 Senha: senha123
+```
+
+Este perfil já possui:
+- ✅ Diagnóstico completo preenchido
+- ✅ Localização configurada (Patos, PB)
+- ✅ Orçamento e objetivos comerciais definidos
+- ✅ Acesso completo a todas as funcionalidades
+
+**Onde usar:**
+1. Faça login no frontend (http://localhost:3000) com estas credenciais
+2. Ou use no Swagger UI (http://localhost:8003/docs) para testar a API diretamente
 
 ---
 
@@ -455,12 +475,15 @@ node --version  # Deve ser 18+
 
 ---
 
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
 ## 👥 Autores
 
-- **Equipe TerraViva** - Jullya Eloy, Luis Augusto Melo, Maria Luisa Quintela: Democratizando tecnologia agrícola no Brasil!
+- **Equipe TerraViva** - Jullya Eloy, Luis Augusto Queiroz,Maria Luisa Quintela-Democratizando tecnologia agrícola no Brasil
 
 
 
