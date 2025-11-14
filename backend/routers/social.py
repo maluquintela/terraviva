@@ -36,28 +36,44 @@ def calculate_compatibility(farmer1: models.Farmer, farmer2: models.Farmer) -> d
     Calcula compatibilidade entre dois agricultores (algoritmo de match)
     
     Retorna score de 0-100 baseado em:
-    - Proximidade geográfica (mesma cidade/estado)
-    - Produtos complementares
-    - Excedente disponível
+    - Mesmo ESTADO (prioridade máxima): 40 pontos
+    - Interesses comerciais compatíveis: 30 pontos
+    - Produtos complementares: 20 pontos
+    - Excedente disponível: 10 pontos
     """
     score = 0
     reasons = []
     shared_products = []
     complementary = []
     
-    # Mesmo estado: +30 pontos
+    # PRIORIDADE 1: Mesmo estado: +40 pontos (AUMENTADO)
     if farmer1.state == farmer2.state:
-        score += 30
-        reasons.append(f"Ambos na Paraíba ({farmer1.state})")
+        score += 40
+        reasons.append(f"Mesmo estado: {farmer1.state}")
+        
+        # Mesma cidade: +10 pontos adicionais
+        if farmer1.city == farmer2.city:
+            score += 10
+            reasons.append(f"Mesma cidade: {farmer1.city}")
     
-    # Mesma cidade: +20 pontos adicionais
-    if farmer1.city == farmer2.city:
-        score += 20
-        reasons.append(f"Mesma cidade: {farmer1.city}")
-    else:
-        reasons.append(f"Próximo: {farmer2.city}")
+    # PRIORIDADE 2: Interesses comerciais compatíveis: até 30 pontos
+    commercial_score = 0
     
-    # Produtos
+    # Tipo de cooperação compatível
+    if farmer1.cooperation_type and farmer2.cooperation_type:
+        if farmer1.cooperation_type == farmer2.cooperation_type:
+            commercial_score += 15
+            reasons.append(f"Mesmo tipo de cooperação: {farmer1.cooperation_type}")
+    
+    # Alvo de venda compatível
+    if farmer1.sale_target and farmer2.sale_target:
+        if farmer1.sale_target == farmer2.sale_target:
+            commercial_score += 15
+            reasons.append(f"Mesmo mercado alvo: {farmer1.sale_target}")
+    
+    score += commercial_score
+    
+    # PRIORIDADE 3: Produtos
     crops1 = set([c.strip().lower() for c in farmer1.crops.split(",")]) if farmer1.crops else set()
     crops2 = set([c.strip().lower() for c in farmer2.crops.split(",")]) if farmer2.crops else set()
     
@@ -65,17 +81,17 @@ def calculate_compatibility(farmer1: models.Farmer, farmer2: models.Farmer) -> d
     common = crops1.intersection(crops2)
     if common:
         shared_products = list(common)
-        score += len(common) * 10
+        score += min(len(common) * 5, 15)  # Máx 15 pontos
         reasons.append(f"{len(common)} produtos em comum")
     
     # Produtos complementares (diferentes mas compatíveis)
     different = crops1.symmetric_difference(crops2)
-    if different:
+    if different and len(different) > 1:
         complementary = list(different)[:3]  # Top 3
-        score += min(len(different) * 5, 30)
+        score += 5
         reasons.append(f"Produtos complementares para diversificar")
     
-    # Tem excedente: +10 pontos
+    # PRIORIDADE 4: Tem excedente: +10 pontos
     if farmer2.surplus and farmer2.surplus != "0":
         score += 10
         reasons.append("Tem excedente disponível")

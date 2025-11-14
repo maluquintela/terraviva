@@ -263,7 +263,11 @@ export default function CooperativasScreen() {
                 onClick={() => handleNavigateChat(chat)}
               >
                 <div className="coops-card__avatar">
-                  <img src={chat.avatar} alt={`Foto de ${chat.nome}`} />
+                  <img
+                    src={chat.avatar}
+                    alt={`Foto de ${chat.nome}`}
+                    className="avatar-circle"
+                  />
                 </div>
 
                 <div className="coops-card__content">

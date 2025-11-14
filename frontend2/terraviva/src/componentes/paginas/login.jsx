@@ -1,58 +1,80 @@
-import React, { useState } from "react";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import { useAuth } from "../../hooks/useAuth";
 
 const initialState = {
-  email: "",
-  password: "",
+  usuario: "",
+  senha: "",
 };
 
 export default function LoginScreen() {
   const [form, setForm] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
-  const [status, setStatus] = useState({ type: null, message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mensagem, setMensagem] = useState(null);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { localLogin, token } = useAuth();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setStatus({ type: null, message: "" });
-
-    if (!form.email.trim() || !form.password.trim()) {
-      setStatus({ type: "error", message: "Informe e-mail e senha." });
-      return;
+  // Navega para diagnóstico quando o token estiver disponível
+  useEffect(() => {
+    if (shouldNavigate && token) {
+      console.log("Token definido, navegando para /diagnostico");
+      navigate("/diagnostico", { state: { origin: "login" } });
     }
+  }, [shouldNavigate, token, navigate]);
 
-    setIsSubmitting(true);
-    try {
-      await login({ email: form.email.trim(), password: form.password });
-      setStatus({ type: "success", message: "Login realizado com sucesso!" });
-      setTimeout(() => navigate("/home"), 300);
-    } catch (error) {
-      console.error("Erro ao autenticar", error);
-      setStatus({
-        type: "error",
-        message:
-          error?.data?.detail ||
-          error?.message ||
-          "Não foi possível autenticar. Verifique suas credenciais.",
-      });
-    } finally {
-      setIsSubmitting(false);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    console.log("=== BOTÃO ENTRAR CLICADO ===");
+    console.log("Form:", form);
+    console.log("localLogin existe?", typeof localLogin);
+
+    const nome = form.usuario.trim() || "Usuário TerraViva";
+    const emailLike = form.usuario.includes("@")
+      ? form.usuario
+      : `${form.usuario || "usuario"}@terraviva.local`;
+
+    console.log("Chamando localLogin com:", { name: nome, email: emailLike });
+    
+    // Criar sessão local
+    if (localLogin) {
+      localLogin({ name: nome, email: emailLike });
+      // Sinaliza que deve navegar após o token ser definido
+      setShouldNavigate(true);
     }
   };
 
   return (
     <div className="login-page">
-      <div className="login-hero" />
+      <section className="login-hero">
+        <div className="login-hero__content">
+          <span className="login-hero__badge">Plataforma integrada</span>
+          <h1>
+            Conecte sua produção
+            <br />
+            com cooperativas e mercados.
+          </h1>
+          <p>
+            Acompanhe demandas em tempo real, organize diagnósticos da lavoura e
+            converse com especialistas em poucos cliques.
+          </p>
+          <ul className="login-hero__list">
+            <li>Marketplace inteligente para escoar excedentes</li>
+            <li>Diagnóstico guiado e recomendações personalizadas</li>
+            <li>Central de chats com cooperativas e assistência técnica</li>
+          </ul>
+        </div>
+        <div className="login-hero__background" aria-hidden="true" />
+      </section>
+
       <form className="card animate-fadeIn" onSubmit={handleSubmit}>
         <div className="logo-container">
           <img src="/terraviva.png" alt="TerraViva Logo" className="logo" />
@@ -63,30 +85,26 @@ export default function LoginScreen() {
         </h2>
 
         <div className="input-wrapper">
-          <Mail className="input-icon" size={18} />
           <input
-            type="email"
-            name="email"
-            placeholder="Email"
+            type="text"
+            name="usuario"
+            placeholder="Usuário"
             className="input"
-            value={form.email}
+            value={form.usuario}
             onChange={handleChange}
             autoComplete="username"
-            required
           />
         </div>
 
         <div className="input-wrapper">
-          <Lock className="input-icon" size={18} />
           <input
             type={showPassword ? "text" : "password"}
-            name="password"
+            name="senha"
             placeholder="Senha"
             className="input"
-            value={form.password}
+            value={form.senha}
             onChange={handleChange}
             autoComplete="current-password"
-            required
           />
           <button
             type="button"
@@ -98,8 +116,14 @@ export default function LoginScreen() {
           </button>
         </div>
 
-        <button type="submit" className="button" disabled={isSubmitting}>
-          {isSubmitting ? "Entrando..." : "Entrar"}
+        <button 
+          type="submit" 
+          className="button"
+          onClick={(e) => {
+            console.log("=== BOTÃO CLICADO (onClick) ===");
+          }}
+        >
+          Entrar
         </button>
 
         <div className="signup-container">
@@ -109,9 +133,9 @@ export default function LoginScreen() {
           </Link>
         </div>
 
-        {status.message && (
-          <p className={`login-feedback ${status.type === "error" ? "erro" : "info"}`}>
-            {status.message}
+        {mensagem && (
+          <p className={`login-feedback ${mensagem.tipo === "erro" ? "erro" : "info"}`}>
+            {mensagem.texto}
           </p>
         )}
       </form>

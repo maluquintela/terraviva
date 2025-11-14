@@ -3,8 +3,7 @@ Script para criar todas as tabelas no banco de dados Supabase
 Execute este script após configurar o DATABASE_URL no arquivo .env
 """
 
-from database import Base, engine
-import models
+from database import Base, engine, models
 
 def create_tables():
     """Cria todas as tabelas definidas nos models"""

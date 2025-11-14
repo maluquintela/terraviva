@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ArrowLeft,
-  Paperclip,
   Send,
   Circle,
-  MoreVertical,
   MessageSquarePlus,
+  Image as ImageIcon,
+  X,
 } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { fetchListingById } from "../api/marketplace";
@@ -40,6 +39,9 @@ export default function ProducerChatScreen() {
   const [draft, setDraft] = useState("");
   const [unread, setUnread] = useState(0);
   const [showProposal, setShowProposal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
   const scrollRef = useRef(null);
   const [loading, setLoading] = useState(!location.state?.listing);
   const [error, setError] = useState(null);
@@ -97,20 +99,46 @@ export default function ProducerChatScreen() {
     }
   }, [messages.length]);
 
+  const handleImageSelect = (event) => {
+    const file = event.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleSend = () => {
     const texto = draft.trim();
-    if (!texto) return;
+    if (!texto && !selectedImage) return;
 
     const timestamp = new Date().toLocaleTimeString("pt-BR", {
       hour: "2-digit",
       minute: "2-digit",
     });
 
-    setMessages((prev) => [
-      ...prev,
-      { id: gerarId(), author: "usuario", text: texto, timestamp },
-    ]);
+    const newMessage = {
+      id: gerarId(),
+      author: "usuario",
+      text: texto || (selectedImage ? "📷 Imagem enviada" : ""),
+      timestamp,
+      image: imagePreview || null,
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
     setDraft("");
+    handleRemoveImage();
 
     setTimeout(() => {
       setMessages((prev) => [
@@ -167,7 +195,7 @@ export default function ProducerChatScreen() {
           className="producer-chat__back"
           onClick={() => navigate("/mercado")}
         >
-          <ArrowLeft size={22} />
+          <span className="producer-chat__back-icon">&lt;</span>
           Voltar ao Mercado
         </button>
         <p>{error}</p>
@@ -183,7 +211,7 @@ export default function ProducerChatScreen() {
           className="producer-chat__back"
           onClick={() => navigate("/mercado")}
         >
-          <ArrowLeft size={22} />
+          <span className="producer-chat__back-icon">&lt;</span>
           Voltar ao Mercado
         </button>
         <p>Produtor não encontrado para iniciar conversa.</p>
@@ -206,11 +234,16 @@ export default function ProducerChatScreen() {
           }}
           aria-label="Voltar para o perfil do produtor"
         >
-          <ArrowLeft size={22} strokeWidth={2.2} />
+          <span className="producer-chat__back-icon">&lt;</span>
         </button>
 
         <div className="producer-chat__identity">
-          <img src={produtor.avatar} alt="" role="presentation" />
+            <img
+              src={produtor.avatar}
+              alt=""
+              role="presentation"
+              className="avatar-circle"
+            />
           <div>
             <h1>{produtor.nome}</h1>
             <span>
@@ -219,13 +252,6 @@ export default function ProducerChatScreen() {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="producer-chat__icon-btn"
-          aria-label="Mais opções de conversa"
-        >
-          <MoreVertical size={20} strokeWidth={2.2} />
-        </button>
       </header>
 
       <div className="producer-chat__body" ref={scrollRef}>
@@ -234,6 +260,13 @@ export default function ProducerChatScreen() {
             key={message.id}
             className={`chat-bubble chat-bubble--${message.author}`}
           >
+            {message.image && (
+              <img 
+                src={message.image} 
+                alt="Imagem enviada" 
+                className="chat-bubble__image"
+              />
+            )}
             <p>{message.text}</p>
             <span>{message.timestamp}</span>
           </div>
@@ -247,12 +280,21 @@ export default function ProducerChatScreen() {
       )}
 
       <footer className="producer-chat__footer">
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept="image/*"
+          onChange={handleImageSelect}
+          style={{ display: 'none' }}
+          aria-label="Selecionar imagem"
+        />
         <button
           type="button"
           className="producer-chat__attachment"
-          aria-label="Anexar arquivo"
+          onClick={() => fileInputRef.current?.click()}
+          aria-label="Anexar imagem"
         >
-          <Paperclip size={20} strokeWidth={2.2} />
+          <ImageIcon size={30} strokeWidth={2.4} />
         </button>
         <input
           type="text"
@@ -272,10 +314,25 @@ export default function ProducerChatScreen() {
           className="producer-chat__send"
           onClick={handleSend}
           aria-label="Enviar mensagem"
+          disabled={!draft.trim() && !selectedImage}
         >
           <Send size={20} strokeWidth={2.2} />
         </button>
       </footer>
+
+      {imagePreview && (
+        <div className="producer-chat__image-preview-floating">
+          <img src={imagePreview} alt="Preview" />
+          <button
+            type="button"
+            className="producer-chat__image-remove"
+            onClick={handleRemoveImage}
+            aria-label="Remover imagem"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
 
       <button
         type="button"

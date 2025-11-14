@@ -90,7 +90,12 @@ export default function CooperativaProdutorChat() {
         </button>
 
         <div className="coop-chat__identity">
-          <img src={produtor.avatar} alt="" role="presentation" />
+          <img
+            src={produtor.avatar}
+            alt=""
+            role="presentation"
+            className="avatar-circle"
+          />
           <div>
             <h1>{produtor.nome}</h1>
             <span>

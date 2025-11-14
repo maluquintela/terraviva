@@ -5,49 +5,31 @@ import {
   UserCog,
   SlidersHorizontal,
   UsersRound,
-  ShoppingCart,
+  User,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./mercado.css";
-import { fetchListings } from "../api/marketplace";
+import { fetchFeedRecommendations } from "../api/social";
 
 const formatarProduto = (produto) => {
   if (!produto) return "";
   return produto.charAt(0).toUpperCase() + produto.slice(1);
 };
 
-const mapListingToCard = (listing) => {
-  const farmer = listing.farmer ?? {};
-  const product = listing.product ?? {};
-  const quantityTotal = listing.quantity_total ?? null;
-  const quantitySold = listing.quantity_sold ?? 0;
-  const remaining =
-    quantityTotal != null && quantitySold != null
-      ? Math.max(quantityTotal - quantitySold, 0)
-      : null;
-
-  const produtoDetalhes = {
-    nome: product.name ?? product.category ?? "Produto disponível",
-    quantidade:
-      quantityTotal != null
-        ? `${quantityTotal} ${product.unit ?? ""}`.trim()
-        : undefined,
-    restante:
-      remaining != null ? `${remaining} ${product.unit ?? ""}`.trim() : undefined,
-    tipo: product.category ?? undefined,
-    disponibilidade: listing.status ? listing.status.replace("_", " ") : undefined,
-    classificacao: product.description ?? undefined,
-  };
-
+const mapFarmerToCard = (recommendation) => {
+  const farmer = recommendation.farmer ?? {};
+  const crops = farmer.crops ? farmer.crops.split(",").map(c => c.trim()) : [];
+  
   return {
-    id: listing.id,
+    id: farmer.id,
     farmer,
-    cidade: listing.city ?? farmer.city ?? "Local não informado",
-    estado: listing.state ?? farmer.state ?? "",
-    produtos: [produtoDetalhes],
-    produtoDetalhes,
-    price: listing.price ?? null,
-    listing,
+    cidade: farmer.city ?? "Local não informado",
+    estado: farmer.state ?? "",
+    produtos: crops.map(crop => ({ nome: crop })),
+    score: recommendation.score ?? 0,
+    reasons: recommendation.reasons ?? [],
+    distance: recommendation.distance ?? null,
+    highlight: recommendation.highlight ?? null,
   };
 };
 
@@ -58,27 +40,27 @@ export default function MercadoScreen() {
   const [query, setQuery] = useState("");
   const [selectedFiltro, setSelectedFiltro] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  const [listings, setListings] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let active = true;
 
-    async function loadListings() {
+    async function loadFeed() {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchListings({ status: "disponível" });
+        const data = await fetchFeedRecommendations({ limit: 50 });
         if (active) {
-          setListings(Array.isArray(data) ? data : []);
+          setRecommendations(Array.isArray(data) ? data : []);
         }
       } catch (err) {
         if (active) {
           setError(
             err?.data?.detail ||
               err?.message ||
-              "Não foi possível carregar os anúncios do marketplace."
+              "Não foi possível carregar o feed de produtores."
           );
         }
       } finally {
@@ -88,7 +70,7 @@ export default function MercadoScreen() {
       }
     }
 
-    loadListings();
+    loadFeed();
     return () => {
       active = false;
     };
@@ -105,7 +87,7 @@ export default function MercadoScreen() {
     }
   }, [location, navigate]);
 
-  const cards = useMemo(() => listings.map(mapListingToCard), [listings]);
+  const cards = useMemo(() => recommendations.map(mapFarmerToCard), [recommendations]);
 
   const produtosDisponiveis = useMemo(() => {
     const nomes = cards.flatMap((card) =>
@@ -116,15 +98,8 @@ export default function MercadoScreen() {
     );
   }, [cards]);
 
-  const produtoresOrdenados = useMemo(
-    () =>
-      [...cards].sort((a, b) => {
-        const nomeA = a.farmer?.name?.toLowerCase() ?? "";
-        const nomeB = b.farmer?.name?.toLowerCase() ?? "";
-        return nomeA.localeCompare(nomeB, "pt-BR", { sensitivity: "base" });
-      }),
-    [cards]
-  );
+  // Os cards já vêm ordenados por score de compatibilidade do backend
+  const produtoresOrdenados = useMemo(() => cards, [cards]);
 
   const resultadosBusca = useMemo(() => {
     const texto = query.trim().toLowerCase();
@@ -232,7 +207,7 @@ export default function MercadoScreen() {
         <section className="marketplace__feed" aria-live="polite">
           {loading ? (
             <div className="marketplace__status" role="status">
-              Carregando anúncios…
+              Carregando produtores…
             </div>
           ) : error ? (
             <div className="marketplace__status marketplace__status--error" role="alert">
@@ -240,13 +215,13 @@ export default function MercadoScreen() {
             </div>
           ) : produtoresOrdenados.length === 0 ? (
             <div className="marketplace__status" role="note">
-              Nenhum anúncio disponível no momento.
+              Nenhum produtor disponível no momento.
             </div>
           ) : (
             produtoresOrdenados.map((card) => (
               <article key={card.id} className="producer-card">
                 <div className="producer-card__avatar" aria-hidden="true">
-                  <ShoppingCart size={22} />
+                  {card.farmer?.name?.[0]?.toUpperCase() ?? <User size={28} />}
                 </div>
                 <div className="producer-card__content">
                   <header className="producer-card__header">
@@ -259,17 +234,12 @@ export default function MercadoScreen() {
                         {card.estado ? `, ${card.estado}` : ""}
                       </p>
                     </div>
-                    {card.price != null && (
-                      <span className="producer-card__distance">
-                        R$ {Number(card.price).toLocaleString("pt-BR")}
-                      </span>
-                    )}
                   </header>
 
                   <div className="producer-card__products" aria-label="Produtos disponíveis">
-                    {card.produtos.map((produto) => (
+                    {card.produtos.slice(0, 3).map((produto, idx) => (
                       <span
-                        key={`${card.id}-${produto.nome}`}
+                        key={`${card.id}-${produto.nome}-${idx}`}
                         className="product-chip"
                       >
                         {formatarProduto(produto.nome)}
@@ -282,12 +252,16 @@ export default function MercadoScreen() {
                     className="producer-card__cta"
                     aria-label={`Ver perfil de ${card.farmer?.name ?? "produtor"}`}
                     onClick={() =>
-                      navigate(`/mercado/produtor/${card.id}`, {
-                        state: { listing: card.listing },
+                      navigate(`/mercado/produtor/${card.farmer.id}`, {
+                        state: {
+                          profileMode: "farmer",
+                          farmerId: card.farmer.id,
+                          origin: "mercado-feed",
+                        },
                       })
                     }
                   >
-                    Ver perfil para saber mais
+                    Clique no perfil para saber mais
                   </button>
                 </div>
               </article>
@@ -376,16 +350,8 @@ export default function MercadoScreen() {
                           <span>
                             {card.cidade}, {card.estado}
                           </span>
-                          {card.produtoDetalhes?.quantidade && (
-                            <span>{card.produtoDetalhes.quantidade}</span>
-                          )}
                         </div>
                       </div>
-                      {card.price != null && (
-                        <span className="producer-card__distance">
-                          R$ {Number(card.price).toLocaleString("pt-BR")}
-                        </span>
-                      )}
                     </div>
 
                     <div className="producer-card__products" aria-label="Produtos disponíveis">
@@ -404,12 +370,11 @@ export default function MercadoScreen() {
                       className="search-result__cta"
                       aria-label={`Ver perfil de ${card.farmer?.name ?? "produtor"}`}
                       onClick={() =>
-                        navigate(`/mercado/produtor/${card.id}`, {
+                        navigate(`/mercado/produtor/${card.farmer.id}`, {
                           state: {
-                            from: "search",
-                            query,
-                            selectedFiltro,
-                            listing: card.listing,
+                            profileMode: "farmer",
+                            farmerId: card.farmer.id,
+                            origin: "mercado-search",
                           },
                         })
                       }

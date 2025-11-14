@@ -6,11 +6,15 @@ import "./home.css";
 import { useAuth } from "../../hooks/useAuth";
 
 const ACTIONS = [
-  { to: "/noticias", icon: Leaf, label: "Notícias" },
   { to: "/ajuda-tecnica", icon: Bot, label: "Ajuda Técnica" },
   { to: "/mercado", icon: ShoppingCart, label: "Mercado" },
   { to: "/cooperativas", icon: Handshake, label: "Cooperativas" },
-  { to: "/diagnostico", icon: ClipboardList, label: "Diagnóstico" },
+  {
+    to: "/diagnostico",
+    icon: ClipboardList,
+    label: "Diagnóstico",
+    state: { origin: "home" },
+  },
 ];
 
 export default function Home() {
@@ -22,12 +26,19 @@ export default function Home() {
     <div className="home-page animate-fade-in">
       <div className="home-shell">
         <header className="home-header">
-          <h1 className="home-header__title">Olá, {firstName}!</h1>
-          <p className="home-header__subtitle">
-            {hasDiagnostic
-              ? "Veja o que você pode fazer hoje com base no seu diagnóstico."
-              : "Complete o diagnóstico para receber orientações e cooperativas recomendadas."}
-          </p>
+          <div className="home-header__content">
+            <div>
+              <h1 className="home-header__title">Olá, {firstName}!</h1>
+              <p className="home-header__subtitle">
+                {hasDiagnostic
+                  ? "Veja o que você pode fazer hoje com base no seu diagnóstico."
+                  : "O que o TerraViva pode fazer por você hoje?"}
+              </p>
+            </div>
+            <div className="home-header__logo">
+              <img src={logo} alt="Logo TerraViva" />
+            </div>
+          </div>
         </header>
 
         <section className="home-actions">
@@ -35,12 +46,6 @@ export default function Home() {
             <MainButton key={action.label} {...action} />
           ))}
         </section>
-
-        <footer className="home-footer">
-          <div className="home-footer__badge">
-            <img src={logo} alt="Símbolo TerraViva" />
-          </div>
-        </footer>
       </div>
     </div>
   );

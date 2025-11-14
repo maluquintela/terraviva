@@ -25,6 +25,13 @@ export function AuthProvider({ children }) {
         setIsLoading(false);
         return;
       }
+      
+      // Se for um token local (fake), não tenta buscar no backend
+      if (token.startsWith("local-")) {
+        setIsLoading(false);
+        return;
+      }
+      
       setIsLoading(true);
       try {
         const profile = await fetchCurrentFarmer();
@@ -62,6 +69,31 @@ export function AuthProvider({ children }) {
     return response;
   }, []);
 
+  const createLocalSession = useCallback(({ name, email } = {}) => {
+    const fakeToken = `local-${Date.now()}`;
+    localStorage.setItem(STORAGE_TOKEN_KEY, fakeToken);
+    setToken(fakeToken);
+    setFarmer({
+      id: 1, // ID numérico para desenvolvimento local
+      name: name || "Produtor(a) TerraViva",
+      email: email || "",
+      city: "",
+      state: "",
+      crops: "",
+      budget: 0,
+      production_weekly: "",
+      surplus: "",
+      cooperation_type: "",
+      sale_target: "",
+      bio: "",
+      diagnostic_profile: null,
+    });
+    setError(null);
+    setIsLoading(false);
+    console.log("✓ Sessão local criada com token:", fakeToken);
+    return fakeToken;
+  }, []);
+
   const handleRegister = useCallback(async (payload) => {
     const farmerCreated = await registerFarmer(payload);
     return farmerCreated;
@@ -79,6 +111,29 @@ export function AuthProvider({ children }) {
       if (!farmer?.id) {
         throw new Error("Usuário não autenticado.");
       }
+      
+      // Se for um token local, apenas atualiza o estado local
+      if (token && token.startsWith("local-")) {
+        setFarmer((prev) =>
+          prev
+            ? {
+                ...prev,
+                city: diagnosticPayload.city,
+                state: diagnosticPayload.state,
+                crops: diagnosticPayload.crops,
+                budget: diagnosticPayload.budget,
+                production_weekly: diagnosticPayload.production_weekly,
+                surplus: diagnosticPayload.surplus,
+                cooperation_type: diagnosticPayload.cooperation_type,
+                sale_target: diagnosticPayload.sale_target,
+                bio: diagnosticPayload.bio, // Bio gerada automaticamente
+              }
+            : prev
+        );
+        return { message: "Diagnóstico salvo localmente com sucesso!" };
+      }
+      
+      // Caso contrário, envia para o backend
       const result = await submitDiagnostic(farmer.id, diagnosticPayload);
       setFarmer((prev) =>
         prev
@@ -90,16 +145,16 @@ export function AuthProvider({ children }) {
               budget: diagnosticPayload.budget,
               production_weekly: diagnosticPayload.production_weekly,
               surplus: diagnosticPayload.surplus,
-              sale_preference: diagnosticPayload.sale_preference,
-              contact: diagnosticPayload.contact,
-              bio: result.bio,
+              cooperation_type: diagnosticPayload.cooperation_type,
+              sale_target: diagnosticPayload.sale_target,
+              bio: diagnosticPayload.bio || result.bio, // Bio gerada ou do backend
               diagnostic_profile: result.diagnostic_profile,
             }
           : prev
       );
       return result;
     },
-    [farmer]
+    [farmer, token]
   );
 
   const value = useMemo(
@@ -109,12 +164,13 @@ export function AuthProvider({ children }) {
       isLoading,
       error,
       login: handleLogin,
+      localLogin: createLocalSession,
       register: handleRegister,
       logout: handleLogout,
       setFarmer,
       submitDiagnostic: handleSubmitDiagnostic,
     }),
-    [farmer, token, isLoading, error, handleLogin, handleRegister, handleLogout, handleSubmitDiagnostic]
+    [farmer, token, isLoading, error, handleLogin, createLocalSession, handleRegister, handleLogout, handleSubmitDiagnostic]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

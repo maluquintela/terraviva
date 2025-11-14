@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from datetime import datetime
 
 # Adicionar a raiz do projeto ao PYTHONPATH para importar o módulo database
 project_root = Path(__file__).parent.parent.parent
@@ -7,7 +8,8 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy import and_, or_
+from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
 from database import SessionLocal, models, schemas
 from auth import get_current_farmer
@@ -21,6 +23,33 @@ def get_db():
         yield db
     finally:
         db.close()
+
+REQUEST_RELATIONS = [
+    joinedload(models.CooperativeRequest.requester),
+    joinedload(models.CooperativeRequest.receiver),
+    joinedload(models.CooperativeRequest.cooperative),
+    joinedload(models.CooperativeRequest.listing).joinedload(models.Listing.product),
+    joinedload(models.CooperativeRequest.listing).joinedload(models.Listing.farmer),
+]
+
+def _get_or_create_conversation(db: Session, farmer_a: int, farmer_b: int) -> models.Conversation:
+    conversation = (
+        db.query(models.Conversation)
+        .filter(
+            or_(
+                and_(models.Conversation.farmer1_id == farmer_a, models.Conversation.farmer2_id == farmer_b),
+                and_(models.Conversation.farmer1_id == farmer_b, models.Conversation.farmer2_id == farmer_a),
+            )
+        )
+        .first()
+    )
+    if conversation:
+        return conversation
+
+    conversation = models.Conversation(farmer1_id=farmer_a, farmer2_id=farmer_b)
+    db.add(conversation)
+    db.flush()
+    return conversation
 
 # ========== PRODUTOS ==========
 
@@ -363,6 +392,104 @@ def leave_cooperative(
     db.commit()
     
     return {"message": "Você saiu da cooperativa"}
+
+@router.get("/cooperative-requests", response_model=List[schemas.CooperativeRequestDetail])
+def list_cooperative_requests(
+    box: str = "received",
+    status_filter: Optional[str] = None,
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db)
+):
+    """Listar solicitações de cooperativa recebidas ou enviadas."""
+    query = db.query(models.CooperativeRequest).options(*REQUEST_RELATIONS)
+
+    if box == "sent":
+        query = query.filter(models.CooperativeRequest.requester_id == current_farmer.id)
+    else:
+        query = query.filter(models.CooperativeRequest.receiver_id == current_farmer.id)
+
+    if status_filter:
+        query = query.filter(models.CooperativeRequest.status == status_filter)
+
+    requests = query.order_by(models.CooperativeRequest.created_at.desc()).all()
+    return requests
+
+@router.post(
+    "/cooperative-requests/{request_id}/respond",
+    response_model=schemas.CooperativeRequestDetail,
+)
+def respond_cooperative_request(
+    request_id: int,
+    payload: schemas.CooperativeRequestResponse,
+    current_farmer: models.Farmer = Depends(get_current_farmer),
+    db: Session = Depends(get_db),
+):
+    """Aceitar ou recusar solicitação de cooperativa e direcionar para o chat."""
+    request = (
+        db.query(models.CooperativeRequest)
+        .options(*REQUEST_RELATIONS)
+        .filter(models.CooperativeRequest.id == request_id)
+        .first()
+    )
+
+    if not request:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Solicitação não encontrada"
+        )
+
+    if request.receiver_id != current_farmer.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você só pode responder solicitações recebidas por você.",
+        )
+
+    if request.status != "pendente":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Esta solicitação já foi respondida.",
+        )
+
+    now = datetime.utcnow()
+
+    if payload.action == "accept":
+        request.status = "aceita"
+        conversation = _get_or_create_conversation(
+            db, request.requester_id, request.receiver_id
+        )
+        request.conversation_id = conversation.id
+
+        # Garantir que ambos os produtores façam parte da cooperativa (quando aplicável)
+        if request.cooperative_id:
+            for farmer_id in {request.requester_id, request.receiver_id}:
+                membership_exists = (
+                    db.query(models.CooperativeMembership)
+                    .filter(
+                        models.CooperativeMembership.farmer_id == farmer_id,
+                        models.CooperativeMembership.cooperative_id == request.cooperative_id,
+                    )
+                    .first()
+                )
+                if not membership_exists:
+                    db.add(
+                        models.CooperativeMembership(
+                            farmer_id=farmer_id, cooperative_id=request.cooperative_id
+                        )
+                    )
+    else:
+        request.status = "recusada"
+        request.conversation_id = None
+
+    request.responded_at = now
+    db.commit()
+
+    updated_request = (
+        db.query(models.CooperativeRequest)
+        .options(*REQUEST_RELATIONS)
+        .filter(models.CooperativeRequest.id == request.id)
+        .first()
+    )
+
+    return updated_request
 
 @router.get("/cooperatives/suggestions/{farmer_id}", response_model=List[schemas.CooperativeSuggestion])
 def get_cooperative_suggestions(

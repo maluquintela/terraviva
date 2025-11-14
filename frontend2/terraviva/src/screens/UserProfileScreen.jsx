@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import {
   Check,
   Edit3,
@@ -15,6 +15,12 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PRODUTORES } from "./mercadoData";
+import { useAuth } from "../hooks/useAuth";
+import {
+  fetchCooperativeRequests,
+  respondCooperativeRequest,
+  fetchFollowersData,
+} from "../api/marketplace";
 import "./userProfile.css";
 
 const INITIAL_USER = {
@@ -93,6 +99,58 @@ const INITIAL_REQUESTS = [
   },
 ];
 
+const buildAvatarUrl = (name) =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "Produtor")}&background=1a73e8&color=ffffff`;
+
+const mapApiRequestToCard = (request) => {
+  const requester = request?.requester ?? {};
+  const listing = request?.listing;
+  const productName = listing?.product?.name ?? requester?.crops?.split(",")?.[0];
+  const quantity = listing?.quantity_total
+    ? `${listing.quantity_total} ${listing.product?.unit ?? ""}`.trim()
+    : requester?.surplus ?? "Sob consulta";
+  const location = [requester.city, requester.state].filter(Boolean).join(", ");
+
+  return {
+    id: request.id,
+    solicitante: requester.name ?? "Produtor parceiro",
+    localizacao: location || "Local não informado",
+    produto: productName ?? "Produtos diversos",
+    quantidade,
+    mensagem: request.message ?? "Solicitação de cooperativa",
+    status: request.status,
+    data: request.created_at
+      ? new Date(request.created_at).toLocaleDateString("pt-BR")
+      : "",
+    raw: request,
+  };
+};
+
+const mapLegacyRequestToCard = (legacy) => ({
+  ...legacy,
+  raw: null,
+});
+
+const mapFarmerToFavorite = (farmer) => {
+  if (!farmer) {
+    return null;
+  }
+  const cidade = [farmer.city, farmer.state].filter(Boolean).join(", ");
+  const avatar =
+    farmer.avatar ||
+    farmer.avatar_url ||
+    buildAvatarUrl(farmer.name);
+
+  return {
+    id: farmer.id,
+    nome: farmer.name ?? "Produtor parceiro",
+    cidade: cidade || "Local não informado",
+    avatar,
+    produtos: farmer.crops || "Produtos diversos",
+    farmer,
+  };
+};
+
 const REQUEST_FILTERS = [
   { id: "todos", label: "Todos" },
   { id: "pendente", label: "Pendentes" },
@@ -102,12 +160,39 @@ const REQUEST_FILTERS = [
 
 export default function UserProfileScreen() {
   const navigate = useNavigate();
+  const { farmer, token } = useAuth();
+  const isLocalSession = token?.startsWith("local-");
+  
+  // Criar objeto de usuário a partir dos dados do farmer
+  const userFromFarmer = useMemo(() => {
+    if (!farmer) return INITIAL_USER;
+    
+    return {
+      id: farmer.id || 1,
+      nome: farmer.name || "Produtor(a) TerraViva",
+      avatar: farmer.avatar || "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=320&q=60",
+      localizacao: {
+        cidade: farmer.city || "",
+        estado: farmer.state || "",
+        endereco: farmer.address || "",
+      },
+      bio: farmer.bio || "Complete seu diagnóstico para gerar sua bio automaticamente.",
+      areasAtuacao: farmer.areasAtuacao || [],
+      favoritos: farmer.favoritos || [],
+    };
+  }, [farmer]);
+  
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [user, setUser] = useState(INITIAL_USER);
-  const [draftUser, setDraftUser] = useState(INITIAL_USER);
+  const [user, setUser] = useState(userFromFarmer);
+  const [draftUser, setDraftUser] = useState(userFromFarmer);
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
-  const [requests, setRequests] = useState(INITIAL_REQUESTS);
+  const [requests, setRequests] = useState([]);
+  const [requestsLoading, setRequestsLoading] = useState(true);
+  const [requestsError, setRequestsError] = useState(null);
+  const [favoriteProducers, setFavoriteProducers] = useState([]);
+  const [favoritesLoading, setFavoritesLoading] = useState(true);
+  const [favoritesError, setFavoritesError] = useState(null);
   const [requestFilter, setRequestFilter] = useState("pendente");
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [productDraft, setProductDraft] = useState({
@@ -118,8 +203,111 @@ export default function UserProfileScreen() {
     disponibilidade: "Semanal",
   });
   const [confirmAction, setConfirmAction] = useState(null);
+  const [isRespondingRequest, setIsRespondingRequest] = useState(false);
   const [toast, setToast] = useState(null);
   const fileInputRef = useRef(null);
+  
+  // Atualizar user quando farmer mudar
+  useEffect(() => {
+    setUser(userFromFarmer);
+    setDraftUser(userFromFarmer);
+  }, [userFromFarmer]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadRequests() {
+      if (isLocalSession) {
+        if (active) {
+          setRequests(INITIAL_REQUESTS.map(mapLegacyRequestToCard));
+          setRequestsLoading(false);
+          setRequestsError(null);
+        }
+        return;
+      }
+
+      setRequestsLoading(true);
+      setRequestsError(null);
+      try {
+        const data = await fetchCooperativeRequests({ box: "received" });
+        if (active) {
+          setRequests(Array.isArray(data) ? data.map(mapApiRequestToCard) : []);
+        }
+      } catch (err) {
+        if (active) {
+          setRequestsError(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar as solicitações de cooperativa.",
+          );
+        }
+      } finally {
+        if (active) {
+          setRequestsLoading(false);
+        }
+      }
+    }
+
+    loadRequests();
+    return () => {
+      active = false;
+    };
+  }, [isLocalSession]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadFavorites() {
+      if (isLocalSession) {
+        const favoriteIds = user.favoritos ?? [];
+        const localFavorites = PRODUTORES.filter((produtor) =>
+          favoriteIds.includes(produtor.id),
+        );
+        if (active) {
+          setFavoriteProducers(localFavorites);
+          setFavoritesLoading(false);
+          setFavoritesError(null);
+        }
+        return;
+      }
+
+      if (!userFromFarmer?.id) {
+        if (active) {
+          setFavoriteProducers([]);
+          setFavoritesLoading(false);
+        }
+        return;
+      }
+
+      setFavoritesLoading(true);
+      setFavoritesError(null);
+      try {
+        const data = await fetchFollowersData(userFromFarmer.id);
+        if (active) {
+          const mapped =
+            data?.following?.map(mapFarmerToFavorite).filter(Boolean) ?? [];
+          setFavoriteProducers(mapped);
+        }
+      } catch (err) {
+        if (active) {
+          setFavoritesError(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar seus produtores favoritos.",
+          );
+        }
+      } finally {
+        if (active) {
+          setFavoritesLoading(false);
+        }
+      }
+    }
+
+    loadFavorites();
+    return () => {
+      active = false;
+    };
+  }, [isLocalSession, userFromFarmer?.id, user.favoritos]);
 
   const filteredRequests = useMemo(() => {
     if (requestFilter === "todos") {
@@ -131,14 +319,6 @@ export default function UserProfileScreen() {
   const pendingCount = useMemo(
     () => requests.filter((req) => req.status === "pendente").length,
     [requests],
-  );
-
-  const favoriteProducers = useMemo(
-    () =>
-      PRODUTORES.filter((produtor) =>
-        user.favoritos?.includes(produtor.id),
-      ),
-    [user.favoritos],
   );
 
   const handleToggleEdit = () => {
@@ -224,6 +404,28 @@ export default function UserProfileScreen() {
     setToast({ message: "Produto removido.", tone: "neutral" });
   };
 
+  const navigateToCooperativeChat = (requestPayload) => {
+    const requester = requestPayload?.requester;
+    if (!requester?.id) {
+      return;
+    }
+
+    const cidade = [requester.city, requester.state].filter(Boolean).join(", ");
+    navigate(`/cooperativas/chat/produtor/${requester.id}`, {
+      state: {
+        from: "perfil-solicitacoes",
+        chat: {
+          id: requester.id,
+          nome: requester.name ?? "Produtor parceiro",
+          cidade: cidade || "Local não informado",
+          avatar: buildAvatarUrl(requester.name),
+          farmer: requester,
+          listing: requestPayload?.listing ?? null,
+        },
+      },
+    });
+  };
+
   const handleRequestAction = (request, action) => {
     setConfirmAction({
       request,
@@ -235,20 +437,55 @@ export default function UserProfileScreen() {
     });
   };
 
-  const confirmRequestAction = () => {
+  const confirmRequestAction = async () => {
     if (!confirmAction) return;
-    setRequests((prev) =>
-      prev.map((req) =>
-        req.id === confirmAction.request.id ? { ...req, status: confirmAction.action } : req,
-      ),
-    );
-    const tone = confirmAction.action === "aceita" ? "success" : "danger";
-    const message =
-      confirmAction.action === "aceita"
-        ? "Cooperativa formada com sucesso."
-        : "Solicitação marcada como recusada.";
-    setToast({ message, tone });
-    setConfirmAction(null);
+
+    if (isLocalSession || !confirmAction.request?.raw) {
+      setRequests((prev) =>
+        prev.map((req) =>
+          req.id === confirmAction.request.id ? { ...req, status: confirmAction.action } : req,
+        ),
+      );
+      const tone = confirmAction.action === "aceita" ? "success" : "danger";
+      const message =
+        confirmAction.action === "aceita"
+          ? "Cooperativa formada com sucesso."
+          : "Solicitação marcada como recusada.";
+      setToast({ message, tone });
+      setConfirmAction(null);
+      return;
+    }
+
+    setIsRespondingRequest(true);
+    try {
+      const apiAction = confirmAction.action === "aceita" ? "accept" : "decline";
+      const updated = await respondCooperativeRequest(confirmAction.request.raw.id, apiAction);
+      const mapped = mapApiRequestToCard(updated);
+      setRequests((prev) => prev.map((req) => (req.id === mapped.id ? mapped : req)));
+
+      const tone = confirmAction.action === "aceita" ? "success" : "danger";
+      const message =
+        confirmAction.action === "aceita"
+          ? "Cooperativa formada com sucesso. Abrindo chat..."
+          : "Solicitação marcada como recusada.";
+      setToast({ message, tone });
+
+      if (confirmAction.action === "aceita") {
+        navigateToCooperativeChat(updated);
+      }
+
+      setConfirmAction(null);
+    } catch (err) {
+      setToast({
+        message:
+          err?.data?.detail ||
+          err?.message ||
+          "Não foi possível atualizar a solicitação. Tente novamente.",
+        tone: "danger",
+      });
+    } finally {
+      setIsRespondingRequest(false);
+    }
   };
 
   const handleToastClose = () => setToast(null);
@@ -317,7 +554,11 @@ export default function UserProfileScreen() {
 
       <section className="profile-section profile-section--card">
         <div className={`profile-avatar ${isEditing ? "is-editing" : ""}`}>
-          <img src={user.avatar} alt={`Foto de ${user.nome}`} />
+          <img
+            src={user.avatar}
+            alt={`Foto de ${user.nome}`}
+            className="avatar-circle"
+          />
           {isEditing && (
             <button
               type="button"
@@ -418,22 +659,42 @@ export default function UserProfileScreen() {
           </div>
         </header>
 
-        {favoriteProducers.length === 0 ? (
+        {favoritesLoading ? (
+          <div className="empty-state" role="status">
+            Carregando produtores favoritos...
+          </div>
+        ) : favoritesError ? (
+          <div className="empty-state" role="alert">
+            <CircleX size={28} />
+            <h3>Não foi possível carregar seus favoritos</h3>
+            <p>{favoritesError}</p>
+          </div>
+        ) : favoriteProducers.length === 0 ? (
           <div className="empty-state">
             <CircleDot size={28} />
             <h3>Nenhum produtor favorito</h3>
             <p>Salve produtores no marketplace para acompanhar de perto.</p>
+            <button
+              type="button"
+              className="ghost-button"
+              onClick={() => navigate("/mercado")}
+            >
+              <ArrowUpRight size={16} />
+              Explorar produtores
+            </button>
           </div>
         ) : (
           <ul className="favorites-list">
             {favoriteProducers.map((produtor) => (
               <li key={produtor.id} className="favorite-card">
-                <img src={produtor.avatar} alt={`Foto de ${produtor.nome}`} />
+                <img
+                  src={produtor.avatar}
+                  alt={`Foto de ${produtor.nome}`}
+                  className="avatar-circle"
+                />
                 <div className="favorite-card__info">
                   <h3>{produtor.nome}</h3>
-                  <p>
-                    {produtor.cidade}, {produtor.estado}
-                  </p>
+                  <p>{produtor.cidade}</p>
                 </div>
                 <button
                   type="button"
@@ -574,7 +835,15 @@ export default function UserProfileScreen() {
           ))}
         </div>
 
-        {filteredRequests.length === 0 ? (
+        {requestsLoading ? (
+          <div className="empty-state" role="status">
+            Carregando solicitações de cooperativa...
+          </div>
+        ) : requestsError ? (
+          <div className="empty-state" role="alert">
+            {requestsError}
+          </div>
+        ) : filteredRequests.length === 0 ? (
           <div className="empty-state">
             <CircleX size={28} />
             <h3>Nenhuma solicitação encontrada</h3>
@@ -776,8 +1045,9 @@ export default function UserProfileScreen() {
                 type="button"
                 className="profile-modal__btn profile-modal__btn--primary"
                 onClick={confirmRequestAction}
+                disabled={isRespondingRequest}
               >
-                Confirmar
+                {isRespondingRequest ? <Loader2 className="spin" size={18} /> : <Check size={18} />} Confirmar
               </button>
             </footer>
           </div>

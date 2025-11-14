@@ -1,28 +1,60 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { ChevronLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./diagnostico.css";
 import { useAuth } from "../../hooks/useAuth";
 
-const SALE_OPTIONS = [
-  { value: "direta", label: "Venda direta ao consumidor" },
-  { value: "institucional", label: "Venda institucional (PAA/PNAE, órgãos públicos)" },
-  { value: "digital", label: "Venda por canais digitais" },
+const COOPERATION_OPTIONS = [
+  { value: "semanal", label: "Cooperações semanais" },
+  { value: "longo_prazo", label: "Cooperações à longo prazo" },
+];
+
+const SALE_TARGET_OPTIONS = [
+  { value: "direta", label: "Vendas direta ao consumidor." },
+  { value: "mercados", label: "Vendas à mercados e ao varejo." },
+  { value: "institucional", label: "Vendas institucionais." },
+  { value: "digital", label: "Vendas por meio de canais digitais." },
 ];
 
 const BUDGET_OPTIONS = [
   { value: 0, label: "Ainda não tenho orçamento definido" },
-  { value: 500, label: "Até R$ 500 por mês" },
-  { value: 1000, label: "Até R$ 1.000 por mês" },
-  { value: 3000, label: "Entre R$ 1.000 e R$ 3.000 por mês" },
-  { value: 5000, label: "Entre R$ 3.000 e R$ 5.000 por mês" },
-  { value: 10000, label: "Acima de R$ 5.000 por mês" },
+  { value: 10, label: "Até R$ 10" },
+  { value: 20, label: "R$ 20 - R$ 30" },
+  { value: 40, label: "R$ 40 - R$ 50" },
+  { value: 60, label: "R$ 60 - R$ 80" },
+  { value: 100, label: "R$ 100 - R$ 150" },
+  { value: 200, label: "R$ 200 - R$ 300" },
+  { value: 400, label: "R$ 400 - R$ 500" },
+  { value: 600, label: "R$ 600 - R$ 800" },
+  { value: 1000, label: "Mais do que R$ 1000" },
 ];
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 3;
+
+// Função para gerar a bio automaticamente
+const generateBio = (cooperationType, saleTarget) => {
+  const cooperationText = {
+    semanal: "cooperações semanais",
+    longo_prazo: "cooperações à longo prazo",
+  };
+  
+  const saleTargetText = {
+    direta: "vendas direta ao consumidor",
+    mercados: "vendas à mercados e ao varejo",
+    institucional: "vendas institucionais",
+    digital: "vendas por meio de canais digitais",
+  };
+  
+  const cooperation = cooperationText[cooperationType] || cooperationType;
+  const target = saleTargetText[saleTarget] || saleTarget;
+  
+  return `Prefiro trabalhar com ${cooperation} e busco ${target}.`;
+};
 
 export default function DiagnosticoPlantacao() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const origin = location.state?.origin;
   const { submitDiagnostic, farmer } = useAuth();
   const [step, setStep] = useState(1);
   const [cities, setCities] = useState([]);
@@ -35,9 +67,16 @@ export default function DiagnosticoPlantacao() {
     budget: farmer?.budget || "",
     production_weekly: farmer?.production_weekly || "",
     surplus: farmer?.surplus || "",
-    sale_preference: farmer?.sale_preference || "direta",
-    contact: farmer?.contact || "",
+    cooperation_type: "",
+    sale_target: "",
   });
+
+  // Debug: verificar valores iniciais
+  useEffect(() => {
+    console.log("Valores do form:", form);
+    console.log("cooperation_type:", form.cooperation_type);
+    console.log("sale_target:", form.sale_target);
+  }, [step]);
 
   useEffect(() => {
     async function loadCities() {
@@ -62,12 +101,25 @@ export default function DiagnosticoPlantacao() {
   };
 
   const goNext = () => setStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
-  const goBack = () => setStep((prev) => Math.max(prev - 1, 1));
+  const goBack = () => {
+    if (step === 1) {
+      if (origin === "home") {
+        navigate("/home");
+      } else {
+        navigate("/");
+      }
+    } else {
+      setStep((prev) => prev - 1);
+    }
+  };
 
   const handleSubmit = async () => {
     setStatus({ type: null, message: "" });
     setIsSubmitting(true);
     try {
+      // Gerar bio automaticamente baseada nas respostas
+      const generatedBio = generateBio(form.cooperation_type, form.sale_target);
+      
       const payload = {
         city: form.city,
         state: form.state,
@@ -75,8 +127,9 @@ export default function DiagnosticoPlantacao() {
         budget: Number(form.budget) || 0,
         production_weekly: form.production_weekly,
         surplus: form.surplus,
-        sale_preference: form.sale_preference,
-        contact: form.contact,
+        cooperation_type: form.cooperation_type,
+        sale_target: form.sale_target,
+        bio: generatedBio, // Bio gerada automaticamente
       };
 
       const response = await submitDiagnostic(payload);
@@ -102,7 +155,7 @@ export default function DiagnosticoPlantacao() {
   return (
     <div className="container-diagnostico">
       <header className="header-diagnostico">
-        <button className="botao-voltar" onClick={goBack} disabled={step === 1}>
+        <button className="botao-voltar" onClick={goBack}>
           <ChevronLeft size={24} />
         </button>
         <div>
@@ -113,9 +166,6 @@ export default function DiagnosticoPlantacao() {
         </div>
         <div className="barra-progresso-container">
           <div className="barra-progresso" style={{ width: `${progressPercent}%` }} />
-          <span className="barra-progresso__label">
-            Passo {step} de {TOTAL_STEPS}
-          </span>
         </div>
       </header>
 
@@ -176,28 +226,6 @@ export default function DiagnosticoPlantacao() {
 
         {step === 2 && (
           <section className="secao-pergunta">
-            <p className="pergunta-numero">Culturas</p>
-            <h2 className="pergunta-texto">O que você produz?</h2>
-            <textarea
-              className="input-texto"
-              name="crops"
-              value={form.crops}
-              onChange={handleChange}
-              placeholder="Ex.: milho, feijão e hortaliças diversificadas."
-            />
-            <div className="acoes-passo">
-              <button type="button" className="botao-secundario" onClick={goBack}>
-                Voltar
-              </button>
-              <button type="button" className="botao-confirmar" onClick={goNext} disabled={!form.crops}>
-                Avançar
-              </button>
-            </div>
-          </section>
-        )}
-
-        {step === 3 && (
-          <section className="secao-pergunta">
             <p className="pergunta-numero">Orçamento</p>
             <h2 className="pergunta-texto">Qual o orçamento mensal destinado à produção?</h2>
             <select
@@ -213,9 +241,6 @@ export default function DiagnosticoPlantacao() {
               ))}
             </select>
             <div className="acoes-passo">
-              <button type="button" className="botao-secundario" onClick={goBack}>
-                Voltar
-              </button>
               <button type="button" className="botao-confirmar" onClick={goNext}>
                 Avançar
               </button>
@@ -223,87 +248,53 @@ export default function DiagnosticoPlantacao() {
           </section>
         )}
 
-        {step === 4 && (
-          <section className="secao-pergunta">
-            <p className="pergunta-numero">Produção</p>
-            <h2 className="pergunta-texto">Conte sobre sua produção semanal e excedentes.</h2>
-            <textarea
-              className="input-texto"
-              name="production_weekly"
-              value={form.production_weekly}
-              onChange={handleChange}
-              placeholder="Ex.: Produzo 200 kg de hortaliças e normalmente sobram 30 kg por semana."
-            />
-            <textarea
-              className="input-texto"
-              name="surplus"
-              value={form.surplus}
-              onChange={handleChange}
-              placeholder="Ex.: Disponho de 50 caixas extras por mês para cooperativas."
-            />
-            <div className="acoes-passo">
-              <button type="button" className="botao-secundario" onClick={goBack}>
-                Voltar
-              </button>
-              <button type="button" className="botao-confirmar" onClick={goNext}>
-                Avançar
-              </button>
-            </div>
-          </section>
-        )}
-
-        {step === 5 && (
+        {step === 3 && (
           <section className="secao-pergunta">
             <p className="pergunta-numero">Preferências de venda</p>
-            <h2 className="pergunta-texto">Como você prefere comercializar o excedente?</h2>
+            <h2 className="pergunta-texto">Para a venda do seu excedente, qual a opção que mais é confortável para você?</h2>
             <div className="opcoes-radio">
-              {SALE_OPTIONS.map((option) => (
+              {COOPERATION_OPTIONS.map((option) => (
                 <label
                   key={option.value}
-                  className={`opcao-radio ${form.sale_preference === option.value ? "selecionada" : ""}`}
+                  className={`opcao-radio ${form.cooperation_type === option.value && form.cooperation_type !== "" ? "selecionada" : ""}`}
                 >
                   <input
                     type="radio"
-                    name="sale_preference"
+                    name="cooperation_type"
                     value={option.value}
-                    checked={form.sale_preference === option.value}
+                    checked={form.cooperation_type !== "" && form.cooperation_type === option.value}
                     onChange={handleChange}
                   />
                   {option.label}
                 </label>
               ))}
             </div>
-            <div className="acoes-passo">
-              <button type="button" className="botao-secundario" onClick={goBack}>
-                Voltar
-              </button>
-              <button type="button" className="botao-confirmar" onClick={goNext}>
-                Avançar
-              </button>
-            </div>
-          </section>
-        )}
 
-        {step === 6 && (
-          <section className="secao-pergunta">
-            <p className="pergunta-numero">Contato</p>
-            <h2 className="pergunta-texto">Qual o melhor contato para cooperativas e consultoria?</h2>
-            <input
-              className="input-texto"
-              name="contact"
-              value={form.contact}
-              onChange={handleChange}
-              placeholder="Telefone, WhatsApp ou email"
-            />
+            <h2 className="pergunta-texto" style={{ marginTop: "32px" }}>Para quem você gostaria de vender?</h2>
+            <div className="opcoes-radio">
+              {SALE_TARGET_OPTIONS.map((option) => (
+                <label
+                  key={option.value}
+                  className={`opcao-radio ${form.sale_target === option.value && form.sale_target !== "" ? "selecionada" : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="sale_target"
+                    value={option.value}
+                    checked={form.sale_target !== "" && form.sale_target === option.value}
+                    onChange={handleChange}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+
             <div className="acoes-passo">
-              <button type="button" className="botao-secundario" onClick={goBack} disabled={isSubmitting}>
-                Voltar
-              </button>
               <button
                 type="button"
                 className="botao-confirmar"
                 onClick={handleSubmit}
-                disabled={isSubmitting || !form.contact}
+                disabled={isSubmitting || !form.cooperation_type || !form.sale_target}
               >
                 {isSubmitting ? "Enviando..." : "Concluir diagnóstico"}
               </button>

@@ -35,6 +35,27 @@ export async function fetchCooperativeById(cooperativeId) {
   return apiRequest(`/marketplace/cooperatives/${cooperativeId}`);
 }
 
+export async function fetchCooperativeRequests({ box = "received", status } = {}) {
+  const params = new URLSearchParams();
+  params.set("box", box);
+  if (status) params.set("status_filter", status);
+  return apiRequest(`/marketplace/cooperative-requests?${params.toString()}`);
+}
+
+export async function respondCooperativeRequest(requestId, action) {
+  return apiRequest(`/marketplace/cooperative-requests/${requestId}/respond`, {
+    method: "POST",
+    body: { action },
+  });
+}
+
+export async function fetchFollowersData(farmerId) {
+  if (!farmerId) {
+    throw new Error("farmerId é obrigatório para buscar seguidores/favoritos.");
+  }
+  return apiRequest(`/marketplace/followers/${farmerId}`);
+}
+
 // ========== POSTS DE COOPERATIVAS (REDE SOCIAL) ==========
 
 export async function createCooperativePost(cooperativeId, postData) {

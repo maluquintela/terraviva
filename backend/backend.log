@@ -1,0 +1,261 @@
+INFO:     Will watch for changes in these directories: ['/home/maluquintela/terraviva/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [111971] using StatReload
+INFO:     Started server process [111989]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57306 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44902 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44902 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44902 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49604 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49604 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45826 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45826 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45832 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45832 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45826 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45832 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45832 - "OPTIONS /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45832 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45832 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46982 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46982 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32774 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32774 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33698 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33698 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47312 - "OPTIONS /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47312 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47312 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54330 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54344 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54344 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54330 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51426 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51420 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51426 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51420 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35536 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35536 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "OPTIONS /marketplace/listings/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /marketplace/listings/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /marketplace/listings/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40668 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40668 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "OPTIONS /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35528 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50268 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50268 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50268 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41520 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41520 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46734 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46734 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37752 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37752 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48648 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48636 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48648 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48636 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32844 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32844 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35828 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35812 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35828 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35812 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51906 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51906 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52544 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52544 - "GET /marketplace/listings/9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54520 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54520 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'ai_context.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [111989]
+INFO:     Started server process [124510]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [124510]
+WARNING:  StatReload detected changes in 'seed_listings.py'. Reloading...
+INFO:     Started server process [124556]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [124569]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:36448 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36448 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36448 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45688 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45688 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45688 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45688 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49376 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49376 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49376 - "OPTIONS /social/farmers/5/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49376 - "GET /social/farmers/5/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49376 - "GET /social/farmers/5/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33150 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33150 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33150 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33150 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40478 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40478 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40492 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40492 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33356 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33356 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45404 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45404 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45404 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51480 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51480 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51480 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59702 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59702 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59706 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59706 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59702 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59706 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'test_marketplace.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [124569]
+INFO:     Started server process [128209]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:47058 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47048 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47058 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47048 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/marketplace.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [128209]
+INFO:     Started server process [129340]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/marketplace.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [129340]
+INFO:     Started server process [129455]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/marketplace.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [129455]
+INFO:     Started server process [129998]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:49200 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49200 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49200 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41488 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41488 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41488 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53408 - "OPTIONS /marketplace/listings/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53408 - "GET /marketplace/listings/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53408 - "GET /marketplace/listings/2 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'create_tables.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [129998]
+INFO:     Started server process [130663]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53434 - "OPTIONS /marketplace/listings/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53434 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53434 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'create_tables.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [130663]
+INFO:     Started server process [130780]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:58654 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57438 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57438 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34624 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34624 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'test_marketplace.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [130780]
+INFO:     Started server process [132307]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:46106 - "OPTIONS /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46106 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46106 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55912 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55912 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54714 - "OPTIONS /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54714 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54714 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37228 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37228 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33236 - "OPTIONS /marketplace/listings/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33236 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33236 - "GET /marketplace/listings/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49584 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49584 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49584 - "OPTIONS /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49598 - "OPTIONS /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49598 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49584 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49598 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49584 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38600 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38600 - "GET /marketplace/cooperatives?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38592 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38592 - "GET /social/feed?limit=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/farmers/9/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33788 - "GET /social/feed?limit=50 HTTP/1.1" 200 OK

@@ -1,0 +1,129 @@
+╔════════════════════════════════════════════════════════════════╗
+║                   ATALHOS RÁPIDOS - NGROK                      ║
+╚════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 INÍCIO RÁPIDO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cd ~/terraviva
+
+# Menu completo (RECOMENDADO):
+./ngrok-menu.sh
+
+# Ou direto:
+./ngrok-frontend.sh     # Frontend (porta 3000)
+./ngrok-backend.sh      # Backend (porta 8000)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 STATUS E INFORMAÇÕES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Ver status completo:
+./ngrok-status.sh
+
+# Ver apenas URL público:
+wget -qO- http://localhost:4040/api/tunnels | python3 -c "import sys, json; [print(t['public_url']) for t in json.load(sys.stdin)['tunnels']]"
+
+# Abrir interface web:
+xdg-open http://localhost:4040
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛑 PARAR E REINICIAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Parar (no terminal onde o ngrok está rodando):
+Ctrl + C
+
+# Ou matar todos os processos ngrok:
+pkill ngrok
+
+# Reiniciar:
+./ngrok-frontend.sh
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔧 COMANDOS DIRETOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Frontend:
+ngrok http 3000
+
+# Backend:
+ngrok http 8000
+
+# Com autenticação:
+ngrok http 3000 --basic-auth="usuario:senha"
+
+# Com domínio customizado (plano pago):
+ngrok http 3000 --domain=seudominio.ngrok.io
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💻 MANTER RODANDO EM BACKGROUND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Com tmux (RECOMENDADO):
+tmux new -s ngrok
+ngrok http 3000
+# Sair: Ctrl+B depois D
+# Voltar: tmux attach -t ngrok
+
+# Com screen:
+screen -S ngrok
+ngrok http 3000
+# Sair: Ctrl+A depois D
+# Voltar: screen -r ngrok
+
+# Com nohup:
+nohup ngrok http 3000 > ngrok.log 2>&1 &
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 VERIFICAÇÕES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Verificar se ngrok está rodando:
+ps aux | grep ngrok
+
+# Ver processos na porta 3000:
+sudo netstat -tlnp | grep :3000
+
+# Ver processos na porta 8000:
+sudo netstat -tlnp | grep :8000
+
+# Verificar configuração do ngrok:
+cat ~/.config/ngrok/ngrok.yml
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 COPIAR URL PARA CELULAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Pegar URL e copiar (se tiver xclip):
+wget -qO- http://localhost:4040/api/tunnels | python3 -c "import sys, json; url=[t['public_url'] for t in json.load(sys.stdin)['tunnels']][0] if json.load(sys.stdin).get('tunnels') else ''; print(url)" | xclip -selection clipboard
+
+# Gerar QR Code para escanear no celular (se tiver qrencode):
+sudo apt install qrencode
+wget -qO- http://localhost:4040/api/tunnels | python3 -c "import sys, json; print([t['public_url'] for t in json.load(sys.stdin)['tunnels']][0])" | qrencode -t UTF8
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 ARQUIVOS ÚTEIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cat COMECE-AQUI.md      # Guia de início rápido
+cat NGROK-RESUMO.md     # Resumo das funcionalidades
+cat NGROK-GUIA.md       # Documentação completa
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌐 LINKS IMPORTANTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Interface Local:  http://localhost:4040
+Dashboard Ngrok:  https://dashboard.ngrok.com/
+Documentação:     https://ngrok.com/docs
+Status:           https://status.ngrok.com/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 DICA: Salve este arquivo para referência rápida!
+
+Execute: ./ngrok-menu.sh para acessar o menu interativo! 🚀
+
+

@@ -9,9 +9,11 @@ import {
   CheckCircle2,
   Clock,
   X,
+  ArrowLeft,
 } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { fetchListingById } from "../api/marketplace";
+import { fetchFarmerProfile } from "../api/social";
 import "./producerProfile.css";
 
 const STATUS_LABELS = {
@@ -19,6 +21,37 @@ const STATUS_LABELS = {
   pending: { label: "Solicitação pendente", tone: "pending" },
   accepted: { label: "Solicitação aceita", tone: "success" },
   declined: { label: "Solicitação recusada", tone: "danger" },
+};
+
+const buildListingFromFarmerProfile = (profileData) => {
+  const farmer = profileData?.farmer ?? {};
+  const listings = profileData?.listings ?? [];
+  const primaryListing = listings[0] ?? {};
+
+  const fallbackProductName =
+    farmer.crops?.split(",")?.map((c) => c.trim()).filter(Boolean)?.[0] ??
+    "Produção local";
+
+  const product = primaryListing.product ?? {
+    name: fallbackProductName,
+    category: fallbackProductName,
+    description: profileData?.bio ?? farmer.bio ?? "Produtor parceiro TerraViva.",
+    unit: "un",
+  };
+
+  return {
+    id: primaryListing.id ?? farmer.id,
+    farmer,
+    product,
+    quantity_total: primaryListing.quantity_total ?? null,
+    quantity_sold: primaryListing.quantity_sold ?? 0,
+    status: primaryListing.status ?? "disponível",
+    city: primaryListing.city ?? farmer.city,
+    state: primaryListing.state ?? farmer.state,
+    contact: primaryListing.contact ?? farmer.contact ?? null,
+    listings,
+    profileBio: profileData?.bio,
+  };
 };
 
 export default function ProducerProfileScreen() {
@@ -33,7 +66,16 @@ export default function ProducerProfileScreen() {
   const [exibirModalProduto, setExibirModalProduto] = useState(false);
   const [exibirModalCoop, setExibirModalCoop] = useState(false);
 
+  const profileMode =
+    location.state?.profileMode ??
+    (location.state?.farmerId ? "farmer" : "listing");
+  const farmerProfileId =
+    location.state?.farmerId ?? (profileMode === "farmer" ? Number(id) : null);
+
   useEffect(() => {
+    if (profileMode === "farmer") {
+      return undefined;
+    }
     let active = true;
     async function loadListing() {
       if (location.state?.listing) return;
@@ -63,7 +105,42 @@ export default function ProducerProfileScreen() {
     return () => {
       active = false;
     };
-  }, [id, location.state]);
+  }, [id, location.state, profileMode]);
+
+  useEffect(() => {
+    if (profileMode !== "farmer" || !farmerProfileId) {
+      return undefined;
+    }
+
+    let active = true;
+    async function loadFarmerProfile() {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchFarmerProfile(farmerProfileId);
+        if (active) {
+          setListing(buildListingFromFarmerProfile(data));
+        }
+      } catch (err) {
+        if (active) {
+          setError(
+            err?.data?.detail ||
+              err?.message ||
+              "Não foi possível carregar o perfil desse produtor."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadFarmerProfile();
+    return () => {
+      active = false;
+    };
+  }, [profileMode, farmerProfileId]);
 
   const produtor = useMemo(() => {
     if (!listing) {
@@ -257,7 +334,11 @@ export default function ProducerProfileScreen() {
 
         <section className="producer-profile__hero">
           <div className="producer-profile__avatar">
-            <img src={produtor.avatar} alt={`Foto de ${produtor.nome}`} />
+            <img
+              src={produtor.avatar}
+              alt={`Foto de ${produtor.nome}`}
+              className="avatar-circle"
+            />
           </div>
 
           <div className="producer-profile__identity">

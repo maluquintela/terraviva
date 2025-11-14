@@ -1,4 +1,4 @@
-const DEFAULT_API_URL = "http://localhost:8003";
+const DEFAULT_API_URL = "http://localhost:8000";
 
 let tokenProvider = () => null;
 

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Literal
 from datetime import datetime
 
 # Schemas para Farmers (Agricultores)
@@ -186,6 +186,36 @@ class CooperativeMembership(BaseModel):
 
     class Config:
         from_attributes = True
+
+class CooperativeRequestBase(BaseModel):
+    message: Optional[str] = None
+    cooperative_id: Optional[int] = None
+    listing_id: Optional[int] = None
+
+class CooperativeRequestCreate(CooperativeRequestBase):
+    receiver_id: int
+
+class CooperativeRequest(CooperativeRequestBase):
+    id: int
+    requester_id: int
+    receiver_id: int
+    status: str
+    conversation_id: Optional[int] = None
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    responded_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+class CooperativeRequestDetail(CooperativeRequest):
+    requester: Farmer
+    receiver: Farmer
+    cooperative: Optional[Cooperative] = None
+    listing: Optional[ListingWithDetails] = None
+
+class CooperativeRequestResponse(BaseModel):
+    action: Literal["accept", "decline"]
 
 # Schemas para IA Consultiva
 class AIDiagnoseRequest(BaseModel):
