@@ -24,41 +24,6 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/", response_model=schemas.Farmer, status_code=status.HTTP_201_CREATED)
-def create_farmer(farmer: schemas.FarmerCreate, db: Session = Depends(get_db)):
-    """Cadastrar novo agricultor"""
-    # Verificar se já existe um agricultor com o mesmo email
-    existing_farmer = db.query(models.Farmer).filter(models.Farmer.email == farmer.email).first()
-    if existing_farmer:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Já existe um agricultor com este email"
-        )
-    
-    # Criar hash da senha
-    hashed_password = get_password_hash(farmer.password)
-    
-    # Criar novo agricultor
-    db_farmer = models.Farmer(
-        name=farmer.name,
-        email=farmer.email,
-        password_hash=hashed_password,
-        region=farmer.region,
-        city=farmer.city,
-        state=farmer.state,
-        crops=farmer.crops,
-        budget=farmer.budget,
-        production_weekly=farmer.production_weekly,
-        surplus=farmer.surplus,
-        sale_preference=farmer.sale_preference,
-        contact=farmer.contact
-    )
-    
-    db.add(db_farmer)
-    db.commit()
-    db.refresh(db_farmer)
-    
-    return db_farmer
 
 @router.get("/", response_model=List[schemas.Farmer])
 def list_farmers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):

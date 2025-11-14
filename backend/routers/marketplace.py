@@ -290,15 +290,35 @@ def create_cooperative(
     
     return db_cooperative
 
-@router.get("/cooperatives", response_model=List[schemas.Cooperative])
+@router.get("/cooperatives", response_model=List[schemas.CooperativeWithMembers])
 def list_cooperatives(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db)
 ):
-    """Listar todas as cooperativas"""
+    """Listar todas as cooperativas com seus membros"""
     cooperatives = db.query(models.Cooperative).offset(skip).limit(limit).all()
-    return cooperatives
+    
+    # Adicionar membros a cada cooperativa
+    result = []
+    for coop in cooperatives:
+        memberships = db.query(models.CooperativeMembership).filter(
+            models.CooperativeMembership.cooperative_id == coop.id
+        ).all()
+        
+        members = [membership.farmer for membership in memberships]
+        
+        coop_with_members = {
+            "id": coop.id,
+            "name": coop.name,
+            "main_product": coop.main_product,
+            "description": coop.description,
+            "created_at": coop.created_at,
+            "members": members
+        }
+        result.append(schemas.CooperativeWithMembers(**coop_with_members))
+    
+    return result
 
 @router.get("/cooperatives/{cooperative_id}", response_model=schemas.CooperativeWithMembers)
 def get_cooperative(cooperative_id: int, db: Session = Depends(get_db)):

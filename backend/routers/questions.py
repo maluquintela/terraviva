@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile,
 from sqlalchemy.orm import Session
 from typing import List, Tuple, Optional
 import os
+import base64
 from database import SessionLocal, models, schemas
 from backend.auth import get_current_farmer
 from dotenv import load_dotenv
@@ -32,7 +33,7 @@ def get_ai_response(
     question: str,
     farmer_context: models.Farmer = None,
     sent_at: Optional[str] = None,
-    image_analysis: Optional[str] = None
+    image_base64: Optional[str] = None
 ) -> Tuple[str, float]:
     """
     Obter resposta contextualizada da IA usando OpenAI GPT-4
@@ -41,7 +42,7 @@ def get_ai_response(
         question: Pergunta do agricultor
         farmer_context: Dados do agricultor
         sent_at: Data/hora do envio (ISO 8601)
-        image_analysis: Análise de imagem anexada (opcional)
+        image_base64: Imagem em base64 para análise (opcional)
     
     Returns:
         Tuple (resposta, confiança)
@@ -114,7 +115,7 @@ Para orientações mais específicas, compartilhe detalhes sobre: condições do
                 question=question,
                 farmer=farmer_context,
                 sent_at=sent_at,
-                image_analysis=image_analysis
+                image_analysis="Imagem anexada para análise" if image_base64 else None
             )
         else:
             # Fallback se não houver contexto do agricultor
@@ -123,16 +124,43 @@ Para orientações mais específicas, compartilhe detalhes sobre: condições do
                 "user": f"Pergunta do agricultor: {question}\n\nResponda de forma clara e didática."
             }
         
-        # Chamada ao ChatGPT com contexto completo
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
+        # Se houver imagem, usar GPT-4 Vision
+        if image_base64:
+            print("🖼️ Enviando imagem para análise com GPT-4 Vision")
+            messages = [
                 {"role": "system", "content": prompts["system"]},
-                {"role": "user", "content": prompts["user"]}
-            ],
-            max_tokens=600,
-            temperature=0.7
-        )
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompts["user"]},
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{image_base64}",
+                                "detail": "high"
+                            }
+                        }
+                    ]
+                }
+            ]
+            
+            response = client.chat.completions.create(
+                model="gpt-4o",  # Modelo com suporte a visão
+                messages=messages,
+                max_tokens=2500,
+                temperature=0.7
+            )
+        else:
+            # Chamada normal sem imagem
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": prompts["system"]},
+                    {"role": "user", "content": prompts["user"]}
+                ],
+                max_tokens=2500,  # Aumentado para respostas completas
+                temperature=0.7
+            )
         
         answer = response.choices[0].message.content.strip()
         confidence = 0.92  # Poderia ser calculado baseado na resposta
@@ -196,22 +224,25 @@ async def ask_question(
     print(f"   Bio: {farmer.bio}")
     print(f"\n")
     
-    # Processar imagem se enviada (placeholder - implementar análise de imagem futuramente)
-    image_analysis = None
-    image_url = None
+    # Processar imagem se enviada
+    image_base64 = None
     if image:
-        # TODO: Implementar análise de imagem com Vision API ou similar
-        # Por enquanto, apenas mencionar que há uma imagem
-        image_analysis = f"Imagem anexada: {image.filename}"
-        # TODO: Salvar imagem e obter URL
-        image_url = None
+        print(f"📸 Processando imagem: {image.filename}")
+        try:
+            # Ler conteúdo da imagem e converter para base64
+            image_content = await image.read()
+            image_base64 = base64.b64encode(image_content).decode('utf-8')
+            print(f"✅ Imagem convertida para base64 ({len(image_base64)} caracteres)")
+        except Exception as e:
+            print(f"❌ Erro ao processar imagem: {e}")
+            image_base64 = None
     
     # Obter resposta contextualizada da IA
     ai_response, confidence = get_ai_response(
         question=question_text,
         farmer_context=farmer,
         sent_at=sent_at,
-        image_analysis=image_analysis
+        image_base64=image_base64
     )
     
     # Criar registro da pergunta no banco
