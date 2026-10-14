@@ -371,41 +371,43 @@ See more examples in [docs/API.md](docs/API.md)
 
 ## Folder Structure
 
+## Folder Structure
+
+```
 terraviva-4/
-├── README.md # This file
-├── docs/ # Full documentation
-│ ├── AUTENTICACAO.md
-│ ├── DIAGNOSTICO.md
-│ ├── BACKEND.md
-│ ├── DATABASE.md
-│ ├── FRONTEND.md
-│ └── API.md
-├── terraviva/
-│ ├── backend/ # FastAPI API
-│ │ ├── main.py # Entry point
-│ │ ├── auth.py # JWT authentication
-│ │ ├── ai_context.py # AI context
-│ │ ├── regional_data.py # Data by state
-│ │ ├── requirements.txt # Python dependencies
-│ │ └── routers/ # API routes
-│ │ ├── farmers.py
-│ │ ├── questions.py
-│ │ ├── marketplace.py
-│ │ └── social.py
-│ ├── database/ # Database models
-│ │ ├── models.py # SQLAlchemy models
-│ │ ├── schemas.py # Pydantic schemas
-│ │ └── database.py # Database configuration
-│ └── frontend2/terraviva/ # React app
-│ ├── src/
-│ │ ├── api/ # API calls
-│ │ ├── context/ # Context API
-│ │ ├── componentes/ # UI components
-│ │ ├── screens/ # Pages
-│ │ └── App.js
-│ └── package.json
-
-
+├── README.md                 # This file
+├── docs/                     # Full documentation
+│   ├── AUTENTICACAO.md
+│   ├── DIAGNOSTICO.md
+│   ├── BACKEND.md
+│   ├── DATABASE.md
+│   ├── FRONTEND.md
+│   └── API.md
+└── terraviva/
+    ├── backend/              # FastAPI API
+    │   ├── main.py           # Entry point
+    │   ├── auth.py           # JWT authentication
+    │   ├── ai_context.py     # AI context
+    │   ├── regional_data.py  # Data by state
+    │   ├── requirements.txt  # Python dependencies
+    │   └── routers/          # API routes
+    │       ├── farmers.py
+    │       ├── questions.py
+    │       ├── marketplace.py
+    │       └── social.py
+    ├── database/             # Database models
+    │   ├── models.py         # SQLAlchemy models
+    │   ├── schemas.py        # Pydantic schemas
+    │   └── database.py       # Database configuration
+    └── frontend2/terraviva/  # React app
+        ├── src/
+        │   ├── api/          # API calls
+        │   ├── context/      # Context API
+        │   ├── componentes/  # UI components
+        │   ├── screens/      # Pages
+        │   └── App.js
+        └── package.json
+```
 ---
 
 ## Environment Variables
