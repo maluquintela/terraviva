@@ -292,58 +292,73 @@ The full documentation is organized by module:
 
 ### Diagnostic → AI Flow
 
-┌──────────────────┐
-│ 1. DIAGNOSTIC │ User fills in:
-│ │ - City/State (PB, Patos)
-│ │ - Budget (R$ 100/month)
-│ │ - Goals (direct sales, weekly cooperation)
-└────────┬─────────┘
-│
-▼
-┌──────────────────┐
-│ 2. SAVED TO DB │ Backend saves to farmer.diagnostic_profile
-│ │ And automatically infers:
-│ │ - Regional soil type
-│ │ - Current climate
-└────────┬─────────┘
-│
-▼
-┌──────────────────┐
-│ 3. AI USES DATA │ When the user asks something:
-│ │ AI receives the full context:
-│ │ - Location → Soil + Climate
-│ │ - Budget → Limits recommendations
-│ │ - Goals → Adapts advice
-└────────┬─────────┘
-│
-▼
-┌──────────────────┐
-│ 4. CONTEXT-AWARE │ “For corn in Patos/PB with a budget
-│ RESPONSE │ of R$100/month focused on direct sales...”
-└──────────────────┘
-
+```
+┌────────────────────────────────────────────────────┐
+│ 1. DIAGNOSTIC                                      │
+├────────────────────────────────────────────────────┤
+│ User fills in:                                     │
+│ - City/State (PB, Patos)                           │
+│ - Budget (R$ 100/month)                            │
+│ - Goals (direct sales, weekly cooperation)         │
+└──────────────────────────┬─────────────────────────┘
+                           ▼
+┌────────────────────────────────────────────────────┐
+│ 2. SAVED TO DB                                     │
+├────────────────────────────────────────────────────┤
+│ Backend saves to farmer.diagnostic_profile         │
+│ And automatically infers:                          │
+│ - Regional soil type                               │
+│ - Current climate                                  │
+└──────────────────────────┬─────────────────────────┘
+                           ▼
+┌────────────────────────────────────────────────────┐
+│ 3. AI USES DATA                                    │
+├────────────────────────────────────────────────────┤
+│ When the user asks something,                      │
+│ AI receives the full context:                      │
+│ - Location → Soil + Climate                        │
+│ - Budget → Limits recommendations                  │
+│ - Goals → Adapts advice                            │
+└──────────────────────────┬─────────────────────────┘
+                           ▼
+┌────────────────────────────────────────────────────┐
+│ 4. CONTEXT-AWARE RESPONSE                          │
+├────────────────────────────────────────────────────┤
+│ "For corn in Patos/PB with a budget of             │
+│ R$ 100/month focused on direct sales..."           │
+└────────────────────────────────────────────────────┘
+```
 
 ### Cooperative Creation Flow
 
-Farmer A Farmer B System
-│ │ │
-│─── View B’s profile ─────────────│ │
-│ │ │
-│─── Request cooperative ──────────┼─────────────────────────►│
-│ │ │
-│ │◄── Notification ───────────│
-│ │ │
-│ │─── Accept request ────────►│
-│ │ │
-│◄──── Chat created ───────────────┼────────────────────────────│
-│ │ │
-│─── Chat conversation ───────────►│ │
-│ │ │
-│─── A becomes group admin ────────┼────────────────────────────│
-│ │ │
-│─── Add Farmer C ─────────────────┼────────────────────────────│
-
-
+```
+  Farmer A                 Farmer B                  System
+      │                        │                        │
+      │  View B's profile      │                        │
+      │───────────────────────▶│                        │
+      │                        │                        │
+      │  Request cooperative   │                        │
+      │────────────────────────────────────────────────▶│
+      │                        │                        │
+      │                        │  Notification          │
+      │                        │◀───────────────────────│
+      │                        │                        │
+      │                        │  Accept request        │
+      │                        │───────────────────────▶│
+      │                        │                        │
+      │  Chat created          │                        │
+      │◀────────────────────────────────────────────────│
+      │                        │                        │
+      │  Chat conversation     │                        │
+      │◀──────────────────────▶│                        │
+      │                        │                        │
+      │  A becomes group admin │                        │
+      │◀────────────────────────────────────────────────│
+      │                        │                        │
+      │  Add Farmer C          │                        │
+      │────────────────────────────────────────────────▶│
+      │                        │                        │
+```
 ---
 
 ## Testing the API
