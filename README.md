@@ -84,55 +84,58 @@
 
 ## System Architecture
 
-┌─────────────────────────────────────────────────────────────┐
-│ FRONTEND │
-│ React 19 + React Router + Context API + Tailwind CSS │
-│ │
-│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
-│ │ Pages │ │ Components │ │ Context │ │
-│ │ │ │ │ │ │ │
-│ │ - Home │ │ - Layout │ │ - AuthContext│ │
-│ │ - Profile │ │ - Cards │ │ │ │
-│ │ - Market │ │ - Modals │ │ │ │
-│ │ - Chat │ │ │ │ │ │
-│ └──────────────┘ └──────────────┘ └──────────────┘ │
-│ │
-│ ▼ HTTP/REST ▼ │
-└─────────────────────────────────────────────────────────────┘
-│
-┌─────────────────────────────────────────────────────────────┐
-│ BACKEND │
-│ FastAPI + SQLAlchemy + JWT │
-│ │
-│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
-│ │ Routers │ │ Models │ │ Auth │ │
-│ │ │ │ │ │ │ │
-│ │ - farmers │ │ - Farmer │ │ - JWT │ │
-│ │ - questions │ │ - Question │ │ - Bcrypt │ │
-│ │ - marketplace│ │ - Listing │ │ - Bearer │ │
-│ │ - social │ │ - Message │ │ │ │
-│ └──────────────┘ └──────────────┘ └──────────────┘ │
-│ │
-│ ▼ SQL/ORM ▼ │
-└─────────────────────────────────────────────────────────────┘
-│
-┌─────────────────────────────────────────────────────────────┐
-│ DATABASE │
-│ SQLite (dev) / PostgreSQL (prod) │
-│ │
-│ Farmers | Questions | Listings | Cooperatives │
-│ Messages | Products | CooperativeRequests | ... │
-└─────────────────────────────────────────────────────────────┘
-│
-◄ OpenAI API ◄
-┌─────────────────────────────────────────────────────────────┐
-│ EXTERNAL SERVICES │
-│ │
-│ - OpenAI GPT-4o (AI Consulting) │
-│ - GPT-4o Vision (Image Analysis) │
-│ - Regional Data (Climate, Soil, Pests) │
-└─────────────────────────────────────────────────────────────┘
+## System Architecture
 
+```
+┌────────────────────────────────────────────────────────┐
+│ FRONTEND                                               │
+│ React 19 + React Router + Context API + Tailwind CSS   │
+│                                                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │ Pages        │  │ Components   │  │ Context      │  │
+│  ├──────────────┤  ├──────────────┤  ├──────────────┤  │
+│  │ - Home       │  │ - Layout     │  │ - AuthContext│  │
+│  │ - Profile    │  │ - Cards      │  │              │  │
+│  │ - Market     │  │ - Modals     │  │              │  │
+│  │ - Chat       │  │              │  │              │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└────────────────────────────────────────────────────────┘
+                             │
+                             │ HTTP/REST
+                             ▼
+┌────────────────────────────────────────────────────────┐
+│ BACKEND                                                │
+│ FastAPI + SQLAlchemy + JWT                             │
+│                                                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │ Routers      │  │ Models       │  │ Auth         │  │
+│  ├──────────────┤  ├──────────────┤  ├──────────────┤  │
+│  │ - farmers    │  │ - Farmer     │  │ - JWT        │  │
+│  │ - questions  │  │ - Question   │  │ - Bcrypt     │  │
+│  │ - marketplace│  │ - Listing    │  │ - Bearer     │  │
+│  │ - social     │  │ - Message    │  │              │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└────────────────────────────────────────────────────────┘
+                             │
+                             │ SQL/ORM
+                             ▼
+┌────────────────────────────────────────────────────────┐
+│ DATABASE                                               │
+│ SQLite (dev) / PostgreSQL (prod)                       │
+│                                                        │
+│ Farmers | Questions | Listings | Cooperatives          │
+│ Messages | Products | CooperativeRequests | ...        │
+└────────────────────────────────────────────────────────┘
+                             │
+                             │ OpenAI API
+                             ▼
+┌────────────────────────────────────────────────────────┐
+│ EXTERNAL SERVICES                                      │
+│ - OpenAI GPT-4o (AI Consulting)                        │
+│ - GPT-4o Vision (Image Analysis)                       │
+│ - Regional Data (Climate, Soil, Pests)                 │
+└────────────────────────────────────────────────────────┘
+```
 
 ---
 
